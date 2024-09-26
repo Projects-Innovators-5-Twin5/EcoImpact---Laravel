@@ -3,6 +3,7 @@
 @section('content')
 <title>EcoImpact - Landing page</title>
 <link rel="stylesheet" href="{{ asset('css/landing.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <div class="container">
     <!-- Container content can be added here if needed -->
@@ -18,14 +19,14 @@
 
             <!-- Bouton vert -->
             <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-    <button onclick="openModal()" style="background-color: #82caef; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">
-        Ajouter une consommation
-    </button>
-    <button onclick="window.location.href='/carbon-footprints'" style="background-color: #64d4bb; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
-    émissions de carbone
-</button>
+                <button onclick="openModal()" style="background-color: #82caef; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">
+                    Ajouter une consommation
+                </button>
+                <button onclick="window.location.href='/carbon-footprints'" style="background-color: #64d4bb; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                    émissions de carbone
+                </button>
 
-</div>
+            </div>
 
         </div>
 
@@ -49,6 +50,7 @@
                 <th style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; background-color: #4CAF50; color: white;">Date</th>
                 <th style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; background-color: #4CAF50; color: white;">Type d'énergie</th>
                 <th style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; background-color: #f1b77b; color: white;">Consommation (kWh)</th>
+                <th style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd; background-color: #f1b77b; color: white;">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -57,7 +59,23 @@
                 <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd;">{{ $consumption->consumption_date }}</td>
                 <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd;">{{ ucfirst($consumption->energy_type) }}</td>
                 <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd;">{{ $consumption->energy_value }} kWh</td>
+                <td style="padding: 12px; text-align: left; border-bottom: 1px solid #ddd;">
+                    <!-- Icon for Edit -->
+                    <a href="{{ route('editConsumption', ['id' => $consumption->id]) }}" style="color: blue; margin-right: 10px;">
+                        <i class="fas fa-pen"></i>
+                    </a>
+
+                    <!-- Form for Delete -->
+                    <form action="{{ route('consumptions.delete', ['id' => $consumption->id]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette consommation ?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
             </tr>
+
             @endforeach
         </tbody>
     </table>
@@ -67,6 +85,7 @@
         {{ $userConsumptions->links() }}
     </div>
 </div>
+
 
 <div class="contactus bg-white shadow-top" style="padding: 40px; border-radius: 8px; margin: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
     <div class="content-contact" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
@@ -99,19 +118,19 @@
 
             <!-- Energy type buttons -->
             <div class="energy-buttons" style="margin-top: 20px;">
-    <button onclick="updateChart('electricity')" style="padding: 10px 15px; font-size: 16px; margin-right: 10px; background-color: #d4c164; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
-        Électricité
-    </button>
-    <button onclick="updateChart('gas')" style="padding: 10px 15px; font-size: 16px; margin-right: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
-        Gaz
-    </button>
-    <button onclick="updateChart('water')" style="padding: 10px 15px; font-size: 16px; background-color: #82caef; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
-        Eau
-    </button>
-    <button onclick="updateChart('wind')" style="padding: 10px 15px; font-size: 16px; background-color: #64d4bb; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
-        wint
-    </button>
-</div>
+                <button onclick="updateChart('Électricité')" style="padding: 10px 15px; font-size: 16px; margin-right: 10px; background-color: #d4c164; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+                    Électricité
+                </button>
+                <button onclick="updateChart('gas')" style="padding: 10px 15px; font-size: 16px; margin-right: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+                    Gaz
+                </button>
+                <button onclick="updateChart('Eau')" style="padding: 10px 15px; font-size: 16px; background-color: #82caef; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+                    Eau
+                </button>
+                <button onclick="updateChart('wind')" style="padding: 10px 15px; font-size: 16px; background-color: #64d4bb; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+                    wint
+                </button>
+            </div>
 
         </div>
 
@@ -212,12 +231,18 @@
             .catch(error => {
                 console.error('Error fetching consumption data:', error);
                 // Handle the error appropriately
-                createChart({ labels: [], values: [] }); // Clear the chart on error
+                createChart({
+                    labels: [],
+                    values: []
+                }); // Clear the chart on error
             });
     }
 
     // Initialize the chart with the total energy consumption data
-    createChart({ labels: initialLabels, values: initialValues });
+    createChart({
+        labels: initialLabels,
+        values: initialValues
+    });
 
     // Optionally, set up event listeners for your buttons to update the chart
     document.querySelectorAll('.energy-type-button').forEach(button => {
@@ -228,14 +253,26 @@
     });
 
     function openModal() {
-    document.getElementById('consommationModal').style.display = 'block';
-    document.getElementById('modalOverlay').style.display = 'block';
-}
+        document.getElementById('consommationModal').style.display = 'block';
+        document.getElementById('modalOverlay').style.display = 'block';
+    }
 
-function closeModal() {
-    document.getElementById('consommationModal').style.display = 'none';
-    document.getElementById('modalOverlay').style.display = 'none';
-}
+    function closeModal() {
+        document.getElementById('consommationModal').style.display = 'none';
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    function openEditModal(url) {
+        document.getElementById('editConsumptionFrame').src = url; // Set the src of the iframe to the edit page URL
+        document.getElementById('editConsumptionModal').style.display = 'block'; // Show the modal
+        document.getElementById('modalOverlay').style.display = 'block'; // Show the overlay
+    }
+
+    function closeEditModal() {
+        document.getElementById('editConsumptionModal').style.display = 'none';
+        document.getElementById('modalOverlay').style.display = 'none';
+        document.getElementById('editConsumptionFrame').src = ''; // Clear the iframe src
+    }
 </script>
 <script>
     window.addEventListener('scroll', function() {

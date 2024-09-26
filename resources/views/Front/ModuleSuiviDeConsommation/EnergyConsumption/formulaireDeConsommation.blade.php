@@ -115,10 +115,10 @@
             <div class="form-group mb-3">
                 <label class="mb-2">Type d'énergie :</label>
                 <div class="d-flex flex-wrap">
-                    @foreach(['electricity' => 'Électricité', 'gas' => 'Gaz', 'solar' => 'Solaire', 
-                              'wind' => 'Éolienne', 'biomass' => 'Biomasse', 'geothermal' => 'Géothermique', 
-                              'coal' => 'Charbon', 'oil' => 'Pétrole', 'nuclear' => 'Nucléaire', 
-                              'diesel' => 'Diesel'] as $value => $label)
+                    @foreach(['Électricité' => 'Électricité', 'gas' => 'Gaz', 'Solaire' => 'Solaire', 
+                              'Éolienne' => 'Éolienne', 'Biomasse' => 'Biomasse', 'Géothermique' => 'Géothermique', 
+                              'Charbon' => 'Charbon', 'Pétrole' => 'Pétrole', 'Nucléaire' => 'Nucléaire', 
+                              'Diesel' => 'Diesel'] as $value => $label)
                         <div class="form-check me-3">
                             <input type="radio" id="energy_type_{{ $value }}" name="energy_type" value="{{ $value }}" class="form-check-input" required>
                             <label for="energy_type_{{ $value }}" class="form-check-label">{{ $label }}</label>
