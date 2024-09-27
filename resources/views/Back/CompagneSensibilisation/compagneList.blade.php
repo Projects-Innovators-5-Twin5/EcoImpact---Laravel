@@ -4,6 +4,8 @@
 
 @section('content')
 @include('Back.CompagneSensibilisation.createCompagne')
+@include('Back.CompagneSensibilisation.ModalConfirmationSuppression')
+
 
 <title>EcoImpact - Awareness Campaigns list page</title>
 
@@ -32,24 +34,14 @@
                         <div class="icon-shape icon-shape-primary rounded me-4 me-sm-0">
                             <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
                         </div>
-                        <div class="d-sm-none">
-                            <h2 class="h5">Customers</h2>
-                            <h3 class="fw-extrabold mb-1">345,678</h3>
-                        </div>
+                       
                     </div>
                     <div class="col-12 col-xl-7 px-xl-0">
-                        <div class="d-none d-sm-block">
-                            <h2 class="h6 text-gray-400 mb-0">Customers</h2>
-                            <h3 class="fw-extrabold mb-2">345k</h3>
+                        <div class="d-none d-sm-block mt-2">
+                            <h2 class="h5 text-info mb-0">Upcoming</h2>
+                            <h4 class="fw-bold mt-2 text-info">{{$upcomingCampaignsCount}}</h4>
                         </div>
-                        <small class="d-flex align-items-center text-gray-500">
-                            Feb 1 - Apr 1,  
-                            <svg class="icon icon-xxs text-gray-500 ms-2 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd"></path></svg>
-                            USA
-                        </small> 
-                        <div class="small d-flex mt-1">                               
-                            <div>Since last month <svg class="icon icon-xs text-success" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg><span class="text-success fw-bolder">22%</span></div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -63,24 +55,14 @@
                         <div class="icon-shape icon-shape-secondary rounded me-4 me-sm-0">
                             <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg>
                         </div>
-                        <div class="d-sm-none">
-                            <h2 class="fw-extrabold h5">Revenue</h2>
-                            <h3 class="mb-1">$43,594</h3>
-                        </div>
+                 
                     </div>
                     <div class="col-12 col-xl-7 px-xl-0">
-                        <div class="d-none d-sm-block">
-                            <h2 class="h6 text-gray-400 mb-0">Revenue</h2>
-                            <h3 class="fw-extrabold mb-2">$43,594</h3>
+                        <div class="d-none d-sm-block mt-2">
+                            <h2 class="h5 text-success mb-0">Active</h2>
+                            <h4 class="fw-bold mt-2 text-success">{{$activeCampaignsCount}}</h4>
                         </div>
-                        <small class="d-flex align-items-center text-gray-500">
-                            Feb 1 - Apr 1,  
-                            <svg class="icon icon-xxs text-gray-500 ms-2 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd"></path></svg>
-                            GER
-                        </small> 
-                        <div class="small d-flex mt-1">                               
-                            <div>Since last month <svg class="icon icon-xs text-danger" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg><span class="text-danger fw-bolder">2%</span></div>
-                        </div>
+                       
                     </div>
                 </div>
             </div>
@@ -92,24 +74,16 @@
                 <div class="row d-block d-xl-flex align-items-center">
                     <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
                         <div class="icon-shape icon-shape-tertiary rounded me-4 me-sm-0">
-                            <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <img src="/assets/img/completed.png" alt="icon" class="icon" style="width:25px; height:25px;"> 
                         </div>
-                        <div class="d-sm-none">
-                            <h2 class="fw-extrabold h5"> Bounce Rate</h2>
-                            <h3 class="mb-1">50.88%</h3>
-                        </div>
+                    
                     </div>
                     <div class="col-12 col-xl-7 px-xl-0">
-                        <div class="d-none d-sm-block">
-                            <h2 class="h6 text-gray-400 mb-0"> Bounce Rate</h2>
-                            <h3 class="fw-extrabold mb-2">50.88%</h3>
+                        <div class="d-none d-sm-block mt-2">
+                            <h2 class="h5 complete mb-0">Completed</h2>
+                            <h4 class="fw-bold mt-2 complete">{{$completedCampaignsCount}}</h4>
                         </div>
-                        <small class="text-gray-500">
-                            Feb 1 - Apr 1
-                        </small> 
-                        <div class="small d-flex mt-1">                               
-                            <div>Since last month <svg class="icon icon-xs text-success" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg><span class="text-success fw-bolder">4%</span></div>
-                        </div>
+                      
                     </div>
                 </div>
             </div>
@@ -120,7 +94,7 @@
 
 <div class="btn-toolbar mb-2 mb-md-0 py-4 d-flex justify-content-end">
    <button  class="btn btn-sm btn-gray-800" data-bs-toggle="modal" data-bs-target="#modal-createC-form">
-       <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>Add Compaign
+       <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>Add Campaign
    </button>
     <div class="btn-group ms-2 ms-lg-3">
         <button type="button" class="btn btn-sm btn-outline-gray-600">Share</button>
@@ -140,7 +114,7 @@
                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                     </svg>
                 </span>
-                <input type="text" class="form-control" placeholder="Search compaigns">
+                <input type="text" class="form-control" placeholder="Search campaigns">
             </div>
         </div>
         <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
@@ -190,11 +164,20 @@
                 <td><span class="fw-normal">{{ $campaign->end_date}}</span></td>
                     <td>
                         @foreach($campaign->target_audience as $audience)
-                            <p class="fw-bold"> {{ $audience }}</p>
+                            <div class="fw-bold"> {{ $audience }}</div>
                         @endforeach    
                     </td>
-
-                <td><span class="fw-bold text-warning">Due</span></td>
+                <td>
+                    @if ($campaign->status === 'active')
+                      <span class="fw-bold status-active">Active</span>
+                    @elseif($campaign->status  === 'upcoming')
+                      <span class="fw-bold status-upcoming">Upcoming</span>
+                    @elseif($campaign->status === 'completed')
+                      <span class="fw-bold status-completed">Completed</span>
+                    @else
+                       <span class="fw-bold status-archived">Archived</span>
+                    @endif
+                </td>
                 <td>
                     <div class="btn-group">
                         <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -205,12 +188,20 @@
                         </button>
                         <div class="dropdown-menu py-0">
                             <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                            <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                            <a class="dropdown-item text-danger rounded-bottom" href="#"><span class="fas fa-trash-alt me-2"></span>Remove</a>
+
+                            <a class="dropdown-item" href="{{ route('campaigns.edit',  $campaign->id) }}" ><span class="fas fa-edit me-2" ></span>Edit</a>   
+
+                            <button type="button" class="dropdown-item text-danger rounded-bottom" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modal-confirmationsuppression"
+                                        data-campaign-id="{{ $campaign->id }}">
+                                    <span class="fas fa-trash-alt me-2"></span>Remove
+                                </button>                        
                         </div>
                     </div>
                 </td>
             </tr>         
+            
             @endforeach
                    
         </tbody>
@@ -222,30 +213,48 @@
     <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
         <nav aria-label="Page navigation example">
             <ul class="pagination mb-0">
-                <li class="page-item">
-                    <a class="page-link" href="#">Previous</a>
-                </li>
+        @if ($campaigns->onFirstPage())
+            <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+            </li>
+        @else
+            <li class="page-item">
+                <a class="page-link" href="{{ $campaigns->previousPageUrl() }}" rel="prev">Previous</a>
+            </li>
+        @endif
+
+        <!-- Pagination Elements -->
+        @foreach ($campaigns->links() as $page => $url)
+            @if ($campaigns->currentPage() == $page)
                 <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
+                    <span class="page-link">{{ $page }}</span>
                 </li>
+            @else
                 <li class="page-item">
-                    <a class="page-link" href="#">2</a>
+                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">4</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">5</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
+            @endif
+        @endforeach
+
+        <!-- Next Page Link -->
+        @if ($campaigns->hasMorePages())
+            <li class="page-item">
+                <a class="page-link" href="{{ $campaigns->nextPageUrl() }}" rel="next">Next</a>
+            </li>
+        @else
+            <li class="page-item disabled">
+                <span class="page-link">Next</span>
+            </li>
+        @endif
             </ul>
         </nav>
-        <div class="fw-normal small mt-4 mt-lg-0">Showing <b>5</b> out of <b>25</b> entries</div>
+
+   
+        <div class="fw-normal small mt-4 mt-lg-0">Showing <b>5</b> out of <b>{{$completedCampaignsCount + $upcomingCampaignsCount+ $activeCampaignsCount}}</b> entries</div>
     </div>
 </div>
 @endsection
+
+
+
+

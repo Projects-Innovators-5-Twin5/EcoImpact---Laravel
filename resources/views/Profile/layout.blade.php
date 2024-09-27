@@ -10,7 +10,6 @@
 <meta name="description" content="Volt Pro is a Premium Bootstrap 5 Admin Dashboard featuring over 800 components, 10+ plugins and 20 example pages using Vanilla JS.">
 <meta name="keywords" content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, themesberg, themesberg dashboard, themesberg admin dashboard" />
 <link rel="canonical" href="https://themesberg.com/product/admin-dashboard/volt-premium-bootstrap-5-dashboard">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
@@ -43,6 +42,8 @@
 
 <!-- Volt CSS -->
 @vite('resources/css/volt.css')
+<link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+
 
 <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
 
@@ -54,10 +55,11 @@
       <!-- Include the navbar -->
       @include('layouts.landingtopbar')
 
-      <div>
-          <main>
-              @yield('content')
-          </main>
+      <div class="content-profile">
+        <div class="row">
+            @include('layouts.profilenav')
+            @yield('content')
+        </div>
       </div>
 
      <!-- Include the footer -->

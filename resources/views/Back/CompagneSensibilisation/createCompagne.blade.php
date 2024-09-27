@@ -7,9 +7,9 @@
                                         <div class="card p-3 p-lg-4">
                                             <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
                                             <div class="text-center text-md-center mb-4 mt-md-0">
-                                                <h1 class="mb-0 h4">Add Compaign</h1>
+                                                <h1 class="mb-0 h4">Add Campaign</h1>
                                             </div>
-                                            <form action="{{ route('campaigns.store') }}" class="mt-4"  method="POST">
+                                            <form action="{{ route('campaigns.store') }}" class="mt-4"  method="POST" enctype="multipart/form-data">
 
                                                @csrf
                                                 <!-- Form -->
@@ -39,7 +39,7 @@
 
 
                                                 <div class="form-group mb-4">
-                                                    <label for="formFile" class="form-label">Image</label>
+                                                    <label for="image" class="form-label">Image</label>
                                                     <input class="form-control" name="image" type="file" id="image">
                                                 </div>
 

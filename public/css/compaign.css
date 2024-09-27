@@ -1,3 +1,81 @@
 .btn-toolbar{
     margin-left: auto;
 }
+
+
+.status-active {
+    color: #ffffff; 
+    background-color: #28a745; 
+    padding: 5px 10px;
+    border-radius: 12px;
+}
+
+.status-archived {
+    color: #ffffff; 
+    background-color: rgb(248, 74, 74); 
+    padding: 5px 10px;
+    border-radius: 12px;
+}
+
+.status-upcoming {
+    color: #ffffff; 
+    background-color: #007bff; 
+    padding: 5px 10px;
+    border-radius: 12px;
+}
+
+.status-completed {
+    color: #ffffff; 
+    background-color: #fd7e14; 
+    padding: 5px 10px;
+    border-radius: 12px;
+}
+
+
+.btn-gray{
+    background-color: rgb(179, 177, 177) ;
+    color: white;
+}
+
+.btn-gray:hover{
+    background-color: rgb(179, 177, 177) ;
+    color: white;
+}
+
+
+.img-c{
+    width: 100%;
+    height: 50%;
+}
+
+
+.list-compaign-active{
+    padding:2%;
+    margin-top: 100px;
+}
+
+.list-compaign-upcoming{
+    padding:2%;
+}
+
+
+.title-list-compaign{
+    margin-left: 2% ;
+    margin-bottom: 2% ;
+    font-size: 25px;
+}
+
+.card:hover{
+    box-shadow:  0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+h2.complete , h4.complete{
+    color: #fd7e14 ;
+}
+
+.icon-compaign{
+    width: 60px;
+    height: 60px;
+    margin-bottom: 2%;
+    
+}

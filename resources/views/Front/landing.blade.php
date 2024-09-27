@@ -4,6 +4,8 @@
 <title>EcoImpact - Landing page</title>
 
 <link rel="stylesheet" href="{{ asset('css/landing.css') }}">
+<script src="{{ asset('js/landing.js') }}"></script>
+
 
 <div class="container">
        
@@ -119,14 +121,5 @@
 
 </div>
 
-<script>
-    window.addEventListener('scroll', function() {
-        var navbar = document.querySelector('.navbar');
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
-</script>
+
 @endsection

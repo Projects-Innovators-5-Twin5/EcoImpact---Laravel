@@ -19,4 +19,8 @@ class AuthController extends Controller
     public function forgotPassword(){
         return View("Auth.forgotPassword");
     }
+
+    public function ProfileUser(){
+        return View("Profile.profileUser");
+    }
 }

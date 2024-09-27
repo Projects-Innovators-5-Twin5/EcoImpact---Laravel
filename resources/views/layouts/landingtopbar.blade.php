@@ -30,7 +30,7 @@
         </div>
 
 
-        <button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-right-from-bracket"></i><a href="/register" class="text-btn">Login/Regsiter</a></button>
+        <button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-right-from-bracket"></i><a href="/register" class="text-btn">  Login/Regsiter</a></button>
 
 
 

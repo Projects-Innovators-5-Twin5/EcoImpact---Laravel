@@ -31,8 +31,19 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/forgotPassword', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
 
+Route::get('/profile', [AuthController::class, 'profileUser'])->name('ProfileUser');
+
 
 //module compagne de sensibilisation
-Route::get('/compagneList', [SensibilisatioCompagneController::class, 'index'])->name('campaigns.index');
-Route::post('/compagneCreate', [SensibilisatioCompagneController::class, 'store'])->name('campaigns.store');
+Route::get('/campaigns', [SensibilisatioCompagneController::class, 'index'])->name('campaigns.index');
+Route::get('/campaigns/front', [SensibilisatioCompagneController::class, 'indexFront'])->name('campaignsFront.index');
+
+Route::post('/campaigns/create', [SensibilisatioCompagneController::class, 'store'])->name('campaigns.store');
+
+Route::get('/campaigns/{id}/edit', [SensibilisatioCompagneController::class, 'edit'])->name('campaigns.edit');
+Route::put('/campaigns/{id}', [SensibilisatioCompagneController::class, 'update'])->name('campaigns.update');
+Route::get('/campaigns/show/{id}', [SensibilisatioCompagneController::class, 'show'])->name('campaigns.show');
+
+
+Route::put('/campaigns/{id}/archive', [SensibilisatioCompagneController::class, 'archive'])->name('campaigns.archive');
 

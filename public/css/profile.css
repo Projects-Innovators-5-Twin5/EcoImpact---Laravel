@@ -1,0 +1,16 @@
+.content-profile{
+    padding: 2%;
+}
+
+.nav-item-profile{
+    padding: 1%;
+}
+
+.sidebar-text{
+    font-size: 18px;
+}
+
+.nav-item-profile:hover{
+    background-color: rgb(231, 229, 229);
+    padding: 1%;
+}

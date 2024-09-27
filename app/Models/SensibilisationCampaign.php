@@ -16,6 +16,7 @@ class SensibilisationCampaign extends Model
         'start_date',
         'end_date',
         'target_audience',
+        'status'
     ];
 
     protected $casts = [
