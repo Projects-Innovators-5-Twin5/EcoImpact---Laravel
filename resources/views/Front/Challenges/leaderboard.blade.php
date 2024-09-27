@@ -5,8 +5,17 @@
 
 <div class="leaderboard-wrapper">
     <div class="leaderboard-container">
-        <h1>Leaderboard</h1>
-        <table class="table">
+    <h1 class="leaderboard-title">
+    🏅 EcoImpact Leaderboard 🥇
+</h1>
+        
+        <!-- Leaderboard Description -->
+        <div class="leaderboard-description">
+            <p>Welcome to the <strong>EcoImpact Leaderboard</strong>! This page showcases the top users who have demonstrated exceptional participation in our challenges. Each user is ranked based on their accumulated scores, which are earned by successfully submitting solutions and winning challenges.</p>
+            <p>Join us in celebrating the achievements of our community members as they strive to make a positive impact on energy consumption and sustainability. Compete for the top spot and see how you measure up against your peers!</p>
+        </div>
+        
+        <table class="table leaderboard-table">
             <thead>
                 <tr>
                     <th>Rank</th>
@@ -19,7 +28,7 @@
                 <tr class="table-row @if($index == 0) winner @endif">
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $user->name }}</td>
-                    <td>{{ $user->score }}</td>
+                    <td>{{ $user->score }}</td> <!-- Directly displays the user's score -->
                 </tr>
                 @endforeach
             </tbody>

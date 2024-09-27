@@ -1,11 +1,17 @@
 .solution-item {
-    border: 1px solid #ccc;
+    border: 1px solid #e0e0e0;
     border-radius: 10px;
     padding: 20px;
-    margin-bottom: 15px;
-    background-color: #f0f4f8;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    background-color: #ffffff; /* White background for clarity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s; /* Add a hover effect */
 }
+.solution-item:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+
 
 .solution-header {
     display: flex;
@@ -13,7 +19,7 @@
     align-items: center;
     font-size: 14px;
     color: #555;
-    margin-bottom: 5px; /* Adds space between the header and vote section */
+    margin-bottom: 10px; /* Increased space between header and vote section */
 }
 
 .solution-header .user-info {
@@ -22,33 +28,38 @@
 }
 
 .user-image {
-    width: 40px;
-    height: 40px;
+    width: 45px; /* Slightly larger profile picture */
+    height: 45px;
     border-radius: 50%;
     margin-right: 10px;
+    border: 2px solid #ffa500; /* Optional border around profile image */
 }
 
 
 .solution-content h5 {
-    font-size: 18px;
-    margin-top: 0px; /* Decrease this value to reduce the gap */
-    margin-bottom: 5px; /* You can add this if there's extra space below the title */
+    font-size: 20px; /* Slightly larger title */
+    margin-top: 0;
+    margin-bottom: 8px; /* Adjust margin for spacing */
+    color: #333; /* Darker title color */
 }
 
 .solution-content p {
     margin-top: 5px;
-    font-size: 14px;
+    font-size: 15px; /* Increased font size */
     line-height: 1.6;
+    color: #666; /* Slightly lighter color for description */
 }
+
 .solution-date {
     font-size: 12px;
     color: #999;
-    margin-left: auto; /* Forces the date to the far right */
+    margin-left: auto;
 }
 
 .dropdown {
-    margin-left: 10px; /* Adds space between date and dropdown if needed */
+    margin-left: 10px;
 }
+
 .vote-section {
     display: flex;
     justify-content: flex-end; /* Moves the button to the right */
@@ -58,8 +69,8 @@
 .vote-btn {
     background-color: transparent;
     border: none;
-    color: #000000; /* Yellow star color */
-    font-size: 20px;
+    color: #000;
+    font-size: 24px; /* Increased font size for visibility */
     cursor: pointer;
     transition: color 0.3s ease;
 }
@@ -71,16 +82,18 @@
 .vote-btn:focus {
     outline: none;
 }
+
 .vote-btn.voted {
-    color: #ffa500;
+    color: #ffa500; /* Color for voted state */
 }
 
 
 .solution-filter-container {
     display: flex;
-    justify-content: flex-end; /* Aligns the filter to the right */
-    margin-bottom: 1rem; /* Adds some space below the filter */
+    justify-content: flex-end;
+    margin-bottom: 1rem;
 }
+
 
 .solution-filter {
     display: flex;
@@ -106,35 +119,40 @@
 .podium {
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    margin-top: 20px;
     margin-bottom: 20px;
+
 }
 
 .podium-position {
-    position: relative;
-    width: 100px;
-    height: 150px;
-    margin: 0 10px;
-    background-color: #f8c740; /* Gold color for podium */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 15px;
+    text-align: center; /* Center the text */
 }
 
+
 .trophy-icon {
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 40px;
-    color: #f39c12; /* Trophy color */
+    font-size: 40px; /* Increase trophy size */
+    color: gold; /* Optional: give a gold color to the trophy */
+    margin-bottom: 5px; /* Space between trophy and text */
 }
 
 .winner-info {
-    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Light background for contrast */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
 }
 
-.winner-info strong {
-    display: block;
-    font-size: 18px;
-    margin-bottom: 5px;
+.winner-name {
+    font-weight: bold;
+    font-size: 16px; /* Adjust name font size */
+}
+
+.winner-title {
+    font-size: 14px; /* Adjust title font size */
+    color: #555; /* Subtitle color */
+    margin-top: 5px; /* Space between name and title */
 }

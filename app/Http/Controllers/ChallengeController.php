@@ -17,7 +17,7 @@ class ChallengeController extends Controller
         $search = $request->get('search', '');
         $challenges = Challenge::where('title', 'like', '%' . $search . '%')
             ->orWhere('description', 'like', '%' . $search . '%')
-            ->paginate(10);
+            ->paginate(5);
     
             $currentDate = Carbon::now();
 
@@ -177,49 +177,77 @@ class ChallengeController extends Controller
     }
     
    
-
-public function indexfront(Request $request)
-{
-    $search = $request->get('search', '');
-    $challenges = Challenge::where('title', 'like', '%' . $search . '%')
-        ->orWhere('description', 'like', '%' . $search . '%')
-        ->paginate(10);
-
-    $currentDate = Carbon::now();
-
-    // Update challenge statuses based on end date
-    foreach ($challenges as $challenge) {
-        $endDate = Carbon::parse($challenge->end_date);
-        if ($currentDate->gte($endDate) && $challenge->status !== 'closed') {
-            $challenge->status = 'closed';
-            $challenge->save();
-
-            // Find the winning solution, counting votes dynamically
-            $winningSolution = Solution::where('challenge_id', $challenge->id)
-                ->withCount('votes') // Count votes dynamically
-                ->orderBy('votes_count', 'desc')
-                ->first();
-
-            if ($winningSolution) {
-                // Update the winner's score
-                $user = User::find($winningSolution->user_id);
-                if ($user) {
-                    $user->score += $challenge->reward_points;
-                    $user->save();
-                }
-            }
-        } elseif ($currentDate->lt($endDate) && $challenge->status === 'closed') {
-            $challenge->status = 'open';
-            $challenge->save();
+    public function indexfront(Request $request)
+    {
+        $search = $request->get('search', '');
+        $statusFilter = $request->get('status', ''); // Get status filter (open, closed, upcoming, or empty for all)
+        $currentDate = Carbon::now();
+    
+        // Base query for ongoing and past challenges
+        $challengesQuery = Challenge::where(function ($query) use ($search) {
+            $query->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+        });
+    
+        // Apply the status filter (open, closed, upcoming)
+        if ($statusFilter === 'open') {
+            $challengesQuery->where('status', 'open')->where('start_date', '<=', $currentDate);
+        } elseif ($statusFilter === 'closed') {
+            $challengesQuery->where('status', 'closed')->where('start_date', '<=', $currentDate);
+        } elseif ($statusFilter === 'upcoming') {
+            // If "upcoming" is selected, only fetch upcoming challenges
+            $challengesQuery->where('start_date', '>', $currentDate);
+        } else {
+            // If no status filter, get both ongoing/past and upcoming challenges
+            $challengesQuery = Challenge::where(function ($query) use ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                      ->orWhere('description', 'like', '%' . $search . '%');
+            })->where(function ($query) use ($currentDate) {
+                $query->where('start_date', '<=', $currentDate) // Ongoing and past challenges
+                      ->orWhere('start_date', '>', $currentDate); // Upcoming challenges
+            });
         }
+    
+        // Get paginated challenges
+        $challenges = $challengesQuery->paginate(6);
+    
+        // Update challenge statuses based on end date (existing logic)
+        foreach ($challenges as $challenge) {
+            $endDate = Carbon::parse($challenge->end_date);
+            if ($currentDate->gte($endDate) && $challenge->status !== 'closed') {
+                $challenge->status = 'closed';
+                $challenge->save();
+    
+                // Find the winning solution, counting votes dynamically
+                $winningSolution = Solution::where('challenge_id', $challenge->id)
+                    ->withCount('votes')
+                    ->orderBy('votes_count', 'desc')
+                    ->first();
+    
+                if ($winningSolution) {
+                    $user = User::find($winningSolution->user_id);
+                    if ($user) {
+                        $user->score += $challenge->reward_points;
+                        $user->save();
+                    }
+                }
+            } elseif ($currentDate->lt($endDate) && $challenge->status === 'closed') {
+                $challenge->status = 'open';
+                $challenge->save();
+            }
+        }
+    
+        if ($request->ajax()) {
+            $html = view('Front.Challenges.challenges_list', compact('challenges'))->render();
+            $pagination = $challenges->links('pagination::bootstrap-4')->render();
+            return response()->json(['html' => $html, 'pagination' => $pagination]);
+        }
+        
+    
+        return view('Front.Challenges.index', compact('challenges', 'search', 'statusFilter'));
     }
-
-    if ($request->ajax()) {
-        return view('Front.Challenges.challenges_list', compact('challenges'));
-    }
-
-    return view('Front.Challenges.index', compact('challenges', 'search'));
-}
+    
+    
 public function showfront($id)
 {
     $challenge = Challenge::find($id);
@@ -267,25 +295,16 @@ public function showfront($id)
 
     return view('Front.Challenges.show', compact('challenge', 'solutions', 'timeLeft', 'isClosed', 'winningSolutions'));
 }
+public function leaderboard()
+{
+    $users = User::select('users.id', 'users.name', 'users.email', 'users.score') // Retrieve users' score from the database
+        ->where('users.role', 'user')
+        ->orderBy('users.score', 'DESC') // Order by the score in descending order
+        ->get();
 
-        public function leaderboard()
-        {
-        
-            $users = User::select('users.id', 'users.name', 'users.email', 'users.score')
-            ->leftJoin('solutions', 'users.id', '=', 'solutions.user_id')
-            ->leftJoin('challenges', 'solutions.challenge_id', '=', 'challenges.id')
-            ->where('users.role', 'user')
-            ->whereNotNull('solutions.is_winner')
-            ->groupBy('users.id', 'users.name', 'users.email', 'users.score')
-            ->selectRaw('SUM(CASE WHEN solutions.is_winner THEN challenges.reward_points ELSE 0 END) AS total_score')
-            ->orderBy('total_score', 'DESC')
-            ->get();
-    
-             
-            
-                return view('Front.Challenges.leaderboard', compact('users'));
-        }
-        
+    return view('Front.Challenges.leaderboard', compact('users'));
+}
+
     
     
 }    

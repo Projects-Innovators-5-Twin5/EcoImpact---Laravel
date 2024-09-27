@@ -10,7 +10,7 @@
         <h1>{{ $challenge->title }}</h1>
         <div class="button-group">
             <a href="{{ route('challenges.indexfront') }}" class="btn btn-secondary back-btn">Back to Challenges</a>
-            @if (!$challenge->isClosed())
+            @if ($challenge->isOpen() && !$challenge->isUpcoming())
                 <a href="#" class="btn btn-primary add-solution-btn" data-bs-toggle="modal" data-bs-target="#addSolutionModal">Add Solution</a>
             @endif        </div>
     </div>
@@ -35,18 +35,19 @@
         @if ($isClosed && $winningSolutions->count())
 <div class="winner-container">
     <div class="podium">
+    
         @foreach ($winningSolutions as $solution)
             <div class="podium-position">
                 <i class="fas fa-trophy trophy-icon"></i>
                 <div class="winner-info">
-                    <strong>{{ $solution->user->name }}</strong>
-                    <p>{{ $solution->title }}</p>
+                    <strong class="winner-name">🎉{{ $solution->user->name }}🎉</strong>
+                    <p class="winner-title">{{ $solution->title }}</p>
                 </div>
             </div>
         @endforeach
     </div>
     <div class="alert alert-success">
-       Gongratulations to the winner(s) :
+        Congratulations to the winner(s) :
         @foreach ($winningSolutions as $solution)
             <strong>{{ $solution->title }}</strong> by <strong>{{ $solution->user->name }}</strong>@if (!$loop->last), @endif
         @endforeach
@@ -71,17 +72,13 @@
         @foreach($solutions as $solution)
         <div class="solution-item">
     <div class="solution-header">
-    
-
-        <div class="user-info">
+    <div class="user-info">
             <img src="/assets/img/team/profile-picture-5.jpg" alt="User Image" class="user-image">
-
             <strong>{{ $solution->user->name }}</strong>
-            
         </div>
-        <span class="solution-date">{{ $solution->created_at->format('Y-m-d') }}</span>
+        <span class="solution-date">{{ $solution->created_at->format('d-m-Y H:i') }}</span>
         @if(auth()->id() === $solution->user_id || auth()->user()->role === 'admin')
-                    <div class="dropdown">
+        <div class="dropdown">
                 <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                     &#x2026;
                 </button>
@@ -90,16 +87,14 @@
                     <li><a class="dropdown-item" href="{{ route('solutions.destroy', $solution->id) }}" onclick="event.preventDefault(); document.getElementById('delete-solution-{{ $solution->id }}').submit();">Delete</a></li>
                 </ul>
             </div>
-
             <form id="delete-solution-{{ $solution->id }}" action="{{ route('solutions.destroy', $solution->id) }}" method="POST" style="display: none;">
                 @csrf
                 @method('DELETE')
             </form>
         @endif
-     
     </div>
+
     <div class="vote-section">
-        <!-- Conditionally render the vote button based on challenge status -->
         @if (!$challenge->isClosed())
             <button class="vote-btn {{ $solution->voted ? 'voted' : '' }}" onclick="voteSolution({{ $solution->id }})" data-solution-id="{{ $solution->id }}">
                 <i class="fa fa-star"></i>
@@ -109,7 +104,7 @@
                 <i class="fa fa-star"></i>
             </button>
         @endif
-        <span id="vote-count-{{ $solution->id }}">{{ $solution->votes()->count() }}</span> <!-- Display vote count -->
+        <span id="vote-count-{{ $solution->id }}">{{ $solution->votes()->count() }}</span>
     </div>
 
 

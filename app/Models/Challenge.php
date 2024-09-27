@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Challenge extends Model
 {
@@ -37,5 +38,12 @@ public function isClosed()
 {
     return $this->status === 'closed';
 }
-
+public function isUpcoming()
+{
+    return $this->start_date > Carbon::now();
+}
+public function isOpen()
+{
+    return $this->status === 'open';
+}
 }

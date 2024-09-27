@@ -3,7 +3,7 @@
     padding: 30px;
     border-radius: 12px; /* Rounded corners */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-    max-width: 800px; /* Max width for better alignment */
+    max-width: 1000px; /* Max width for better alignment */
     margin: 20px auto; /* Centered in the middle of the page */
 }
 
@@ -32,7 +32,7 @@ h1 {
 }
 
 .table th {
-    background-color: #007bff; /* Primary color for header */
+    background-color: #fb503b; /* Primary color for header */
     color: white; /* White text for header */
     font-weight: bold;
 }
@@ -66,4 +66,47 @@ h1 {
 
 .table-row:hover {
     transform: scale(1.02); /* Slight scale effect on hover */
+}
+
+
+.leaderboard-title {
+    font-family: 'Arial', sans-serif; /* Consistent font */
+    color: #333; /* Darker text color */
+    text-align: center; /* Centered heading */
+    margin-bottom: 20px;
+    font-size: 2.5em; /* Increased font size for prominence */
+    position: relative; /* Positioning for icon */
+}
+
+.leaderboard-title::before {
+    content: '🥇'; /* Gold medal icon */
+    position: absolute;
+    left: 10%; /* Centered */
+    transform: translateX(-50%); /* Adjust position */
+    font-size: 0.8em; /* Smaller size for balance */
+    top: -0.5em; /* Slightly above the title */
+}
+
+.leaderboard-title::after {
+    content: '🏅'; /* Silver medal icon */
+    position: absolute;
+    right: 10%; /* Position to the right */
+    font-size: 0.8em; /* Smaller size for balance */
+    top: -0.5em; /* Slightly above the title */
+}
+
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .leaderboard-wrapper {
+        padding: 20px; /* Reduced padding on smaller screens */
+    }
+    
+    .table th, .table td {
+        padding: 8px; /* Adjusted padding */
+    }
+    
+    h1 {
+        font-size: 1.5em; /* Smaller heading on mobile */
+    }
 }

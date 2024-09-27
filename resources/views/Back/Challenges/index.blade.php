@@ -64,9 +64,9 @@
                     @include('Back.Challenges.table_rows', ['challenges' => $challenges]) <!-- Include a separate view for table rows -->
                 </tbody>
             </table>
-            <div class="mt-3">
-                {{ $challenges->appends(request()->query())->links() }} <!-- Pagination links -->
-            </div>
+            <div class="d-flex justify-content-center mt-4">
+        {{ $challenges->links('pagination::bootstrap-4') }} <!-- Using Bootstrap pagination -->
+    </div>
         </div>
     </div>
 </div>

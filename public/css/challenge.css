@@ -1,10 +1,14 @@
 .challenge-container {
-    margin: 20px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 90%; /* Set the maximum width to 70% */
+    margin: 20px auto; /* Center the container with auto margins */
+    padding: 20px; /* Padding inside the container */
+    background-color: #f8f9fa; /* Light background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    position: relative; /* Position relative to position emojis */
 }
+
+
 
 .challenge-header {
     display: flex;
@@ -12,15 +16,20 @@
     align-items: center;
     margin-bottom: 20px;
 }
-
 .challenge-content {
     display: flex;
-    align-items: flex-start; 
-    gap: 50px; 
-    margin-bottom: 20px;
-    justify-content: center
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
+.challenge-card {
+    transition: transform 0.3s, box-shadow 0.3s; /* Animation on hover */
+}
+
+.challenge-card:hover {
+    transform: translateY(-10px); /* Slightly lift the card */
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2); /* Increase shadow */
+}
 
 .challenge-image {
     max-width: 100%;
@@ -29,8 +38,27 @@
     border-radius: 5px; 
 }
 
+.image-framecard {
+    width: 100%; 
+    height: 200px;
+    border-bottom: 2px solid #ddd;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa; 
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.image-framecard:hover {
+    background-color: #e2f0f1; /* Change background on hover */
+}
+
 .challenge-details {
     max-width: 55%;
+    margin-left:30px;
+    margin-top:50px;
+
 }
 
 .challenge-details p {
@@ -94,4 +122,17 @@
 }
 .float-right {
     float: right;
+}
+.card-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.badge {
+    font-size: 0.9em;
 }
