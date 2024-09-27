@@ -1,9 +1,67 @@
 @extends('back.layout')
 
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
 
 @section('content')
 <title>EcoImpact - Dashboard page</title>
+<div class="col-12 mb-4">
+    <div class="card border-0 shadow-sm rounded">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Challenges Insights</h5>
+        </div>
+        <div class="card-body">
+        <div class="row mt-4">
+                <div class="col-12 col-sm-4 text-center mb-4">
+                    <h6>Total Challenges</h6>
+                    <h3 class="fw-extrabold animated-count">
+                        {{ $totalChallenges }} <span role="img" aria-label="challenges">📊</span>
+                    </h3>
+                </div>
+                <div class="col-12 col-sm-6 text-center mb-4">
+                    <h6>Total Solutions</h6>
+                    <h3 class="fw-extrabold animated-count">
+                        {{ $totalSolutions }} <span role="img" aria-label="solutions">💡</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 col-sm-4 text-center mb-4">
+                    <h6>Open Challenges</h6>
+                    <h4 class="text-success animated-count">
+                        {{ $challengesOpen }} <span role="img" aria-label="open">✅</span>
+                    </h4>
+                </div>
+                <div class="col-12 col-sm-6 text-center mb-4">
+                    <h6>Completed Challenges</h6>
+                    <h4 class="text-danger animated-count">
+                        {{ $challengesClosed }} <span role="img" aria-label="closed">🏆</span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mb-4">
+    <div class="card border-0 shadow">
+        <div class="card-header">
+            <h5 class="mb-0">Challenges Charts</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-sm-6 text-center">
+                    <canvas id="challengesChart" height="400"></canvas>
+                </div>
+                <div class="col-12 col-sm-6 text-center">
+                    <canvas id="solutionsChart" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
 <div class="py-4">
     <div class="dropdown">
         <button class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,6 +93,9 @@
         </div>
     </div>
 </div>
+
+
+
 <div class="row">
     <div class="col-12 mb-4">
         <div class="card border-0 shadow" style="background-color: #fac0b9">
@@ -571,4 +632,71 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctxChallenges = document.getElementById('challengesChart').getContext('2d');
+    const challengesChart = new Chart(ctxChallenges, {
+        type: 'bar',
+        data: {
+            labels: ['Total Challenges', 'Open Challenges', 'Completed Challenges'],
+            datasets: [{
+                label: 'Challenges',
+                data: [{{ $totalChallenges }}, {{ $challengesOpen }}, {{ $challengesClosed }}],
+                backgroundColor: [
+                    'rgba(80, 90, 73, 0.8)',
+                    'rgba(63, 195, 128, 1)',      // Dark Green
+                    'rgba(255, 99, 132, 1)',   // Red
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const ctxSolutions = document.getElementById('solutionsChart').getContext('2d');
+    const solutionsChart = new Chart(ctxSolutions, {
+        type: 'doughnut',
+        data: {
+            labels: ['Open Challenges', 'Closed Challenges'],
+            datasets: [{
+                label: 'Challenges',
+                data: [{{ $challengesOpen }},  {{ $challengesClosed }}],
+                backgroundColor: [
+                    'rgba(63, 195, 128, 1)',      // Dark Green
+                    'rgba(255, 99, 132, 1)',   // Red
+                ],
+                borderColor: [
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(201, 203, 207, 1)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Solutions Overview'
+                }
+            }
+        }
+    });
+</script>
+
+
 @endsection

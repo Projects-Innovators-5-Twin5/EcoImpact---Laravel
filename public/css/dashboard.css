@@ -1,0 +1,58 @@
+@keyframes count-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-count {
+    animation: count-up 0.5s ease-in-out;
+    font-size: 2rem; /* Increased font size for emphasis */
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Elevate the card on hover */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+}
+
+.card-header {
+    border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners */
+}
+
+.text-success {
+    color: #28a745; /* Bootstrap success color */
+}
+
+.text-danger {
+    color: #dc3545; /* Bootstrap danger color */
+}
+
+/* Optional: Add some padding to card body for better spacing */
+.card-body {
+    padding: 2rem;
+}
+
+/* Additional styling for better text visibility */
+h6 {
+    font-weight: 600; /* Slightly bolder for headings */
+}
+
+h3, h4 {
+    margin-top: 0.5rem;
+}
+.card-body {
+    padding: 20px;
+}
+
+canvas {
+    max-width: 100%;
+    margin: 0 auto;
+}
