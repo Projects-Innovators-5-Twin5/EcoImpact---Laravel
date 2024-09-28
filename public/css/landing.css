@@ -1,11 +1,9 @@
-body{
-    padding-top: 130px;
-}
-.nav-content{
-    margin-left: 8%;
-    margin-right: 8%;
-}
 
+.navbar{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+}
 .navbar.scrolled {
     background-color: white; 
 }
