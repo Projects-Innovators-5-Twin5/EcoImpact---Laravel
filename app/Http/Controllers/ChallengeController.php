@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 use App\Models\Challenge;
 use App\Models\Solution;
 use App\Models\User ;
-
+use App\Mail\ChallengeWinnerMail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PDF;
+use Illuminate\Support\Facades\Mail;
+
 
 
 class ChallengeController extends Controller
@@ -229,6 +231,9 @@ class ChallengeController extends Controller
                     if ($user) {
                         $user->score += $challenge->reward_points;
                         $user->save();
+                        \Log::info('Sending email to: ' . $user->email);
+                        Mail::to($user->email)->send(new ChallengeWinnerMail($user, $challenge));
+
                     }
                 }
             } elseif ($currentDate->lt($endDate) && $challenge->status === 'closed') {

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\SolutionController;
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -45,5 +46,14 @@ Route::resource('solutions', SolutionController::class)->only(['store', 'edit', 
 Route::delete('/solutions/{solution}', [SolutionController::class, 'destroy'])->name('solutions.destroy');
 Route::post('/solutions/{solution}/vote', [SolutionController::class, 'voteSolution'])->name('solutions.vote');
 Route::get('/leaderboard', [ChallengeController::class, 'leaderboard'])->name('leaderboard');
+
+Route::get('/sendemail', function () {
+    Mail::raw('This is a test email', function ($message) {
+        $message->to('feryelouerfelli@gmail.com')
+                ->subject('Test Email');
+    });
+
+    return 'Test email sent!';
+});
 
 
