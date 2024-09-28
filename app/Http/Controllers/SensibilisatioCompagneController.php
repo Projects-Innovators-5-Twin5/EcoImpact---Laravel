@@ -8,6 +8,8 @@ use App\Models\SensibilisationCampaign;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
+use PDF;
+
 class SensibilisatioCompagneController extends Controller
 {
     /**
@@ -18,9 +20,14 @@ class SensibilisatioCompagneController extends Controller
     public function index()
     {
         $campaigns = SensibilisationCampaign::all();
+
         foreach ($campaigns as $campaign) {
             if (Carbon::parse($campaign->end_date)->lt(Carbon::today()) && ($campaign->status != 'archived')) {
                 $campaign->status = 'completed';
+                $campaign->save();
+            }
+            if (Carbon::parse($campaign->start_date)->lte(Carbon::today()) && ($campaign->status == 'upcoming')) {
+                $campaign->status = 'active';
                 $campaign->save();
             }
         }
@@ -47,7 +54,17 @@ class SensibilisatioCompagneController extends Controller
 
         $completedCampaigns = SensibilisationCampaign::where('status', 'completed')->whereBetween('end_date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
 
-        
+        $campaigns = SensibilisationCampaign::all();
+        foreach ($campaigns as $campaign) {
+            if (Carbon::parse($campaign->end_date)->lt(Carbon::today()) && ($campaign->status != 'archived')) {
+                $campaign->status = 'completed';
+                $campaign->save();
+            }
+            if (Carbon::parse($campaign->start_date)->lte(Carbon::today()) && ($campaign->status == 'upcoming')) {
+                $campaign->status = 'active';
+                $campaign->save();
+            }
+        }
         return view('Front.CompagneSensibilisation.compagneList', compact('activeCampaigns', 'upcomingCampaigns','completedCampaigns'));
     }
 
@@ -68,7 +85,17 @@ class SensibilisatioCompagneController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $validatedData = $request->validate([
+            'title' => 'required|string|min:4|max:255',
+            'description' => 'required|string|min:50|max:1000',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after:start_date',
+            'target_audience' => 'required|array',
+            'target_audience.*' => 'string|max:255', 
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+
         $startDate = $request->input('start_date');
 
         if (Carbon::parse($startDate)->gt(Carbon::today())) {
@@ -109,6 +136,15 @@ class SensibilisatioCompagneController extends Controller
         $startDate = Carbon::parse($campaign->start_date);
         $endDate = Carbon::parse($campaign->end_date);
         return view('Front.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate','endDate'));
+    }
+
+
+    public function showBack($id)
+    {
+        $campaign = SensibilisationCampaign::findOrFail($id);
+        $startDate = Carbon::parse($campaign->start_date);
+        $endDate = Carbon::parse($campaign->end_date);
+        return view('Back.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate','endDate'));
     }
 
     /**
@@ -181,4 +217,36 @@ class SensibilisatioCompagneController extends Controller
 
         return redirect()->route('campaigns.index')->with('success', 'Campaign archived successfully.');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $results = SensibilisationCampaign::where('title', 'LIKE', "%{$query}%")->get();
+
+        return response()->json($results);
+    }
+
+    public function searchByStatus(Request $request)
+    {
+        $query = $request->input('query', ''); 
+
+        if ($query === 'all' || empty($query)) {
+            $results = SensibilisationCampaign::all();
+        } else {
+            $results = SensibilisationCampaign::where('status', 'LIKE', "%{$query}%")->get();
+        }
+        
+        return response()->json($results);
+    }
+
+    public function exportPdf()
+    {
+        $data = SensibilisationCampaign::all();
+
+        $pdf = PDF::loadView('Back.CompagneSensibilisation.compagnePDF', compact('data'));
+
+        return $pdf->download('table_campaigns.pdf');
+    }
+
 }

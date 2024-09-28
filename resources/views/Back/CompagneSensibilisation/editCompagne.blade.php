@@ -1,5 +1,6 @@
 @extends('back.layout')
 <link rel="stylesheet" href="{{ asset('css/compaign.css') }}">
+<script src="{{ asset('js/compaign.js') }}"></script>
 
 
 @section('content')
@@ -32,7 +33,7 @@
                                                 <div class="form-group mb-4">
                                                     <label for="title">Title</label>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="title" value="{{ old('title', $campaign->title) }}" placeholder="Enter Title" id="title" autofocus required>
+                                                        <input type="text" class="form-control" name="title" value="{{ old('title', $campaign->title) }}" placeholder="Enter Title" id="title" autofocus >
                                                     </div>  
                                                 </div>
                                               
@@ -40,7 +41,7 @@
                                                     <label for="start_date">Start Date</label>
                                                     <div class="input-group">
                                                       
-                                                       <input data-datepicker="" class="form-control" id="start_date" value="{{ old('start_date', $campaign->start_date) }}" name="start_date" type="date" placeholder="dd/mm/yyyy" required>   
+                                                       <input data-datepicker="" class="form-control" id="start_date" value="{{ old('start_date', $campaign->start_date) }}" name="start_date" type="date" placeholder="dd/mm/yyyy" >   
                                                 
                                                     </div>  
                                                 </div>
@@ -48,7 +49,7 @@
                                                 <div class="form-group mb-4">
                                                     <label for="end_date">End Date</label>
                                                     <div class="input-group">
-                                                       <input data-datepicker="" class="form-control" id="end_date" type="date" value="{{ old('end_date', $campaign->end_date) }}" name="end_date" placeholder="dd/mm/yyyy" required>   
+                                                       <input data-datepicker="" class="form-control" id="end_date" type="date" value="{{ old('end_date', $campaign->end_date) }}" name="end_date" placeholder="dd/mm/yyyy" >   
                                                       
                                                     </div>  
                                                 </div>
@@ -72,6 +73,37 @@
                                                         </option>
                                                         @endforeach
                                                     </select>
+                                                    </div>  
+                                                </div>
+
+                                                <div class="form-group mb-4">
+                                                    <label for="target_audience">Status</label>
+
+                                                    <div class="input-group">
+
+                                                        <select class="form-select" id="status" name="status" aria-label="Message select example 2">
+                                                            @if($campaign->status == 'active')
+                                                              <option value="active" selected>active</option>
+                                                              <option value="upcoming">upcoming</option>
+                                                              <option value="completed">completed</option>
+                                                              <option value="archived">archived</option>
+                                                            @elseif($campaign->status == 'upcoming')  
+                                                               <option value="active">active</option>
+                                                               <option value="upcoming" selected>upcoming</option>
+                                                               <option value="completed">completed</option>
+                                                               <option value="archived">archived</option>
+                                                            @elseif($campaign->status == 'completed')  
+                                                                <option value="active">active</option>
+                                                                <option value="upcoming">upcoming</option>
+                                                                <option value="completed" selected>completed</option>
+                                                                <option value="archived">archived</option>
+                                                            @else  
+                                                                <option value="active">active</option>
+                                                                <option value="upcoming">upcoming</option>
+                                                                <option value="completed">completed</option>
+                                                                <option value="archived" selected>archived</option>
+                                                            @endif   
+                                                        </select>
                                                     </div>  
                                                 </div>
 

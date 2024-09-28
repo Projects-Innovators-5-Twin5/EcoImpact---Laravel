@@ -1,5 +1,6 @@
 @extends('back.layout')
 <link rel="stylesheet" href="{{ asset('css/compaign.css') }}">
+<script src="{{ asset('js/compaign.js') }}"></script>
 
 
 @section('content')
@@ -26,19 +27,20 @@
     </div>
 
 <div class="row mt-4">
-    <div class="col-12 col-sm-6 col-xl-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3 mb-4">
         <div class="card border-0 shadow">
             <div class="card-body">
                 <div class="row d-block d-xl-flex align-items-center">
                     <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                        <div class="icon-shape icon-shape-primary rounded me-4 me-sm-0">
-                            <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
+                        <div class="icon-shape icon-shape-info rounded me-4 me-sm-0">
+                        <i class="fas fa-calendar-alt" style="font-size: 25px; color: blue;"></i>
+
                         </div>
                        
                     </div>
                     <div class="col-12 col-xl-7 px-xl-0">
                         <div class="d-none d-sm-block mt-2">
-                            <h2 class="h5 text-info mb-0">Upcoming</h2>
+                            <h2 class="h5 text-info mb-0">Upcoming </h2>
                             <h4 class="fw-bold mt-2 text-info">{{$upcomingCampaignsCount}}</h4>
                         </div>
                         
@@ -47,13 +49,13 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-xl-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3 mb-4">
         <div class="card border-0 shadow">
             <div class="card-body">
                 <div class="row d-block d-xl-flex align-items-center">
                     <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                        <div class="icon-shape icon-shape-secondary rounded me-4 me-sm-0">
-                            <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg>
+                        <div class="icon-shape icon-shape-success rounded me-4 me-sm-0">
+                            <i class="fas fa-spinner" style="font-size: 30px; color: green; animation: spin 2s linear infinite;"></i>
                         </div>
                  
                     </div>
@@ -68,13 +70,14 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-xl-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3 mb-4">
         <div class="card border-0 shadow">
             <div class="card-body">
                 <div class="row d-block d-xl-flex align-items-center">
                     <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                        <div class="icon-shape icon-shape-tertiary rounded me-4 me-sm-0">
-                            <img src="/assets/img/completed.png" alt="icon" class="icon" style="width:25px; height:25px;"> 
+                        <div class="icon-shape icon-shape-secondary rounded me-4 me-sm-0">
+                        <i class="fas fa-check-circle" style="font-size: 30px; color: orange;"></i>
+
                         </div>
                     
                     </div>
@@ -82,6 +85,28 @@
                         <div class="d-none d-sm-block mt-2">
                             <h2 class="h5 complete mb-0">Completed</h2>
                             <h4 class="fw-bold mt-2 complete">{{$completedCampaignsCount}}</h4>
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3 mb-4">
+        <div class="card border-0 shadow">
+            <div class="card-body">
+                <div class="row d-block d-xl-flex align-items-center">
+                    <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                        <div class="icon-shape icon-shape-danger rounded me-4 me-sm-0">
+                        <i class="fas fa-trash" style="font-size: 25px; color: red;"></i>
+
+                        </div>
+                    
+                    </div>
+                    <div class="col-12 col-xl-7 px-xl-0">
+                        <div class="d-none d-sm-block mt-2">
+                            <h2 class="h5 text-danger mb-0">Archived</h2>
+                            <h4 class="fw-bold mt-2 text-danger">{{$completedCampaignsCount}}</h4>
                         </div>
                       
                     </div>
@@ -97,8 +122,7 @@
        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>Add Campaign
    </button>
     <div class="btn-group ms-2 ms-lg-3">
-        <button type="button" class="btn btn-sm btn-outline-gray-600">Share</button>
-        <button type="button" class="btn btn-sm btn-outline-gray-600">Export</button>
+        <a type="button"  href="{{ route('export.pdf') }}" class="btn btn-sm btn-outline-gray-600 export-pdf">Export PDF</a>
     </div>       
 </div>
 
@@ -107,15 +131,22 @@
 
 <div class="table-settings mb-4">
     <div class="row align-items-center justify-content-between">
-        <div class="col col-md-6 col-lg-3 col-xl-4">
+        <div class="d-flex col col-md-6 col-lg-8 col-xl-8">
             <div class="input-group me-2 me-lg-3 fmxw-400">
                 <span class="input-group-text">
                     <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                     </svg>
                 </span>
-                <input type="text" class="form-control" placeholder="Search campaigns">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search campaigns">
             </div>
+                <select class="form-select fmxw-200 d-none d-md-inline" id="status" name="status" aria-label="Message select example 2">
+                    <option value="all">all</option>
+                    <option value="active">active</option>
+                    <option value="upcoming">upcoming</option>
+                    <option value="completed">completed</option>
+                    <option value="archived">archived</option>
+                </select>
         </div>
         <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
             <div class="dropdown mr-4">
@@ -134,7 +165,7 @@
     </div>
 </div>
 <div class="card card-body border-0 shadow table-wrapper table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover" id="campaignList">
         <thead>
             <tr>
                 <th class="border-gray-200">#</th>
@@ -150,7 +181,10 @@
             <!-- Item -->
 
             @foreach($campaigns as $campaign)
-
+            @php
+                $startDate = \Carbon\Carbon::parse($campaign->start_date);
+                $endDate = \Carbon\Carbon::parse($campaign->end_date);
+            @endphp
             <tr>
                 <td>
                     <a href="#" class="fw-bold">
@@ -160,8 +194,8 @@
                 <td>
                     <span class="fw-normal">{{ $campaign->title }}</span>
                 </td>
-                <td><span class="fw-normal">{{ $campaign->start_date}}</span></td>                        
-                <td><span class="fw-normal">{{ $campaign->end_date}}</span></td>
+                <td><span class="fw-normal">{{ $startDate->format('l, F j, Y')}}</span></td>                        
+                <td><span class="fw-normal">{{ $endDate->format('l, F j, Y')}}</span></td>
                     <td>
                         @foreach($campaign->target_audience as $audience)
                             <div class="fw-bold"> {{ $audience }}</div>
@@ -169,13 +203,13 @@
                     </td>
                 <td>
                     @if ($campaign->status === 'active')
-                      <span class="fw-bold status-active">Active</span>
+                      <span class="fw-bold status-active">active</span>
                     @elseif($campaign->status  === 'upcoming')
-                      <span class="fw-bold status-upcoming">Upcoming</span>
+                      <span class="fw-bold status-upcoming">upcoming</span>
                     @elseif($campaign->status === 'completed')
-                      <span class="fw-bold status-completed">Completed</span>
+                      <span class="fw-bold status-completed">completed</span>
                     @else
-                       <span class="fw-bold status-archived">Archived</span>
+                       <span class="fw-bold status-archived">archived</span>
                     @endif
                 </td>
                 <td>
@@ -187,7 +221,7 @@
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu py-0">
-                            <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
+                            <a class="dropdown-item rounded-top" href="{{ route('campaigns.showBack',  $campaign->id) }}"><span class="fas fa-eye me-2" ></span>View Details</a>
 
                             <a class="dropdown-item" href="{{ route('campaigns.edit',  $campaign->id) }}" ><span class="fas fa-edit me-2" ></span>Edit</a>   
 
@@ -254,7 +288,3 @@
     </div>
 </div>
 @endsection
-
-
-
-
