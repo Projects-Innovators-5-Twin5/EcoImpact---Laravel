@@ -25,11 +25,11 @@
                     <div class="d-flex justify-content-between mt-4">
                         <a href="{{ route('produits.index') }}" class="btn btn-secondary">Retour à la liste</a>
 
-                    <!-- Formulaire pour ajouter au panier -->
-<form action="{{ route('panier.ajouter', $produit->id) }}" method="POST" style="display:inline;">
-    @csrf
-    <button type="submit" class="btn btn-primary">Ajouter au panier</button>
-</form>
+                        <form action="{{ route('panier.ajouter', $produit->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Ajouter au panier</button>
+                        </form>
+
 
 
                     </div>

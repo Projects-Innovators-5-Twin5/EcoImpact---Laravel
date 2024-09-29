@@ -6,35 +6,8 @@ use Illuminate\Http\Request;
 
 class PanierController extends Controller
 {
-    public function ajouterAuPanier($id)
-    {
-        $produit = Produit::find($id);
 
-        if (!$produit) {
-            return redirect()->route('produits.index')->with('error', 'Produit introuvable.');
-        }
-
-        $panier = session()->get('panier', []);
-
-        // Si le produit est déjà dans le panier
-        if (isset($panier[$id])) {
-            $panier[$id]['quantite']++;
-        } else {
-            // Ajouter un nouveau produit au panier
-            $panier[$id] = [
-                "nom" => $produit->nom,
-                "quantite" => 1,
-                "prix" => $produit->prix,
-                "image" => $produit->image,
-            ];
-        }
-
-        session()->put('panier', $panier);
-
-        return redirect()->route('panier.index')->with('success', 'Produit ajouté au panier avec succès !');
-    }
-
-    public function update(Request $request)
+ public function update(Request $request)
     {
         // Récupérer les quantités du formulaire
         $quantites = $request->input('quantites');
@@ -63,25 +36,39 @@ class PanierController extends Controller
     $commandes = session('commandes', []); // Récupère les commandes de la session ou une liste vide
     return view('front.index', compact('commandes'));
 }
+
+
+
+
 public function addToCart(Request $request, $productId) {
     $product = Produit::findOrFail($productId); // Get the product from the database
 
-    $cart = session()->get('cart', []);
+    $cart = session()->get('panier', []);
 
-    // Add or update product in the cart
-    if(isset($cart[$productId])) {
-        $cart[$productId]['quantite'] += $request->quantite; // Update quantity if exists
+    // Always add or update product in the cart
+    if (isset($cart[$productId])) {
+        $cart[$productId]['quantite']++; // Increment quantity
     } else {
         $cart[$productId] = [
             "nom" => $product->nom,
             "prix" => $product->prix,
-            "quantite" => $request->quantite,
+            "quantite" => 1,
+            "image" => $product->image, // Add image if needed
         ];
     }
 
-    session()->put('cart', $cart);
-    return redirect()->route('panier.index')->with('success', 'Produit ajouté au panier.');
+    session()->put('panier', $cart);
+
+    // Log to Laravel logs
+    logger()->info('Produit ajouté au panier:', [
+        'produit_id' => $productId,
+        'quantite' => $cart[$productId]['quantite'],
+        'panier' => $cart
+    ]);
+
+    return redirect()->route('panier.index')->with('success', 'Produit ajouté au panier avec succès !');
 }
+
 
 
     public function supprimerDuPanier($id)
