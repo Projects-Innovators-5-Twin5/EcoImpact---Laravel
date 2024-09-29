@@ -15,7 +15,7 @@ class ProduitController extends Controller
 
 
     }
-    
+
       // Afficher tous les produits
       public function frontaffichage()
       {
