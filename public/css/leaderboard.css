@@ -1,0 +1,112 @@
+.leaderboard-wrapper {
+    background-color: #e9f7f5; /* Light teal background for the wrapper */
+    padding: 30px;
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    max-width: 1000px; /* Max width for better alignment */
+    margin: 20px auto; /* Centered in the middle of the page */
+}
+
+.leaderboard-container {
+    padding: 20px;
+    background-color: #ffffff; /* White background for the table container */
+    border-radius: 8px; /* Rounded corners */
+}
+
+h1 {
+    font-family: 'Arial', sans-serif; /* Consistent font */
+    color: #333; /* Darker text color */
+    text-align: center; /* Centered heading */
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px 15px; /* Increased padding */
+    border: 1px solid #ddd; /* Light border */
+    text-align: left;
+}
+
+.table th {
+    background-color: #fb503b; /* Primary color for header */
+    color: white; /* White text for header */
+    font-weight: bold;
+}
+
+.table tr:hover {
+    background-color: #f1f1f1; /* Light hover effect */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.table-row.winner {
+    font-weight: bold; /* Highlight the winner */
+    color: #f39c12; /* Gold-like color */
+}
+
+.table-row.winner td {
+    position: relative; /* For absolute positioning of the trophy icon */
+}
+
+.table-row.winner td::after {
+    content: '🏆'; /* Trophy emoji */
+    position: absolute;
+    right: 10px; /* Position it to the right of the score */
+    font-size: 20px; /* Adjust size of the trophy */
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+}
+
+.table-row {
+    transition: transform 0.2s; /* Smooth row animation */
+}
+
+.table-row:hover {
+    transform: scale(1.02); /* Slight scale effect on hover */
+}
+
+
+.leaderboard-title {
+    font-family: 'Arial', sans-serif; /* Consistent font */
+    color: #333; /* Darker text color */
+    text-align: center; /* Centered heading */
+    margin-bottom: 20px;
+    font-size: 2.5em; /* Increased font size for prominence */
+    position: relative; /* Positioning for icon */
+}
+
+.leaderboard-title::before {
+    content: '🥇'; /* Gold medal icon */
+    position: absolute;
+    left: 10%; /* Centered */
+    transform: translateX(-50%); /* Adjust position */
+    font-size: 0.8em; /* Smaller size for balance */
+    top: -0.5em; /* Slightly above the title */
+}
+
+.leaderboard-title::after {
+    content: '🏅'; /* Silver medal icon */
+    position: absolute;
+    right: 10%; /* Position to the right */
+    font-size: 0.8em; /* Smaller size for balance */
+    top: -0.5em; /* Slightly above the title */
+}
+
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .leaderboard-wrapper {
+        padding: 20px; /* Reduced padding on smaller screens */
+    }
+    
+    .table th, .table td {
+        padding: 8px; /* Adjusted padding */
+    }
+    
+    h1 {
+        font-size: 1.5em; /* Smaller heading on mobile */
+    }
+}

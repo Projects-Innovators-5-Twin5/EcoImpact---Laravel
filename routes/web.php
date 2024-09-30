@@ -6,6 +6,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SensibilisatioCompagneController;
 use App\Http\Controllers\CompagneParticipationsController;
+use App\Http\Controllers\ChallengeController;
+use App\Http\Controllers\SolutionController;
+use Illuminate\Support\Facades\Mail;
 
 
 use App\Http\Controllers\ArticleController;
@@ -32,6 +35,9 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashb
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'loginSubmit'])->name('login.submit');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('/forgotPassword', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
 
 Route::get('/profile', [AuthController::class, 'profileUser'])->name('ProfileUser');
@@ -83,3 +89,19 @@ Route::put('/front//commentaires/{id}', [CommentaireController::class, 'update']
 Route::get('/back/commentaires', [CommentaireController::class, 'index'])->name('back.commentaires.index'); 
 
 Route::delete('/commentaires/{id}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy'); // Supprimer un commentaire
+Route::resource('challenges', ChallengeController::class);
+
+Route::get('/challengesfront', [ChallengeController::class, 'indexfront'])->name('challenges.indexfront');
+Route::get('/challengesfront/{id}', [ChallengeController::class, 'showfront'])->name('challenges.showfront');
+Route::get('challenges/export/pdf', [ChallengeController::class, 'exportPdf'])->name('challenges.export.pdf');
+Route::get('/challenges/{challenge}/solutions/create', [SolutionController::class, 'create'])->name('solutions.create');
+Route::post('/solutions', [SolutionController::class, 'store'])->name('solutions.store');
+Route::resource('solutions', SolutionController::class)->only(['store', 'edit', 'update', 'destroy']);
+Route::delete('/solutions/{solution}', [SolutionController::class, 'destroy'])->name('solutions.destroy');
+Route::post('/solutions/{solution}/vote', [SolutionController::class, 'voteSolution'])->name('solutions.vote');
+Route::get('/leaderboard', [ChallengeController::class, 'leaderboard'])->name('leaderboard');
+Route::get('/solutions/{solution}/voters', [SolutionController::class, 'getVoters']);
+
+
+
+

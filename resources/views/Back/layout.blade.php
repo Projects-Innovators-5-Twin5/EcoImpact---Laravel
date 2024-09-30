@@ -36,6 +36,7 @@
 <link rel="mask-icon" href="../../assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMJd4iJ18gbX5h8sV3B0c4V2gkZ4OkVx0zPeW4" crossorigin="anonymous">
 
 <!-- Sweet Alert -->
 @vite('public/documentation/assets/vendor/sweetalert2/dist/sweetalert2.min.css')

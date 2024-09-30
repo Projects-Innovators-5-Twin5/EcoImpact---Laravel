@@ -26,7 +26,7 @@
         
     </div>
 
-<div class="row mt-4">
+<!--<div class="row mt-4">
     <div class="col-12 col-sm-6 col-xl-3 mb-4">
         <div class="card border-0 shadow">
             <div class="card-body">
@@ -114,7 +114,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 
 <div class="btn-toolbar mb-2 mb-md-0 py-4 d-flex justify-content-end">
@@ -168,7 +168,6 @@
     <table class="table table-hover" id="campaignList">
         <thead>
             <tr>
-                <th class="border-gray-200">#</th>
                 <th class="border-gray-200">Title</th>						
                 <th class="border-gray-200">Start Date</th>
                 <th class="border-gray-200">End Date</th>
