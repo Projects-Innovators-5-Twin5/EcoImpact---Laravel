@@ -8,6 +8,8 @@ use App\Http\Controllers\SensibilisatioCompagneController;
 use App\Http\Controllers\CompagneParticipationsController;
 
 
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentaireController;
 
 
 /*
@@ -62,3 +64,22 @@ Route::post('/participants/{id}/reject', [CompagneParticipationsController::clas
 
 Route::get('/participants/search', [CompagneParticipationsController::class, 'search'])->name('participation.search');
 Route::get('/participants/searchByStatusP', [CompagneParticipationsController::class, 'searchByStatus'])->name('participation.searchByStatus');
+//article routes 
+// Routes pour l'article
+Route::get('/articles', [ArticleController::class, 'index'])->name('back.articles.index'); 
+Route::get('/front/articles', [ArticleController::class, 'index_front'])->name('front.articles.index_front'); 
+Route::get('/front/articles/{id}', [ArticleController::class, 'show_front'])->name('front.articles.show'); 
+
+Route::get('/articles/create', [ArticleController::class, 'create'])->name('back.articles.create'); 
+Route::post('/articles', [ArticleController::class, 'store'])->name('back.articles.store'); 
+Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('back.articles.show'); 
+Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('back.articles.edit');
+Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('back.articles.update');
+Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('back.articles.destroy'); 
+
+// Routes pour les commentaires
+Route::post('/articles/{article_id}/commentaires', [CommentaireController::class, 'store'])->name('commentaires.store'); // Ajouter un commentaire à un article
+Route::put('/front//commentaires/{id}', [CommentaireController::class, 'update'])->name('front.commentaires.update');
+Route::get('/back/commentaires', [CommentaireController::class, 'index'])->name('back.commentaires.index'); 
+
+Route::delete('/commentaires/{id}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy'); // Supprimer un commentaire

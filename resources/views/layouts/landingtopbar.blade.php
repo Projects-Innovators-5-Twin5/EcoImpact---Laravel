@@ -1,8 +1,12 @@
 <link rel="stylesheet" href="{{ asset('css/landing.css') }}">
 
-<div class="nav-content">
+<div class="nav-content" style="    position: sticky;
+    top: 0;
+    z-index: 1005;
+    background: #f2f4f6;
+}">
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <img src="/assets/img/landing/logo1.png" alt="logo" class="logo">
