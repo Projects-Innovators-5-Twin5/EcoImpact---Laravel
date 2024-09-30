@@ -27,7 +27,7 @@ class CommentaireController extends Controller
 
         $commentaire->save();
 
-        return redirect()->route('back.articles.show', $articleId)->with('success', 'Commentaire ajouté avec succès.');
+        return back()->with('success', 'Commentaire ajouté avec succès.');
     }
     public function update(Request $request, $id)
     {

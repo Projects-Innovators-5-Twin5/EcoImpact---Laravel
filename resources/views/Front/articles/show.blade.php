@@ -111,17 +111,13 @@
     <!-- Include the delete modal -->
     @include('front.articles.modal_delete')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteButtons = document.querySelectorAll('.btn-danger');
-        
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const commentId = this.getAttribute('data-id');
-        
-                    const deleteForm = document.getElementById('deleteForm');
-                });
-            });
-        });
+       var deleteModal = document.getElementById('deleteModal');
+deleteModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var commentId = button.getAttribute('data-id');
+    var form = document.getElementById('deleteForm');
+    form.action = "{{ route('commentaires.destroy', '') }}" + '/' + commentId; // Update the form action
+});
     </script>
     
 <script>

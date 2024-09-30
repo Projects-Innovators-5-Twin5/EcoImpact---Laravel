@@ -36,7 +36,7 @@
                                 <a href="#" class="btn btn-warning btn-sm" title="Modifier le commentaire">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button class="btn btn-danger btn-sm" data-id="{{ $commentaire->id }}" data-title="{{ Str::limit($commentaire->contenu, 50) }}" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Supprimer le commentaire">
+                                <button class="btn btn-danger btn-sm" data-id="{{ $commentaire->id }}" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Supprimer le commentaire">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
@@ -65,11 +65,16 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                
+                <form method="POST" action="{{ route('commentaires.destroy', ['id' => '-1']) }}" id="deleteForm">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
 <!-- View Comment Modal -->
 <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -87,7 +92,9 @@
         </div>
     </div>
 </div>
+
 <script>
+    // Script to set content for the view modal
     var viewModal = document.getElementById('viewModal');
     viewModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
@@ -100,13 +107,15 @@
         modalContent.textContent = commentContent;
         modalAuthor.textContent = commentAuthor;
     });
-    // Script to set data for the delete modal
-    var deleteModal = document.getElementById('deleteModal');
-    deleteModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var commentId = button.getAttribute('data-id');
-        var form = document.getElementById('deleteForm');
-        form.action = form.action.replace('', commentId);
-    });
+
+  // Script to set data for the delete modal
+var deleteModal = document.getElementById('deleteModal');
+deleteModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var commentId = button.getAttribute('data-id');
+    var form = document.getElementById('deleteForm');
+    form.action = "{{ route('commentaires.destroy', '') }}" + '/' + commentId; // Update the form action
+});
+
 </script>
 @endsection

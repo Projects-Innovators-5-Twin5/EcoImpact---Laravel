@@ -9,7 +9,7 @@
                 <p>Êtes-vous sûr de vouloir supprimer le commentaire" ?</p>
             </div>
             <div class="modal-footer">
-                <form  action="{{ route('commentaires.destroy', $commentaire->id) }}" method="POST" id="deleteForm">
+                <form method="POST"  id="deleteForm">
                     @csrf
                     @method('DELETE')
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
