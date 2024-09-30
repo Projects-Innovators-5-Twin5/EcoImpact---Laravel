@@ -39,31 +39,52 @@
         @if($article->commentaires->isEmpty())
             <p><i class="fas fa-info-circle"></i> Aucun commentaire pour cet article.</p>
         @else
-            @foreach($article->commentaires as $commentaire)
-                <div class="card mb-2 bg-gray-50" style="border:none;">
-                    <div class="card-body">
-                        <p>{{ $commentaire->contenu }}</p>
-                        <p class="text-muted">
-                            <small class="text-primary">
-                                <i class="fas fa-user"></i> Par: {{ $commentaire->user->name }}
-                            </small>
-                            <small class="text-secondary mx-2">
-                                <i class="fas fa-calendar-alt"></i> {{ $commentaire->created_at->format('d M Y') }}
-                            </small>
-                        </p>
-
-                        <!-- Like and Dislike section -->
-                        <div class="d-flex justify-content-start align-items-center">
-                            <button class="btn btn-link p-0 me-2" style="color: #28a745;">
-                                <i class="fas fa-thumbs-up"></i> <span class="ms-1">J'aime</span>
-                            </button>
-                            <button class="btn btn-link p-0" style="color: #dc3545;">
-                                <i class="fas fa-thumbs-down"></i> <span class="ms-1">Je n'aime pas</span>
-                            </button>
-                        </div>
+        @foreach($article->commentaires as $commentaire)
+        <div class="card mb-2 bg-gray-50" style="border:none;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <!-- Comment Content -->
+                    <p id="comment-content-{{ $commentaire->id }}">{{ $commentaire->contenu }}</p>
+    
+                    <!-- Form for editing (initially hidden) -->
+                    <form action="{{ route('front.commentaires.update', $commentaire->id) }}" method="POST" style="width:90%;" id="edit-form-{{ $commentaire->id }}" class="d-none">
+                        @csrf
+                        @method('PUT')
+                        <textarea name="contenu" class="form-control mb-2">{{ $commentaire->contenu }}</textarea>
+                        <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit({{ $commentaire->id }})">Annuler</button>
+                    </form>
+    
+                    <!-- 3-dot menu for edit/delete actions -->
+                    <div class="dropdown">
+                        <button class="btn btn-link p-0 text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" onclick="editComment({{ $commentaire->id }})">Modifier</a></li>
+                            <li>
+                                <!-- Supprimer Button -->
+                                <button type="button" class="dropdown-item btn-danger" dropdown-item text-danger data-id="{{ $commentaire->id }}"  data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    Supprimer
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            @endforeach
+    
+                <p class="text-muted">
+                    <small class="text-primary">
+                        <i class="fas fa-user"></i> Par: {{ $commentaire->user->name }}
+                    </small>
+                    <small class="text-secondary mx-2">
+                        <i class="fas fa-calendar-alt"></i> {{ $commentaire->created_at->format('d M Y') }}
+                    </small>
+                </p>
+            </div>
+        </div>
+    @endforeach
+    
+    
         @endif
 
         <h4 class="mt-5"><i class="fas fa-plus-circle"></i> Ajouter un commentaire</h4>
@@ -87,4 +108,37 @@
     </div>
    </div>
 </div>
+    <!-- Include the delete modal -->
+    @include('front.articles.modal_delete')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.btn-danger');
+        
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const commentId = this.getAttribute('data-id');
+        
+                    const deleteForm = document.getElementById('deleteForm');
+                });
+            });
+        });
+    </script>
+    
+<script>
+    function editComment(commentId) {
+        // Hide the comment content
+        document.getElementById('comment-content-' + commentId).classList.add('d-none');
+        
+        // Show the edit form
+        document.getElementById('edit-form-' + commentId).classList.remove('d-none');
+    }
+    
+    function cancelEdit(commentId) {
+        // Show the comment content again
+        document.getElementById('comment-content-' + commentId).classList.remove('d-none');
+        
+        // Hide the edit form
+        document.getElementById('edit-form-' + commentId).classList.add('d-none');
+    }
+    </script>
 @endsection

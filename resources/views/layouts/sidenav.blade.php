@@ -52,7 +52,7 @@
           data-bs-target="#submenu-laravel" aria-expanded="true">
           <span>
             <span class="sidebar-icon"><i class="fab fa-laravel me-2" style="color: #fb503b;"></i></span>
-            <span class="sidebar-text" style="color: #fb503b;">Laravel Examples</span>
+            <span class="sidebar-text" style="color: #fb503b;">Blog</span>
           </span>
           <span class="link-arrow"><svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg">
@@ -64,13 +64,13 @@
         <div class="multi-level collapse show" role="list" id="submenu-laravel" aria-expanded="false">
           <ul class="flex-column nav">
             <li class="nav-item ">
-              <a href="/profile" class="nav-link">
-                <span class="sidebar-text">Profile</span>
+              <a href="/articles" class="nav-link">
+                <span class="sidebar-text">Articles</span>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/users" class="nav-link">
-                <span class="sidebar-text">User management</span>
+              <a href="/back/commentaires" class="nav-link">
+                <span class="sidebar-text">Commentaires</span>
               </a>
             </li>
           </ul>

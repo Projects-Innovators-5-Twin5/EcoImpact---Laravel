@@ -8,6 +8,11 @@ use Auth;
 
 class CommentaireController extends Controller
 {
+    public function index()
+    {
+        $commentaires = Commentaire::with('user')->latest()->paginate(5);
+        return view('back.commentaires.index', compact('commentaires'));
+    }
     public function store(Request $request, $articleId)
     {
         $request->validate([
@@ -24,4 +29,36 @@ class CommentaireController extends Controller
 
         return redirect()->route('back.articles.show', $articleId)->with('success', 'Commentaire ajouté avec succès.');
     }
+    public function update(Request $request, $id)
+    {
+        $commentaire = Commentaire::find($id);
+        
+        if (!$commentaire) {
+            return back()->with('error', 'Commentaire non trouvé.');
+        }
+
+        // Validate the request
+        $request->validate([
+            'contenu' => 'required|string',
+        ]);
+
+        // Update the commentaire's content
+        $commentaire->contenu = $request->input('contenu');
+        
+        // Save the updated commentaire
+        $commentaire->save();
+        
+        // Redirect back with success message
+        return back()->with('success', 'Commentaire mis à jour avec succès.');
+    }
+    public function destroy($id)
+    {
+        $commentaire = Commentaire::findOrFail($id);
+   
+
+        $commentaire->delete();
+
+        return back()->with('success', 'Commentaire mis à jour avec succès.');
+    }
+    
 }

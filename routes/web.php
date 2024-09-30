@@ -44,5 +44,8 @@ Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('back.a
 Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('back.articles.destroy'); 
 
 // Routes pour les commentaires
-Route::post('/articles/{article_id}/comments', [CommentaireController::class, 'store'])->name('commentaires.store'); // Ajouter un commentaire à un article
-Route::delete('/comments/{id}', [CommentaireController::class, 'destroy'])->name('comments.destroy'); // Supprimer un commentaire
+Route::post('/articles/{article_id}/commentaires', [CommentaireController::class, 'store'])->name('commentaires.store'); // Ajouter un commentaire à un article
+Route::put('/front//commentaires/{id}', [CommentaireController::class, 'update'])->name('front.commentaires.update');
+Route::get('/back/commentaires', [CommentaireController::class, 'index'])->name('back.commentaires.index'); 
+
+Route::delete('/commentaires/{id}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy'); // Supprimer un commentaire
