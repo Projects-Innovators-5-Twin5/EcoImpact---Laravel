@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 class PanierController extends Controller
 {
 
- public function update(Request $request)
+    public function update(Request $request)
     {
         // Récupérer les quantités du formulaire
         $quantites = $request->input('quantites');
 
         // Vérifier si le panier existe dans la session
-        $cart = session()->get('cart', []);
+        $cart = session()->get('panier', []);
 
         if ($cart) {
             foreach ($quantites as $produitId => $quantite) {
@@ -24,18 +24,23 @@ class PanierController extends Controller
             }
 
             // Sauvegarder le panier mis à jour dans la session
-            session()->put('cart', $cart);
+            session()->put('panier', $cart);
         }
 
         return redirect()->route('panier.index')->with('success', 'Le panier a été mis à jour avec succès.');
     }
 
 
+
     public function afficherPanier()
-{
-    $commandes = session('commandes', []); // Récupère les commandes de la session ou une liste vide
-    return view('front.index', compact('commandes'));
-}
+    {
+        $panier = session('panier', []);
+        $total = array_sum(array_map(function($produit) {
+            return $produit['prix'] * $produit['quantite'];
+        }, $panier));
+        return view('front.index', compact('panier', 'total'));
+    }
+
 
 
 
@@ -51,9 +56,10 @@ public function addToCart(Request $request, $productId) {
     } else {
         $cart[$productId] = [
             "nom" => $product->nom,
+            "description" => $product->description,
             "prix" => $product->prix,
             "quantite" => 1,
-            "image" => $product->image, // Add image if needed
+            "image" => $product->image,
         ];
     }
 

@@ -78,7 +78,7 @@ public function showDetail($id)
     // Afficher le formulaire d'édition d'un produit
     public function edit(Produit $produit)
     {
-        return view('produits.edit', compact('produit'));
+        return view('back.edit', compact('produit'));
     }
 
     // Mettre à jour un produit

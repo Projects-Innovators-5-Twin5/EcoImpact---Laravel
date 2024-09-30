@@ -37,9 +37,7 @@ Route::get('/forgotPassword', [AuthController::class, 'forgotPassword'])->name('
 Route::resource('produits', ProduitController::class);
 Route::get('/produitss', [ProduitController::class, 'frontaffichage'])->name('produitCards.front');
 Route::get('produits/{id}', [ProduitController::class, 'showDetail'])->name('produits.produit_detail');
-Route::get('/commandes/create', [CommandeController::class, 'create'])->name('commandes.create');
 
-Route::resource('commandes', CommandeController::class);
 
 
 
@@ -52,4 +50,8 @@ Route::post('/panier/ajouter/{id}', [PanierController::class, 'addToCart'])->nam
 
 Route::get('/checkout', [PaiementController::class, 'createPayment'])->name('checkout');
 Route::post('/checkout/payer', [PaiementController::class, 'payer'])->name('payer');
+Route::post('/commande/store', [CommandeController::class, 'store'])->name('commande.store');
 
+
+
+Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');

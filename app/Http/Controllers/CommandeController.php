@@ -3,57 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commande;
-use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log; // Pour la journalisation
 
 class CommandeController extends Controller
 {
-    /**
-     * Afficher la liste des commandes
-     */
     public function index()
     {
         $commandes = Commande::with('produits')->get();
         return view('front.panier', compact('commandes'));
     }
 
-    /**
-     * Enregistrer une nouvelle commande
-     */
     public function store(Request $request)
-    {
-        // Récupérer le produit commandé via l'ID envoyé dans le formulaire
-        $produit = Produit::findOrFail($request->produit_id);
+{
+    // Valider la requête
+    $validatedData = $request->validate([
+        'quantites.*' => 'required|integer|min:1',
+    ]);
 
-        // Vérifier la quantité disponible
-        if ($produit->quantite < 1) {
-            return back()->with('error', 'Quantité insuffisante.');
-        }
+    // Enregistrer la commande
+    $commande = new Commande();
+    $commande->client_nom = $request->input('client_nom', "Nom par défaut"); // Remplacez par les données réelles si disponibles
+    $commande->client_email = $request->input('client_email', "email@example.com"); // Remplacez par les données réelles si disponibles
+    $panier = session('panier', []);
 
-        // Créer la commande
-        $commande = Commande::create([
-            'client_id' => auth()->id(),  // Si vous avez un système d'authentification
-            'total' => $produit->prix,    // Le total correspond ici au prix du produit
-            'quantite' => 1,              // Commande d'une unité du produit
-            'statut' => 'en attente',     // Statut par défaut
-        ]);
+    // Calculer le total de la commande
+    $total = array_sum(array_map(function ($produit) use ($request) {
+        $id = $produit['id'] ?? null;
+        return $id ? $produit['prix'] * $request->quantites[$id] : 0;
+    }, $panier));
 
-        // Associer le produit à la commande
-        $produit->commande()->associate($commande);
-        $produit->save();
+    $commande->total = $total; // Enregistrez le total dans la commande
 
-        // Mettre à jour la quantité de produit disponible
-        $produit->decrement('quantite', 1);
+    // Enregistrez la commande
+    $commande->statut = 'en attente';
+    $commande->save();
 
-        return redirect()->route('produits.index')->with('success', 'Commande passée avec succès!');
-    }
+    // Rediriger vers la page de paiement
+    return redirect()->route('checkout')->with([
+        'total' => $total,
+        'panier' => $panier // Passez le panier si nécessaire
+    ]);
+}
 
-    /**
-     * Afficher une commande
-     */
-    public function show($id)
-    {
-        $commande = Commande::with('produits')->findOrFail($id);
-        return view('commandes.show', compact('commande'));
-    }
 }

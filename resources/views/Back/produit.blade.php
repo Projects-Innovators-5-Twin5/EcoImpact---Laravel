@@ -1,8 +1,21 @@
 @extends('back.layout')
+<title>EcoImpact - Liste des Produits</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
 @section('content')
+<div class="container">
     <h1>Liste des Produits</h1>
     <a href="{{ route('produits.create') }}" class="btn btn-primary mb-3">Ajouter un Produit</a>
+
+    <!-- Champ de recherche avec un style amélioré -->
+    <div class="input-group mb-3">
+        <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+        </div>
+    </div>
 
     <table id="produitsTable" class="table table-striped table-bordered">
         <thead>
@@ -40,7 +53,14 @@
 
     <script>
         $(document).ready(function() {
-            $('#produitsTable').DataTable();
+            // Initialise DataTable
+            var table = $('#produitsTable').DataTable();
+
+            // Filtrer le tableau en fonction de la recherche
+            $('#searchInput').on('keyup', function() {
+                table.search(this.value).draw();
+            });
         });
     </script>
+</div>
 @endsection

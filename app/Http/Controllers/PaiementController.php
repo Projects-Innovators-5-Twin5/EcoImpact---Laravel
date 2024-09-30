@@ -1,12 +1,13 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Session; // Assurez-vous d'importer la classe Session
-use Stripe\PaymentIntent; // Ajoutez cette ligne
 
+use Illuminate\Support\Facades\Session;
+use Stripe\PaymentIntent;
 use Stripe\Stripe;
-use Stripe\Charge;
 use Illuminate\Http\Request;
 use App\Models\Commande;
+use Illuminate\Support\Facades\Log;
+use App\Models\Produit;
 
 class PaiementController extends Controller
 {
@@ -14,8 +15,6 @@ class PaiementController extends Controller
     {
         // Récupérer le total du panier
         $panier = session('panier', []);
-
-        // Convertir le panier en collection
         $collectionPanier = collect($panier);
 
         if ($collectionPanier->isEmpty()) {
@@ -29,15 +28,14 @@ class PaiementController extends Controller
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         // Créer un PaymentIntent
-        $paymentIntent = \Stripe\PaymentIntent::create([
+        $paymentIntent = PaymentIntent::create([
             'amount' => $total * 100, // Montant en cents
             'currency' => 'eur',
         ]);
 
         return view('front.checkout', [
             'clientSecret' => $paymentIntent->client_secret,
-            'total' => $total, // Passez le total à la vue si nécessaire
+            'total' => $total,
         ]);
     }
-
 }

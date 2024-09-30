@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Schema::create('commandes', function (Blueprint $table) {
@@ -13,17 +18,17 @@ return new class extends Migration
             $table->string('client_nom');
             $table->string('client_email');
             $table->decimal('total', 10, 2);
-            $table->foreignId('client_id')->constrained('users')->onDelete('cascade'); // Assurez-vous que cette colonne existe
+            $table->foreignId('client_id')->nullable()->constrained('users')->onDelete('cascade'); // Rendre nullable
             $table->string('statut');
             $table->timestamps();
-
-
-
-            // Clé étrangère pour le client
         });
     }
 
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
         Schema::dropIfExists('commandes');
