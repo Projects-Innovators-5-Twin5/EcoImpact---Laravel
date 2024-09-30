@@ -38,7 +38,7 @@
     <div class="active-compaign d-flex flex-wrap justify-content-start">
 
        @foreach($activeCampaigns as $campaign)
-        <div class="card mt-4" style="width: 25rem; height:20rem; margin-left:90px;cursor:pointer;" onclick="window.location='{{ route('campaigns.show',  $campaign->id) }}'";>
+        <div class="card mt-4" style="width: 20rem; height:20rem; margin-left:90px;cursor:pointer;" onclick="window.location='{{ route('campaigns.show',  $campaign->id) }}'";>
                @if($campaign->image)
                   <img src="{{ asset('storage/' . $campaign->image) }}" alt="Image" class="card-img-top img-c">
                 @endif
@@ -59,7 +59,7 @@
     <div class="upcoming-compaign d-flex flex-wrap justify-content-start sm:items-center">
 
        @foreach($upcomingCampaigns as $campaign)
-        <div class="card mt-4" style="width: 25rem; height:20rem; margin-left:90px;cursor:pointer;" onclick="window.location='{{ route('campaigns.show',  $campaign->id) }}'";>
+        <div class="card mt-4" style="width: 20rem; height:20rem; margin-left:90px;cursor:pointer;" onclick="window.location='{{ route('campaigns.show',  $campaign->id) }}'";>
                @if($campaign->image)
                   <img src="{{ asset('storage/' . $campaign->image) }}" alt="Image" class="card-img-top img-c">
                 @endif
@@ -83,7 +83,7 @@
        @foreach($completedCampaigns as $campaign)
 
 
-        <div class="card mt-4" style="width: 25rem; height:20rem; margin-left:90px;cursor:pointer;" onclick="window.location='{{ route('campaigns.show',  $campaign->id) }}'";>
+        <div class="card mt-4" style="width: 20rem; height:20rem; margin-left:90px;cursor:pointer;" onclick="window.location='{{ route('campaigns.show',  $campaign->id) }}'";>
                @if($campaign->image)
                   <img src="{{ asset('storage/' . $campaign->image) }}" alt="Image" class="card-img-top img-c">
                 @endif

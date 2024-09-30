@@ -1,0 +1,10 @@
+.card {
+    border: 1px solid #ddd; /* Bordure de la carte */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    transition: transform 0.2s; /* Effet de transition */
+}
+
+.card:hover {
+    transform: scale(1.02); /* Légère augmentation au survol */
+}

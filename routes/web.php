@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentaireController;
 
+use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\PanierController;
+
+
+use App\Http\Controllers\PaiementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +110,10 @@ Route::post('/solutions/{solution}/vote', [SolutionController::class, 'voteSolut
 Route::get('/leaderboard', [ChallengeController::class, 'leaderboard'])->name('leaderboard');
 Route::get('/solutions/{solution}/voters', [SolutionController::class, 'getVoters']);
 
+Route::resource('produits', ProduitController::class);
+Route::get('/produitss', [ProduitController::class, 'frontaffichage'])->name('produitCards.front');
+Route::get('produits/{id}', [ProduitController::class, 'showDetail'])->name('produits.produit_detail');
+
 
 
 
@@ -135,3 +145,17 @@ Route::delete('/consumptions/{id}/delete', [ConsommationController::class, 'dest
 Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
 Route::get('/consumptions/editback/{id}', [ConsommationController::class, 'editback'])->name('editConsumptionback');
 Route::put('/consumptions/updateback/{id}', [ConsommationController::class, 'updateback'])->name('consumptionsback.update');
+Route::get('/panier', [PanierController::class, 'afficherPanier'])->name('panier.index');
+Route::post('mettre-a-jour-panier', [PanierController::class, 'mettreAJourPanier'])->name('panier.mettreAJour');
+Route::get('supprimer-du-panier/{id}', [PanierController::class, 'supprimerDuPanier'])->name('panier.supprimer');
+Route::post('/panier/update', [PanierController::class, 'update'])->name('panier.update');
+
+Route::post('/panier/ajouter/{id}', [PanierController::class, 'addToCart'])->name('panier.ajouter');
+
+Route::get('/checkout', [PaiementController::class, 'createPayment'])->name('checkout');
+Route::post('/checkout/payer', [PaiementController::class, 'payer'])->name('payer');
+Route::post('/commande/store', [CommandeController::class, 'store'])->name('commande.store');
+
+
+
+Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');

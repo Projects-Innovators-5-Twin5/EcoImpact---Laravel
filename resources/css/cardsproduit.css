@@ -1,0 +1,71 @@
+/* Styles généraux pour les cartes */
+.card {
+    border: none; /* Supprime les bordures par défaut */
+    transition: transform 0.3s, box-shadow 0.3s; /* Transition pour effet de survol */
+}
+
+/* Ombre de carte */
+.card-shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Effet de survol */
+.card:hover {
+    transform: translateY(-5px); /* Légère élévation lors du survol */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée */
+}
+
+/* Styles pour l'image de la carte */
+.card-img-top {
+    border-radius: 0.5rem; /* Coins arrondis pour les images */
+}
+
+/* Styles pour le titre de la carte */
+.card-title {
+    font-size: 1.25rem; /* Taille du texte du titre */
+    font-weight: 600; /* Poids du texte */
+    color: #333; /* Couleur du texte */
+}
+
+/* Styles pour le texte de la carte */
+.card-text {
+    font-size: 0.9rem; /* Taille du texte */
+    color: #666; /* Couleur du texte */
+}
+
+/* Styles pour le bouton */
+.btn {
+    transition: background-color 0.3s, color 0.3s; /* Transition pour les boutons */
+}
+
+.btn-info {
+    background-color: #17a2b8; /* Couleur de fond du bouton */
+    color: white; /* Couleur du texte */
+}
+
+.btn-info:hover {
+    background-color: #138496; /* Couleur de fond au survol */
+    color: white; /* Couleur du texte au survol */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Couleur de fond du bouton danger */
+    color: white; /* Couleur du texte */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Couleur de fond au survol */
+    color: white; /* Couleur du texte au survol */
+}
+
+/* Styles pour le conteneur des cartes */
+.container {
+    margin-top: 2rem; /* Espace supérieur pour le conteneur */
+}
+
+/* Styles pour le titre principal */
+h1 {
+    font-size: 2rem; /* Taille du texte du titre principal */
+    color: #333; /* Couleur du texte */
+    margin-bottom: 1.5rem; /* Espace inférieur */
+}
