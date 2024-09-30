@@ -35,102 +35,34 @@
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-center mt-2 py-0">
             <div class="list-group list-group-flush">
               <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="/assets/img/team/profile-picture-1.jpg" class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 ms-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Jose Leos</h4>
-                      </div>
-                      <div class="text-end">
-                        <small class="text-danger">a few moments ago</small>
-                      </div>
+           
+@foreach(auth()->user()->unreadNotifications as $notification)
+    <a href="{{ route('challenges.show', $notification->data['challenge_id']) }}" class="list-group-item list-group-item-action border-bottom">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <!-- Avatar -->
+                <div class="user-info">
+            <img src="/assets/img/team/profile-picture-5.jpg" alt="User Image" class="user-image">
+        </div>                </div>
+            <div class="col ps-0 ms-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="h6 mb-0 text-small">{{ $notification->data['message'] }}</h4>
                     </div>
-                    <p class="font-small mt-1 mb-0">Added you to an event "Project stand-up" tomorrow at 12:30 AM.</p>
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="/assets/img/team/profile-picture-2.jpg" class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 ms-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Neil Sims</h4>
-                      </div>
-                      <div class="text-end">
-                        <small class="text-danger">2 hrs ago</small>
-                      </div>
+                    <div class="text-end">
+                        <small class="text-danger">{{ $notification->created_at->diffForHumans() }}</small>
                     </div>
-                    <p class="font-small mt-1 mb-0">You've been assigned a task for "Awesome new project".</p>
-                  </div>
                 </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="/assets/img/team/profile-picture-3.jpg" class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 m-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Roberta Casas</h4>
-                      </div>
-                      <div class="text-end">
-                        <small>5 hrs ago</small>
-                      </div>
-                    </div>
-                    <p class="font-small mt-1 mb-0">Tagged you in a document called "Financial plans",</p>
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="/assets/img/team/profile-picture-4.jpg" class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 ms-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Joseph Garth</h4>
-                      </div>
-                      <div class="text-end">
-                        <small>1 d ago</small>
-                      </div>
-                    </div>
-                    <p class="font-small mt-1 mb-0">New message: "Hey, what's up? All set for the presentation?"</p>
-                  </div>
-                </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-bottom">
-                <div class="row align-items-center">
-                  <div class="col-auto">
-                    <!-- Avatar -->
-                    <img alt="Image placeholder" src="/assets/img/team/profile-picture-5.jpg" class="avatar-md rounded">
-                  </div>
-                  <div class="col ps-0 ms-2">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h4 class="h6 mb-0 text-small">Bonnie Green</h4>
-                      </div>
-                      <div class="text-end">
-                        <small>2 hrs ago</small>
-                      </div>
-                    </div>
-                    <p class="font-small mt-1 mb-0">New message: "We need to improve the UI/UX for the landing page."
-                    </p>
-                  </div>
-                </div>
-              </a>
+            </div>
+        </div>
+    </a>
+@endforeach
+
+
+
+
+
+
               <a href="#" class="dropdown-item text-center fw-bold rounded-bottom py-3">
                 <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg">
@@ -192,3 +124,4 @@
 </nav>
 
 
+<link rel="stylesheet" href="{{ asset('css/solution.css') }}">

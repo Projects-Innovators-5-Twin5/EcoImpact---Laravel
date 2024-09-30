@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Solution;
 use App\Models\Challenge;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Notifications\SolutionSubmitted;
 
 class SolutionController extends Controller
 {
@@ -29,6 +31,13 @@ class SolutionController extends Controller
             'challenge_id' => $validatedData['challenge_id'],
             'user_id' => auth()->id(), // Store the logged-in user's ID
         ]);
+    
+        $admin = User::where('role', 'admin')->first(); // You can adjust this to notify all admins
+        $challenge = Challenge::findOrFail($validatedData['challenge_id']);
+        $user = auth()->user();
+    
+        $admin->notify(new SolutionSubmitted($user, $challenge));
+    
     
         return redirect()->back()->with('success', 'Solution added successfully!');
     }
@@ -97,5 +106,22 @@ class SolutionController extends Controller
     
         return response()->json(['voters' => $voters]);
     }
+
+
+    public function submitSolution(Request $request, $challengeId)
+{
+    // Get the challenge and the user
+    $challenge = Challenge::findOrFail($challengeId);
+    $user = auth()->user();
+
+    // Save the solution logic here...
+
+    // Notify the admin (or all admins)
+    $admin = User::where('role', 'admin')->first(); // Assuming 'role' is used to differentiate admin
+    $admin->notify(new SolutionSubmitted($user, $challenge));
+
+    return back()->with('success', 'Solution submitted successfully.');
+}
+
     
 }
