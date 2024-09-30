@@ -45,7 +45,13 @@ class User extends Authenticatable
     ];
 
     public function solutions()
-{
-    return $this->hasMany(Solution::class);
-}
+    {
+        return $this->hasMany(Solution::class);
+    }
+        // User.php
+    public function consumptions()
+    {
+        return $this->hasMany(EnergyConsumption::class);
+    }
+
 }
