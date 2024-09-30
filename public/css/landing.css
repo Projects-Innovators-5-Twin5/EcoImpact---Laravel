@@ -19,6 +19,7 @@ body{
     font-weight: bold;
 }
 
+
 .navbar-brand img{
     height: 80px;
 }
@@ -31,8 +32,6 @@ body{
 .text-btncontact{
     font-size: 18px;
 }
-
-
 
 .btn:hover .text-btn {
     color: white; 

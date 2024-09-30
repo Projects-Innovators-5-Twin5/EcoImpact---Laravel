@@ -101,11 +101,11 @@
                                                     <label for="target_audience">Target audience</label>
                                                     <div class="input-group">
                                                         <select  class="form-select {{ $errors->has('target_audience') ? 'is-invalid' : '' }}" id="target_audience" name="target_audience[]" aria-label="Default select example" multiple>
-                                                            <option value="Grand Public" selected>Grand Public</option>
-                                                            <option value="Jeunes et Etudiants">Jeunes et Étudiants</option>
-                                                            <option value="Professionnels et Travailleurs">Professionnels et Travailleurs</option>
-                                                            <option value="Institutions et Organisations">Institutions et Organisations</option>
-                                                            <option value="Communautes Locales">Communautés Locales</option>
+                                                        <option value="General Public" selected>General Public</option>
+                                                            <option value="Youth and Students">Youth and Students</option>
+                                                            <option value="Professionals and Workers">Professionals and Workers</option>
+                                                            <option value="Institutions and Organizations">Institutions and Organizations</option>
+                                                            <option value="Local Communities">Local Communities</option>
                                                         </select>
                                                     </div>  
                                                     @if ($errors->has('target_audience'))
@@ -123,8 +123,8 @@
                                                         @foreach ($errors->get('description') as $error)
                                                             @if ($error == 'The description field is required.')
                                                                 <div class="text-danger h6 mt-1" id="error-description">Description is required</div>
-                                                            @elseif ($error == 'The description must be at least 50 characters.')
-                                                                <div class="text-danger h6 mt-1" id="error-description">The description must be at least 50 characters long</div>
+                                                            @elseif ($error == 'The description must be at least 150 characters.')
+                                                                <div class="text-danger h6 mt-1" id="error-description">The description must be at least 150 characters long</div>
                                                             @elseif ($error == 'The description may not be greater than 1000 characters.')
                                                                 <div class="text-danger h6 mt-1" id="error-description">The description cannot be more than 1000 characters long</div>
                                                             @else

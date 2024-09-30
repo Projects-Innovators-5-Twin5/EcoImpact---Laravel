@@ -17,6 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->text('reasons_join_campaign')->nullable();
+            $table->string('link_fb')->nullable();
+            $table->string('link_insta')->nullable();
+            $table->string('link_web')->nullable();
             $table->string('image')->nullable();
             $table->date('start_date');
             $table->date('end_date');

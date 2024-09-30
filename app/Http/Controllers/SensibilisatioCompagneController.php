@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\SensibilisationCampaign;
+use App\Models\CampaignParticipation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
@@ -144,7 +145,11 @@ class SensibilisatioCompagneController extends Controller
         $campaign = SensibilisationCampaign::findOrFail($id);
         $startDate = Carbon::parse($campaign->start_date);
         $endDate = Carbon::parse($campaign->end_date);
-        return view('Back.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate','endDate'));
+
+        $campaigns_participations = CampaignParticipation::where('campaign_id', $campaign->id)->get();
+        $campaigns_participations  = CampaignParticipation::paginate(5);
+
+        return view('Back.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate','endDate','campaigns_participations'));
     }
 
     /**
@@ -170,6 +175,20 @@ class SensibilisatioCompagneController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validatedData = $request->validate([
+            'title' => 'required|string|min:4|max:255',
+            'description' => 'required|string|min:150|max:1000',
+            'reasons_join_campaign' => 'required|string|min:300|max:5000',
+            'link_fb' => 'required|url|max:5000',
+            'link_insta' => 'required|url|max:5000',
+            'link_web' => 'required|url|max:5000',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'target_audience' => 'required|array',
+            'target_audience.*' => 'string|max:255', 
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
         $campaign = SensibilisationCampaign::findOrFail($id);
 
         $startDate = $request->input('start_date');
@@ -185,6 +204,10 @@ class SensibilisatioCompagneController extends Controller
         $campaign->update([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
+            'reasons_join_campaign' => $request->input('reasons_join_campaign'),
+            'link_fb' => $request->input('link_fb'),
+            'link_insta' => $request->input('link_insta'),
+            'link_web' => $request->input('link_web'),
             'image' => $imagePath,
             'start_date' => $request->input('start_date'),
             'end_date' => $request->input('end_date'),

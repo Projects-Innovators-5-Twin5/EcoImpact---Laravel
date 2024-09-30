@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     description.addEventListener('input', function() {
-        if (description.value.trim() !== '' && description.value.length >= 50 ) { 
+        if (description.value.trim() !== '' && description.value.length >= 150 ) { 
             description.classList.add('is-valid');
             description.classList.remove('is-invalid'); 
             errorDes.classList.add('d-none'); 

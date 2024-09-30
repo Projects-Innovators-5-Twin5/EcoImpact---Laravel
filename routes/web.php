@@ -5,6 +5,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SensibilisatioCompagneController;
+use App\Http\Controllers\CompagneParticipationsController;
 
 
 
@@ -48,3 +49,8 @@ Route::put('/campaigns/{id}/archive', [SensibilisatioCompagneController::class, 
 Route::get('/search', [SensibilisatioCompagneController::class, 'search'])->name('search');
 Route::get('/searchByStatus', [SensibilisatioCompagneController::class, 'searchByStatus'])->name('searchByStatus');
 Route::get('/export-pdf', [SensibilisatioCompagneController::class, 'exportPdf'])->name('export.pdf');
+
+
+
+Route::get('/campaigns/show/{campaign_id}/participate', [CompagneParticipationsController::class, 'create'])->name('participation.create');
+Route::post('/campaigns/participateAdd', [CompagneParticipationsController::class, 'store'])->name('participation.store');

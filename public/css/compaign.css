@@ -24,7 +24,7 @@
     border-radius: 12px;
 }
 
-.status-completed {
+.status-completed , .status-pending {
     color: #ffffff; 
     background-color: #fd7e14; 
     padding: 5px 10px;
@@ -80,6 +80,41 @@ h2.complete , h4.complete{
     
 }
 
+.text-des{
+    width: 100%;
+}
 
 
 
+.fa-facebook-f {
+    color: #3b5998; 
+    font-size: 28px;
+
+}
+
+.fa-instagram {
+    background: linear-gradient(45deg, #f58529, #d62976, #962fbf); /* Dégradé d'Instagram */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 30px;
+
+}
+
+.fa-globe {
+    font-size: 28px;
+    color: #fd7e14; 
+
+}
+.btn-join{
+    margin-top: 55px;
+}
+
+
+@media (max-width: 1190px) {
+    .block_details{
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: space-around;
+        align-items: center;
+    }
+}
