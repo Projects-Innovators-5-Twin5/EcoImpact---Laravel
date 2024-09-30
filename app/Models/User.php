@@ -41,4 +41,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // User.php
+public function consumptions()
+{
+    return $this->hasMany(EnergyConsumption::class);
+}
+
 }
