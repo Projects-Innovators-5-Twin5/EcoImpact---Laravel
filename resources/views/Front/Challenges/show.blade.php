@@ -1,4 +1,6 @@
+
 @extends('front.layout')
+
 <title>EcoImpact - Challenges</title>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -23,7 +25,7 @@
             <p><strong>Description:</strong> {{ $challenge->description }}</p>
             <p><strong>Start Date:</strong> {{ $challenge->start_date }}</p>
             <p><strong>End Date:</strong> {{ $challenge->end_date }}</p>
-            <p><strong>Time Left:</strong> {{ $timeLeft }}</p>
+            <p><strong>Time Left:</strong> <span id="time-left"></span></p> <!-- Updated for real-time -->
             <p><strong>Reward Points:</strong> {{ $challenge->reward_points }}</p>
         </div>
     </div>
@@ -121,60 +123,70 @@
         @endif
     </div>
 
-    <!-- Add Solution Modal -->
-    <div class="modal fade" id="addSolutionModal" tabindex="-1" aria-labelledby="addSolutionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addSolutionModalLabel">Add Solution</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="solutionForm" method="POST" action="{{ route('solutions.store') }}">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="solutionTitle" class="form-label">Solution Title</label>
-                            <input type="text" class="form-control" id="solutionTitle" name="title" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="solutionDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="solutionDescription" name="description" rows="3" required></textarea>
-                        </div>
-                        <input type="hidden" name="challenge_id" value="{{ $challenge->id }}">
-                        <button type="submit" class="btn btn-primary">Submit Solution</button>
-                    </form>
-                </div>
+<!-- Add Solution Modal -->
+<div class="modal fade" id="addSolutionModal" tabindex="-1" aria-labelledby="addSolutionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSolutionModalLabel">Add Solution</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="solutionForm" method="POST" action="{{ route('solutions.store') }}" novalidate>
+                    @csrf
+                    <div class="mb-3">
+                        <label for="solutionTitle" class="form-label">Solution Title</label>
+                        <input type="text" class="form-control" id="solutionTitle" name="title" required minlength="3" maxlength="100">
+                        <div class="invalid-feedback">Please enter a valid solution title (3-100 characters).</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="solutionDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="solutionDescription" name="description" rows="3" required minlength="10" maxlength="500"></textarea>
+                        <div class="invalid-feedback">Please provide a description (10-500 characters).</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <input type="hidden" name="challenge_id" value="{{ $challenge->id }}">
+                    <button type="submit" class="btn btn-primary">Submit Solution</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Edit Solution Modal -->
-    <div class="modal fade" id="editSolutionModal" tabindex="-1" aria-labelledby="editSolutionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editSolutionModalLabel">Edit Solution</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editSolutionForm" method="POST" action="">
-                        @csrf
-                        @method('PUT')
-                        <div class="mb-3">
-                            <label for="editSolutionTitle" class="form-label">Solution Title</label>
-                            <input type="text" class="form-control" id="editSolutionTitle" name="title" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editSolutionDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="editSolutionDescription" name="description" rows="3" required></textarea>
-                        </div>
-                        <input type="hidden" id="editSolutionId" name="solution_id">
-                        <button type="submit" class="btn btn-primary">Update Solution</button>
-                    </form>
-                </div>
+<!-- Edit Solution Modal -->
+<div class="modal fade" id="editSolutionModal" tabindex="-1" aria-labelledby="editSolutionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSolutionModalLabel">Edit Solution</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editSolutionForm" method="POST" action="" novalidate>
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="editSolutionTitle" class="form-label">Solution Title</label>
+                        <input type="text" class="form-control" id="editSolutionTitle" name="title" required minlength="3" maxlength="100">
+                        <div class="invalid-feedback">Please enter a valid solution title (3-100 characters).</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editSolutionDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editSolutionDescription" name="description" rows="3" required minlength="10" maxlength="500"></textarea>
+                        <div class="invalid-feedback">Please provide a description (10-500 characters).</div>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <input type="hidden" id="editSolutionId" name="solution_id">
+                    <button type="submit" class="btn btn-primary">Update Solution</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
+
 
     <link rel="stylesheet" href="{{ asset('css/challenge.css') }}">
     <link rel="stylesheet" href="{{ asset('css/solution.css') }}">
@@ -291,5 +303,87 @@ function sortSolutions() {
     url.searchParams.set('sort', sortValue);
     window.location.href = url.toString(); 
 }
+// JavaScript to handle form validation on submit
+(function () {
+    'use strict';
+    var forms = document.querySelectorAll('form');
+
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+// JavaScript to handle live validation
+document.addEventListener('DOMContentLoaded', function () {
+    var solutionForm = document.getElementById('solutionForm');
+    var editSolutionForm = document.getElementById('editSolutionForm');
+
+    // Live validation for both forms
+    [solutionForm, editSolutionForm].forEach(function (form) {
+        if (form) {
+            var inputs = form.querySelectorAll('input, textarea');
+
+            inputs.forEach(function (input) {
+                input.addEventListener('input', function () {
+                    if (input.checkValidity()) {
+                        input.classList.remove('is-invalid');
+                        input.classList.add('is-valid');
+                    } else {
+                        input.classList.remove('is-valid');
+                        input.classList.add('is-invalid');
+                    }
+                });
+            });
+
+            form.addEventListener('submit', function (event) {
+                inputs.forEach(function (input) {
+                    if (!input.checkValidity()) {
+                        event.preventDefault();
+                        input.classList.add('is-invalid');
+                    }
+                });
+                form.classList.add('was-validated');
+            });
+        }
+    });
+});
+
+    // Get the end date from the PHP variable
+    const endDate = new Date("{{ $challenge->end_date }}").getTime();
+
+    // Function to calculate the time left and update the DOM
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const timeRemaining = endDate - now;
+
+        // If time has expired, display 'Closed'
+        if (timeRemaining <= 0) {
+            document.getElementById('time-left').innerHTML = 'Closed';
+            return;
+        }
+
+        // Calculate days, hours, minutes, and seconds remaining
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        // Update the DOM with the remaining time
+        document.getElementById('time-left').innerHTML =
+            days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+    }
+
+    // Update the countdown every second
+    setInterval(updateCountdown, 1000);
+
+    // Initial call to display the countdown immediately
+    updateCountdown();
+
+
 </script>
 @endsection

@@ -27,7 +27,10 @@ public function votes()
 {
     return $this->hasMany(Vote::class);
 }
-
+public function voters()
+{
+    return $this->belongsToMany(User::class, 'votes'); // Assuming you have a pivot table 'votes'
+}
 
 
 }

@@ -136,3 +136,9 @@
 .badge {
     font-size: 0.9em;
 }
+
+.time-left {
+    font-weight: bold;
+    color: #e74c3c; /* Red color for urgency */
+    font-size: 1.2rem;
+}

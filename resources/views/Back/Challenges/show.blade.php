@@ -21,7 +21,7 @@
             <p><strong>Description:</strong> {{ $challenge->description }}</p>
             <p><strong>Start Date:</strong> {{ $challenge->start_date }}</p>
             <p><strong>End Date:</strong> {{ $challenge->end_date }}</p>
-            <p><strong>Time Left:</strong> {{ $timeLeft }}</p>
+            <p><strong>Time Left:</strong> <span id="time-left"></span></p> <!-- Updated for real-time -->
             <p><strong>Reward Points:</strong> {{ $challenge->reward_points }}</p>
         </div>
     </div>
@@ -92,6 +92,8 @@
         <i class="fa fa-star"></i>
     </button>
     <span id="vote-count-{{ $solution->id }}">{{ $solution->votes()->count() }}</span> <!-- Display vote count -->
+    <button class="btn btn-info btn-sm" onclick="showVoters({{ $solution->id }})">View Voters</button>
+
 </div>
 
     <div class="solution-content">
@@ -161,6 +163,25 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Voters Modal -->
+<div class="modal fade" id="votersModal" tabindex="-1" aria-labelledby="votersModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="votersModalLabel">Voters</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="votersList" class="list-group">
+                    <!-- Voters will be dynamically added here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <link rel="stylesheet" href="{{ asset('css/challenge.css') }}">
     <link rel="stylesheet" href="{{ asset('css/solution.css') }}">
@@ -277,5 +298,88 @@ function sortSolutions() {
     url.searchParams.set('sort', sortValue);
     window.location.href = url.toString(); 
 }
+
+    // Get the end date from the PHP variable
+    const endDate = new Date("{{ $challenge->end_date }}").getTime();
+
+    // Function to calculate the time left and update the DOM
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const timeRemaining = endDate - now;
+
+        // If time has expired, display 'Closed'
+        if (timeRemaining <= 0) {
+            document.getElementById('time-left').innerHTML = 'Closed';
+            return;
+        }
+
+        // Calculate days, hours, minutes, and seconds remaining
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        // Update the DOM with the remaining time
+        document.getElementById('time-left').innerHTML =
+            days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+    }
+
+    // Update the countdown every second
+    setInterval(updateCountdown, 1000);
+
+    // Initial call to display the countdown immediately
+    updateCountdown();
+
+    function showVoters(solutionId) {
+    fetch(`/solutions/${solutionId}/voters`)
+        .then(response => response.json())
+        .then(data => {
+            const votersList = document.getElementById('votersList');
+            votersList.innerHTML = ''; // Clear previous voters
+
+            // Populate the modal with voters
+            data.voters.forEach(voter => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item';
+                listItem.textContent = voter.name; // Assuming 'name' is the property of the voter
+                votersList.appendChild(listItem);
+            });
+
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('votersModal'));
+            modal.show();
+        })
+        .catch(error => {
+            console.error('Error fetching voters:', error);
+        });
+}
+function showVoters(solutionId) {
+    fetch(`/solutions/${solutionId}/voters`)
+        .then(response => response.json())
+        .then(data => {
+            const votersList = document.getElementById('votersList');
+            votersList.innerHTML = ''; // Clear existing voters
+
+            if (data.voters.length) {
+                data.voters.forEach(voter => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.textContent = voter.name; // Assuming voter object has a name property
+                    votersList.appendChild(listItem);
+                });
+            } else {
+                votersList.innerHTML = '<li class="list-group-item">No voters yet.</li>';
+            }
+
+            // Show the modal
+            const votersModal = new bootstrap.Modal(document.getElementById('votersModal'));
+            votersModal.show();
+        })
+        .catch(error => {
+            console.error('Error fetching voters:', error);
+        });
+}
+
+
 </script>
 @endsection

@@ -5,8 +5,8 @@
     <tr>
         <td>{{ $challenge->title }}</td>
         <td>{{ Str::limit($challenge->description, 20) }}</td>
-        <td>{{ $challenge->start_date }}</td>
-        <td>{{ $challenge->end_date }}</td>
+        <td>{{ \Carbon\Carbon::parse($challenge->start_date)->format('d/m/Y, H:i:s') }}</td>
+        <td>{{ \Carbon\Carbon::parse($challenge->end_date)->format('d/m/Y, H:i:s') }}</td>
         <td>{{ $challenge->reward_points }}</td>
         <td>
         <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#viewModal{{ $challenge->id }}" onclick="populateViewModal('{{ $challenge->id }}', '{{ $challenge->title }}', '{{ $challenge->description }}', '{{ $challenge->start_date }}', '{{ $challenge->end_date }}', {{ $challenge->reward_points }})">

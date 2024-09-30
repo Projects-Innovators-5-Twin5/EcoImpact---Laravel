@@ -20,8 +20,12 @@
                                 <span class="badge bg-danger">Closed</span> 
                             @else
                                 <span class="badge bg-success">Open</span> 
+                            
+                            
+
                             @endif
                         </div>
+
 
                         <a href="{{ route('challenges.showfront', $challenge->id) }}" class="btn btn-primary">View Challenge</a>
                     </div>
@@ -29,11 +33,8 @@
             </div>
         @endforeach
     </div>
-   
-
-
-
-   
+ 
 </div>
 
 <link rel="stylesheet" href="{{ asset('css/challenge.css') }}">
+

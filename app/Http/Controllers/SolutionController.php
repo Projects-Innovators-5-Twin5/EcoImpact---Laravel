@@ -17,9 +17,9 @@ class SolutionController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'challenge_id' => 'required|exists:challenges,id',
+            'title' => 'required|string|min:3|max:100',
+            'description' => 'required|string|min:10|max:500',
+                'challenge_id' => 'required|exists:challenges,id',
         ]);
     
         // Assuming you have a Solution model set up
@@ -44,8 +44,8 @@ class SolutionController extends Controller
     {
         // Validate the incoming request
         $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
+            'title' => 'required|string|min:3|max:100',
+            'description' => 'required|string|min:10|max:500',
         ]);
     
         $solution = Solution::findOrFail($id);
@@ -90,5 +90,12 @@ class SolutionController extends Controller
         }
     }
     
+    public function getVoters($solutionId)
+    {
+        $solution = Solution::findOrFail($solutionId);
+        $voters = $solution->voters; // Assuming you have a relationship defined in your Solution model
+    
+        return response()->json(['voters' => $voters]);
+    }
     
 }

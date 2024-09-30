@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();  // Auto-incrementing ID
             $table->string('title');  // Title of the challenge
             $table->text('description');  // Description of the challenge
-            $table->date('start_date');  // When the challenge starts
-            $table->date('end_date');  // When the challenge ends
+            $table->timestamp('start_date'); // Change to timestamp
+            $table->timestamp('end_date'); // Change to timestamp
             $table->integer('reward_points');  // Points for completing the challenge
             $table->timestamps();  // Created and Updated timestamps
         });

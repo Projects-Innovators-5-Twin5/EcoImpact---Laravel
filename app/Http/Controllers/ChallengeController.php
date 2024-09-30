@@ -62,7 +62,7 @@ class ChallengeController extends Controller
         ]);
     
         $data = $request->all();
-    
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('challenges', 'public'); // Store image in 'public/challenges'
         }
@@ -100,9 +100,7 @@ class ChallengeController extends Controller
             $solution->voted = $solution->votes()->where('user_id', $userId)->exists();
         }
     
-        $timeLeft = $currentDate->lt($endDate) ? 
-            $currentDate->diffForHumans($endDate, ['syntax' => Carbon::DIFF_ABSOLUTE]) : 
-            'Closed';
+        
     
         $isClosed = $challenge->isClosed();
     
@@ -113,8 +111,7 @@ class ChallengeController extends Controller
         $winningSolutions = $solutions->filter(function ($solution) use ($maxVotes) {
             return $solution->votes_count == $maxVotes;
         });
-    
-        return view('Back.Challenges.show', compact('challenge', 'solutions', 'timeLeft', 'isClosed', 'winningSolutions'));
+        return view('Back.Challenges.show', compact('challenge', 'solutions', 'isClosed', 'winningSolutions'));
 
     }
 
@@ -283,10 +280,6 @@ public function showfront($id)
         $solution->voted = $solution->votes()->where('user_id', $userId)->exists();
     }
 
-    // Determine time left for the challenge
-    $timeLeft = $currentDate->lt($endDate) ? 
-        $currentDate->diffForHumans($endDate, ['syntax' => Carbon::DIFF_ABSOLUTE]) : 
-        'Closed';
 
     // Check if the challenge is closed
     $isClosed = $challenge->isClosed();
@@ -298,7 +291,7 @@ public function showfront($id)
         return $solution->votes_count == $maxVotes;
     });
 
-    return view('Front.Challenges.show', compact('challenge', 'solutions', 'timeLeft', 'isClosed', 'winningSolutions'));
+    return view('Front.Challenges.show', compact('challenge', 'solutions', 'isClosed', 'winningSolutions'));
 }
 public function leaderboard()
 {
@@ -310,6 +303,6 @@ public function leaderboard()
     return view('Front.Challenges.leaderboard', compact('users'));
 }
 
-    
+
     
 }    

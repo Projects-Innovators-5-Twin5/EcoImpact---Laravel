@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Challenges List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenges PDF</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #fff;
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
             border: 1px solid #000;
@@ -13,7 +26,8 @@
             text-align: left;
         }
         th {
-            background-color: #f2f2f2;
+            background-color: #007BFF;
+            color: white;
         }
     </style>
 </head>
@@ -34,8 +48,8 @@
                 <tr>
                     <td>{{ $challenge->title }}</td>
                     <td>{{ $challenge->description }}</td>
-                    <td>{{ $challenge->start_date }}</td>
-                    <td>{{ $challenge->end_date }}</td>
+                    <td>{{ $challenge->start_date ? $challenge->start_date->format('d/m/Y') : 'N/A' }}</td>
+                    <td>{{ $challenge->end_date ? $challenge->end_date->format('d/m/Y') : 'N/A' }}</td>
                     <td>{{ $challenge->reward_points }}</td>
                 </tr>
             @endforeach
