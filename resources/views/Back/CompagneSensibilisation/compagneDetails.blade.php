@@ -1,11 +1,13 @@
 @extends('back.layout')
 <link rel="stylesheet" href="{{ asset('css/compaign.css') }}">
 <script src="{{ asset('js/compaign.js') }}"></script>
+<script src="{{ asset('js/participation.js') }}"></script>
 
 
 @section('content')
 @include('Back.CompagneSensibilisation.createCompagne')
-@include('Back.CompagneSensibilisation.ModalConfirmationSuppression')
+@include('Back.CompagneSensibilisation.modalConfirmationSuppParticipant')
+@include('Back.CompagneSensibilisation.modalParticipantDetails')
 
 
 <title>EcoImpact - Awareness Campaign Details page</title>
@@ -105,7 +107,7 @@
 
     <div class="table-settings mb-4">
     <div class="row align-items-center justify-content-between">
-    <h2 class="h3 mb-4 mt-4">Participants Requests List</h2>
+    <h2 class="h3 mb-4 mt-4">Participants List</h2>
 
         <div class="d-flex col col-md-6 col-lg-8 col-xl-8">
             <div class="input-group me-2 me-lg-3 fmxw-400">
@@ -118,9 +120,9 @@
             </div>
                 <select class="form-select fmxw-200 d-none d-md-inline" id="statusP" name="statusP" aria-label="Message select example 2">
                     <option value="all">all</option>
-                    <option value="upcoming">pending</option>
-                    <option value="active">accepted</option>
-                    <option value="upcoming">refused</option>
+                    <option value="pending">pending</option>
+                    <option value="accepted">accepted</option>
+                    <option value="rejected">rejected</option>
                 </select>
         </div>
         <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
@@ -140,13 +142,14 @@
     </div>
 </div>
 <div class="card card-body border-0 shadow table-wrapper table-responsive">
-    <table class="table table-hover" id="campaignList">
+    <table class="table table-hover" id="participationList">
         <thead>
             <tr>
                 <th class="border-gray-200">#</th>
                 <th class="border-gray-200">Name</th>						
                 <th class="border-gray-200">Email</th>
                 <th class="border-gray-200">Phone</th>
+                <th class="border-gray-200">Date created</th>
                 <th class="border-gray-200">Status</th>
                 <th class="border-gray-200">Action</th>
             </tr>
@@ -171,12 +174,15 @@
                     <span class="fw-normal">{{ $campaign_participation->phone }}</span>
                 </td>
                 <td>
+                    <span class="fw-normal">{{ $campaign_participation->created_at->format('l, F j, Y') }}</span>
+                </td>
+                <td>
                     @if ($campaign_participation->status === 'pending')
                       <span class="fw-bold status-pending">pending</span>
                     @elseif($campaign_participation->status  === 'accepted')
-                      <span class="fw-bold status-success">accepted</span>
-                    @elseif($campaign_participation->status === 'refused')
-                      <span class="fw-bold status-danger">refused</span>
+                      <span class="fw-bold status-active">accepted</span>
+                    @elseif($campaign_participation->status === 'rejected')
+                      <span class="fw-bold status-archived">rejected</span>
                     @else
                        <span class="fw-bold status-archived">archived</span>
                     @endif
@@ -190,14 +196,12 @@
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu py-0">
-                            <a class="dropdown-item rounded-top" href="{{ route('campaigns.showBack',  $campaign->id) }}"><span class="fas fa-eye me-2" ></span>View Details</a>
-
-                            <a class="dropdown-item" href="{{ route('campaigns.edit',  $campaign->id) }}" ><span class="fas fa-edit me-2" ></span>Edit</a>   
+                            <a class="dropdown-item rounded-top" data-bs-toggle="modal" data-bs-target="#modal-default"  data-namep="{{$campaign_participation->name }}" data-phonep="{{$campaign_participation->phone }}" data-emailp="{{$campaign_participation->email }}" data-reasonsp="{{$campaign_participation->reasons }}" data-participant-id="{{$campaign_participation->id}}" data-statusp="{{$campaign_participation->status}}"><span class="fas fa-eye me-2" ></span>View Details</a>
 
                             <button type="button" class="dropdown-item text-danger rounded-bottom" 
                                         data-bs-toggle="modal" 
-                                        data-bs-target="#modal-confirmationsuppression"
-                                        data-campaign-id="{{ $campaign->id }}">
+                                        data-bs-target="#modal-confirmationsuppression-participant"
+                                        data-participant-id="{{ $campaign_participation->id }}">
                                     <span class="fas fa-trash-alt me-2"></span>Remove
                                 </button>                        
                         </div>

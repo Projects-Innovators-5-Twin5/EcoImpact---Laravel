@@ -227,9 +227,14 @@ class SensibilisatioCompagneController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $campaign = SensibilisationCampaign::findOrFail($id);
+
+        $campaign->delete();
+
+        return redirect()->route('campaigns.index')->with('success', 'Campaign deleted successfully.');
     }
 
+    
     public function archive($id)
     {
         $campaign = SensibilisationCampaign::findOrFail($id);

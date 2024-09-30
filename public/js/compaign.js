@@ -21,6 +21,16 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
                     </tr>
                 </thead>`
             data.forEach(campaign => {
+                var startDate = new Date(campaign.start_date); 
+                var endDate = new Date(campaign.end_date); 
+                var options = { 
+                    weekday: 'long',  
+                    year: 'numeric',  
+                    month: 'long',    
+                    day: 'numeric'   
+                };
+                var formattedStartDate = startDate.toLocaleDateString('en-US', options);
+                var formattedEndDate = endDate.toLocaleDateString('en-US', options);
                 results += `
                 
                 <tr>
@@ -32,8 +42,8 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
                 <td>
                     <span class="fw-normal">${campaign.title }</span>
                 </td>
-                <td><span class="fw-normal">${campaign.start_date }</span></td>                        
-                <td><span class="fw-normal">${campaign.end_date }</span></td>
+                <td><span class="fw-normal">${formattedStartDate }</span></td>                        
+                <td><span class="fw-normal">${formattedEndDate }</span></td>
                     <td>
                         ${campaign.target_audience.map(audience => `<div>${audience}</div>`).join('')} 
                     </td>
@@ -92,6 +102,16 @@ selectElement.addEventListener('change', function() {
                     </tr>
                 </thead>`
             data.forEach(campaign => {
+                var startDate = new Date(campaign.start_date); 
+                var endDate = new Date(campaign.end_date); 
+                var options = { 
+                    weekday: 'long',  
+                    year: 'numeric',  
+                    month: 'long',    
+                    day: 'numeric'   
+                };
+                var formattedStartDate = startDate.toLocaleDateString('en-US', options);
+                var formattedEndDate = endDate.toLocaleDateString('en-US', options);
                 results += `
                 
                 <tr>
@@ -103,8 +123,8 @@ selectElement.addEventListener('change', function() {
                 <td>
                     <span class="fw-normal">${campaign.title }</span>
                 </td>
-                <td><span class="fw-normal">${campaign.start_date }</span></td>                        
-                <td><span class="fw-normal">${campaign.end_date }</span></td>
+                <td><span class="fw-normal">${formattedStartDate }</span></td>                        
+                <td><span class="fw-normal">${formattedEndDate }</span></td>
                     <td>
                         ${campaign.target_audience.map(audience => `<div>${audience}</div>`).join('')} 
                     </td>

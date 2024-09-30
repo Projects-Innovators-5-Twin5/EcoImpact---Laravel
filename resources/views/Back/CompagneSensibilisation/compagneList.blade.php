@@ -5,7 +5,7 @@
 
 @section('content')
 @include('Back.CompagneSensibilisation.createCompagne')
-@include('Back.CompagneSensibilisation.ModalConfirmationSuppression')
+@include('Back.CompagneSensibilisation.modalConfirmationSuppression')
 
 
 <title>EcoImpact - Awareness Campaigns list page</title>

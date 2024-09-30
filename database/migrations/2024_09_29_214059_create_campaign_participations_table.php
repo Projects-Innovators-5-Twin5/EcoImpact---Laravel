@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone');
             $table->text('reasons')->nullable();
-            $table->enum('status', ['pending', 'accepted', 'refused', 'archived'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'rejected', 'archived'])->default('pending');
             $table->timestamps();
         });
     }

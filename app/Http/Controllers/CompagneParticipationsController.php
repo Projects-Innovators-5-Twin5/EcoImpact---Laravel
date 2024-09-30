@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SensibilisationCampaign;
 use App\Models\CampaignParticipation;
+use App\Mail\MailParticipation;
+use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 
 
@@ -29,8 +31,10 @@ class CompagneParticipationsController extends Controller
     public function create($campaign_id)
     {
         $campaign = SensibilisationCampaign::findOrFail($campaign_id);
+        $startDate = Carbon::parse($campaign->start_date);
+        $endDate = Carbon::parse($campaign->end_date);
 
-        return view('Front.CompagneSensibilisation.addParticipationCompagne', compact('campaign'));
+        return view('Front.CompagneSensibilisation.addParticipationCompagne', compact('campaign' , 'startDate','endDate'));
     }
 
     /**
@@ -61,6 +65,15 @@ class CompagneParticipationsController extends Controller
         $campaign = SensibilisationCampaign::findOrFail($id);
         $startDate = Carbon::parse($campaign->start_date);
         $endDate = Carbon::parse($campaign->end_date);
+
+        $data = [
+            'name' => $campaign_participation->name,
+            'participation_date'=>$campaign_participation->created_at,
+            'campaign_name'=>$campaign->title,
+            'campaign_startDate'=>$campaign->start_date,
+        ];
+
+        Mail::to($campaign_participation->email)->send(new MailParticipation($data));
 
         return redirect()->route('campaignsFront.index')->with('success', 'participation created successfully.');
     }
@@ -99,6 +112,40 @@ class CompagneParticipationsController extends Controller
         //
     }
 
+
+    public function acceptParticipation($id)
+    {
+        $campaign_participation = CampaignParticipation::findOrFail($id);
+        $campaign_participation->status = 'accepted';
+
+        $campaign_participation->save();
+
+        $campaign = SensibilisationCampaign::findOrFail($campaign_participation->campaign_id);
+
+        $data = [
+            'name' => $campaign_participation->name,
+            'participation_date'=>$campaign_participation->created_at,
+            'campaign_name'=>$campaign->title,
+            'campaign_startDate'=>$campaign->start_date,
+        ];
+
+        Mail::to($campaign_participation->email)->send(new MailParticipation($data));
+         
+        return redirect()->route('campaigns.index')->with('success', 'participation accepted successfully.');
+    }
+
+
+    public function rejectParticipation($id)
+    {
+        $campaign_participation = CampaignParticipation::findOrFail($id);
+        $campaign_participation->status = 'rejected';
+
+        $campaign_participation->save();
+         
+        return redirect()->route('campaigns.index')->with('success', 'participation rejected successfully.');
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -107,6 +154,32 @@ class CompagneParticipationsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $participant = CampaignParticipation::findOrFail($id);
+
+        $participant->delete();
+
+        return redirect()->route('campaigns.index')->with('success', 'Participant deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $results = CampaignParticipation::where('name', 'LIKE', "%{$query}%")->get();
+
+        return response()->json($results);
+    }
+
+    public function searchByStatus(Request $request)
+    {
+        $query = $request->input('query', ''); 
+
+        if ($query === 'all' || empty($query)) {
+            $results = CampaignParticipation::all();
+        } else {
+            $results = CampaignParticipation::where('status', 'LIKE', "%{$query}%")->get();
+        }
+        
+        return response()->json($results);
     }
 }
