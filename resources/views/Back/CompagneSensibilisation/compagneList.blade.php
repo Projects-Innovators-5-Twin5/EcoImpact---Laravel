@@ -185,11 +185,7 @@
                 $endDate = \Carbon\Carbon::parse($campaign->end_date);
             @endphp
             <tr>
-                <td>
-                    <a href="#" class="fw-bold">
-                    {{ $campaign->id }}
-                    </a>
-                </td>
+              
                 <td>
                     <span class="fw-normal">{{ $campaign->title }}</span>
                 </td>

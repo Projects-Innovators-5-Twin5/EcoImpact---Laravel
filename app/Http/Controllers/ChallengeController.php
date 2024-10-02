@@ -23,7 +23,6 @@ class ChallengeController extends Controller
     
             $currentDate = Carbon::now();
 
-            // Update challenge statuses based on end date
             foreach ($challenges as $challenge) {
                 $endDate = Carbon::parse($challenge->end_date);
                 if ($currentDate->gte($endDate) && $challenge->status !== 'closed') {
@@ -63,6 +62,21 @@ class ChallengeController extends Controller
     
         $data = $request->all();
 
+        $currentDate = Carbon::now();
+
+        // Set the initial status based on the dates
+        $startDate = Carbon::parse($data['start_date']);
+        $endDate = Carbon::parse($data['end_date']);
+        
+        if ($currentDate->gte($endDate)) {
+            $data['status'] = 'closed';
+        } elseif ($currentDate->lt($startDate)) {
+            $data['status'] = 'upcoming';
+        } else {
+            $data['status'] = 'open';
+        }
+    
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('challenges', 'public'); // Store image in 'public/challenges'
         }
@@ -80,19 +94,16 @@ class ChallengeController extends Controller
     
         $sort = request('sort', 'latest');
     
-        // Fetch all solutions, counting votes regardless of sort order
         $solutionsQuery = Solution::where('challenge_id', $challenge->id)
             ->with('user')
-            ->withCount('votes'); // Count votes
+            ->withCount('votes'); 
     
         if ($sort === 'votes') {
             $solutionsQuery->orderBy('votes_count', 'desc');
         } else {
-            // Default sorting by latest (created_at)
             $solutionsQuery->orderBy('created_at', 'desc');
         }
     
-        // Execute the query
         $solutions = $solutionsQuery->get();
     
         $userId = auth()->id();
@@ -104,10 +115,8 @@ class ChallengeController extends Controller
     
         $isClosed = $challenge->isClosed();
     
-        // Get the maximum votes count
         $maxVotes = $solutions->max('votes_count');
     
-        // Get all solutions that have the maximum votes
         $winningSolutions = $solutions->filter(function ($solution) use ($maxVotes) {
             return $solution->votes_count == $maxVotes;
         });
@@ -123,7 +132,6 @@ class ChallengeController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validate the incoming request
         $request->validate([
             'title' => 'required|string|max:100',
             'description' => 'required|string|max:500',
@@ -133,27 +141,49 @@ class ChallengeController extends Controller
             'image' => 'image|nullable|max:2048', // Validate image
         ]);
     
-        // Find the challenge by ID
         $challenge = Challenge::findOrFail($id);
     
-        // Prepare data for updating
         $data = $request->all();
+
+        $currentDate = Carbon::now();
+
+        $startDate = Carbon::parse($data['start_date']);
+        $endDate = Carbon::parse($data['end_date']);
     
-        // Check if there's a new image and store it
+        if ($currentDate->gte($endDate)) {
+            $data['status'] = 'closed';
+
+            $winningSolution = Solution::where('challenge_id', $challenge->id)
+            ->withCount('votes')
+            ->orderBy('votes_count', 'desc')
+            ->first();
+
+        if ($winningSolution) {
+            $user = User::find($winningSolution->user_id);
+            if ($user) {
+                $user->score += $challenge->reward_points;
+                $user->save();
+                \Log::info('Sending email to: ' . $user->email);
+                Mail::to($user->email)->send(new ChallengeWinnerMail($user, $challenge));
+
+            }
+        }
+
+        } elseif ($currentDate->lt($startDate)) {
+            $data['status'] = 'upcoming';
+        } else {
+            $data['status'] = 'open';
+        }
+    
+    
         if ($request->hasFile('image')) {
-            // Store the new image
             $data['image'] = $request->file('image')->store('challenges', 'public');
     
-            // Optionally, delete the old image if necessary
-            // if ($challenge->image) {
-            //     Storage::disk('public')->delete($challenge->image);
-            // }
+           
         } else {
-            // If no new image is uploaded, keep the old image
             $data['image'] = $challenge->image;
         }
     
-        // Update the challenge with the new data
         $challenge->update($data);
     
         return redirect()->route('challenges.index')->with('success', 'Challenge updated successfully');
@@ -182,22 +212,18 @@ class ChallengeController extends Controller
         $statusFilter = $request->get('status', ''); // Get status filter (open, closed, upcoming, or empty for all)
         $currentDate = Carbon::now();
     
-        // Base query for ongoing and past challenges
         $challengesQuery = Challenge::where(function ($query) use ($search) {
             $query->where('title', 'like', '%' . $search . '%')
                   ->orWhere('description', 'like', '%' . $search . '%');
         });
     
-        // Apply the status filter (open, closed, upcoming)
         if ($statusFilter === 'open') {
             $challengesQuery->where('status', 'open')->where('start_date', '<=', $currentDate);
         } elseif ($statusFilter === 'closed') {
             $challengesQuery->where('status', 'closed')->where('start_date', '<=', $currentDate);
         } elseif ($statusFilter === 'upcoming') {
-            // If "upcoming" is selected, only fetch upcoming challenges
             $challengesQuery->where('start_date', '>', $currentDate);
         } else {
-            // If no status filter, get both ongoing/past and upcoming challenges
             $challengesQuery = Challenge::where(function ($query) use ($search) {
                 $query->where('title', 'like', '%' . $search . '%')
                       ->orWhere('description', 'like', '%' . $search . '%');
@@ -207,17 +233,14 @@ class ChallengeController extends Controller
             });
         }
     
-        // Get paginated challenges
         $challenges = $challengesQuery->paginate(6);
     
-        // Update challenge statuses based on end date (existing logic)
         foreach ($challenges as $challenge) {
             $endDate = Carbon::parse($challenge->end_date);
             if ($currentDate->gte($endDate) && $challenge->status !== 'closed') {
                 $challenge->status = 'closed';
                 $challenge->save();
     
-                // Find the winning solution, counting votes dynamically
                 $winningSolution = Solution::where('challenge_id', $challenge->id)
                     ->withCount('votes')
                     ->orderBy('votes_count', 'desc')
@@ -305,4 +328,4 @@ public function leaderboard()
 
 
     
-}    
+}

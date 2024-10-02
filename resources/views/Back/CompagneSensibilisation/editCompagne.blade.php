@@ -112,7 +112,9 @@
                                                             @endif
                                                         @endforeach
                                                     @endif
-                                                </div>
+
+                                                        <img src="{{ asset('storage/' . $campaign->image) }}" alt="Current campaign Image" class="img-thumbnail mt-4" style="max-width: 150px;">
+                                                    </div>
 
                                                 <div class="form-group mb-4">
                                                     <label for="target_audience">Target audience</label>

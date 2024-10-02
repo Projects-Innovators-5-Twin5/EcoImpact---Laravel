@@ -19,19 +19,23 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="/landing">Home</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
+                <a class="nav-link" href="/liste-consommations">Consumption</a>
+                </li>
+
+                <li class="nav-item">
+                <a class="nav-link" href="/campaigns/front">Campaigns</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Services</a>
+                <a class="nav-link" href="/challengesfront">Challenges</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="/liste-consommations">Consommation</a>
+                <a class="nav-link" href="/front/articles" aria-disabled="true">Blog</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" aria-disabled="true">Contact</a>
+                <a class="nav-link" href="/produitss" aria-disabled="true">Store</a>
                 </li>
             </ul>
         </div>
