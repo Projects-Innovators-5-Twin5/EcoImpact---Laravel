@@ -56,6 +56,6 @@ class CarbonFootprint extends Model
      */
     public function energyConsumption()
     {
-        return $this->belongsTo(EnergyConsumption::class);
+        return $this->belongsTo(EnergyConsumption::class, 'energy_consumption_id');
     }
 }

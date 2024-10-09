@@ -37,7 +37,7 @@
             <tr>
                 <th class="border-bottom" scope="col">Nom de l'utilisateur</th>
                 <th class="border-bottom" scope="col">Valeur totale de consommation (kWh)</th>
-                <th class="border-bottom" scope="col">Valeur totale de carbone</th>
+                
                 <th class="border-bottom" scope="col">Actions</th>
             </tr>
         </thead>
@@ -46,7 +46,7 @@
             <tr>
                 <td class="text-gray-900">{{ $user->name }}</td>
                 <td class="fw-bolder text-gray-500">{{ number_format($user->consumptions->sum('energy_value'), 2) }}</td>
-                <td class="fw-bolder text-gray-500">{{ number_format($user->consumptions->sum('carbon_value'), 2) }}</td>
+            
                 <td>
                     <button onclick="openModal({{ $user->id }})" class="btn btn-link" style="padding: 0; color:#e8cb68;">
                         <i class="fas fa-eye" title="Voir les consommations" style="font-size: 1rem;"></i>
@@ -197,7 +197,8 @@ function updateChart(energyType) {
                         <td>${consumption.consumption_date}</td>
                         <td>${consumption.energy_value}</td>
                         <td>${consumption.energy_type}</td>
-                        <td>${consumption.carbonFootprint ? consumption.carbonFootprint.carbon_emission : 'N/A'}</td>
+                       <td>${consumption.carbonFootprint ? consumption.carbonFootprint.carbon_emission : 'N/A'}</td>
+
                     </tr>
                     `;
                 });

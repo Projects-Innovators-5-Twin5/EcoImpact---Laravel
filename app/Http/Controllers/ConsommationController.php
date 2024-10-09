@@ -121,7 +121,7 @@ switch ($validatedData['energy_type']) {
 
  public function listConsumptionsBack()
  {
-     // Récupérer tous les utilisateurs avec leurs consommations
+     // Récupérer tous les utilisateurs avec leurs consommations et empreintes carbone
      $users = User::with('consumptions.carbonFootprint')->get();
  
      // Récupérer toutes les consommations d'énergie avec leurs empreintes carbone
@@ -130,15 +130,21 @@ switch ($validatedData['energy_type']) {
      // Calculer la consommation totale d'énergie
      $globalConsumptionTotal = $energyConsumptions->sum('energy_value');
  
-     // Optionnel : Calculer la valeur totale de carbone
+     // Calculer la valeur totale de carbone, en s'assurant de gérer les cas où carbonFootprint peut être null
      $globalCarbonTotal = $energyConsumptions->sum(function ($consumption) {
-         return optional($consumption->carbonFootprint)->carbon_emission; // Assurez-vous d'adapter le champ ici
+         return optional($consumption->carbonFootprint)->carbon_emission ?? 0; // Utiliser ?? 0 pour éviter les null
      });
  
+     // Retourner la vue avec les données nécessaires
      return view('Back.ModuleSuiviDeConsommationBackModule1.ListeDeConsommationEnergitiqueETCarbonique', compact(
-         'users', 'energyConsumptions', 'globalConsumptionTotal', 'globalCarbonTotal'
+         'users',
+         'energyConsumptions',
+         'globalConsumptionTotal',
+         'globalCarbonTotal'
      ));
  }
+ 
+ 
 
  public function edit($id)
  {
