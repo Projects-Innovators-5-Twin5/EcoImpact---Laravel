@@ -54,11 +54,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const searchRouteP = '/participants/search';
 document.addEventListener('DOMContentLoaded', function() {
+const campaignId = document.getElementById('campaignId').value;
+
 document.getElementById('searchInputP').addEventListener('keyup', function() {
     let query = this.value;
     console.log(query);
 
-    fetch(searchRouteP + "?query=" + query)
+    fetch(searchRouteP + "/" + campaignId + "?query=" + query)
         .then(response => response.json())
         .then(data => {
             
@@ -135,7 +137,7 @@ const searchRouteStatusP = '/participants/searchByStatusP';
 const selectElement = document.getElementById('statusP');
 selectElement.addEventListener('change', function() {
     const selectedValue = selectElement.value;
-    fetch(searchRouteStatusP + "?query=" + selectedValue)
+    fetch(searchRouteStatusP + "/" + campaignId + "?query=" + selectedValue)
         .then(response => response.json())
         .then(data => {
             let results = '';

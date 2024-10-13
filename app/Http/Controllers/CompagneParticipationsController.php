@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SensibilisationCampaign;
 use App\Models\CampaignParticipation;
+use App\Mail\MailParticipationAccepted;
 use App\Mail\MailParticipation;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
@@ -37,6 +38,7 @@ class CompagneParticipationsController extends Controller
         return view('Front.CompagneSensibilisation.addParticipationCompagne', compact('campaign' , 'startDate','endDate'));
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -52,7 +54,7 @@ class CompagneParticipationsController extends Controller
             'reasons' => 'required|string|min:100|max:1000',
         ]);
 
-        CampaignParticipation::create([
+        $campaign_participation = CampaignParticipation::create([
             'campaign_id' => $request->input('campaign_id'),
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -129,7 +131,7 @@ class CompagneParticipationsController extends Controller
             'campaign_startDate'=>$campaign->start_date,
         ];
 
-        Mail::to($campaign_participation->email)->send(new MailParticipation($data));
+        Mail::to($campaign_participation->email)->send(new MailParticipationAccepted($data));
          
         return redirect()->route('campaigns.index')->with('success', 'participation accepted successfully.');
     }
@@ -161,23 +163,26 @@ class CompagneParticipationsController extends Controller
         return redirect()->route('campaigns.index')->with('success', 'Participant deleted successfully.');
     }
 
-    public function search(Request $request)
+    public function search(Request $request , $id)
     {
         $query = $request->input('query');
 
-        $results = CampaignParticipation::where('name', 'LIKE', "%{$query}%")->get();
-
+        $results = CampaignParticipation::where('campaign_id', $id)
+                                    ->where('name', 'LIKE', "%{$query}%")
+                                    ->get();
         return response()->json($results);
     }
 
-    public function searchByStatus(Request $request)
+    public function searchByStatus(Request $request,$id)
     {
         $query = $request->input('query', ''); 
 
         if ($query === 'all' || empty($query)) {
-            $results = CampaignParticipation::all();
+            $results = CampaignParticipation::where('campaign_id', $id)->get();
         } else {
-            $results = CampaignParticipation::where('status', 'LIKE', "%{$query}%")->get();
+            $results = CampaignParticipation::where('campaign_id', $id)
+                                            ->where('status', 'LIKE', "%{$query}%")
+                                            ->get();
         }
         
         return response()->json($results);

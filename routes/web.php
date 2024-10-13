@@ -60,5 +60,8 @@ Route::delete('/participants/{id}/delete', [CompagneParticipationsController::cl
 Route::post('/participants/{id}/accept', [CompagneParticipationsController::class, 'acceptParticipation'])->name('participation.accept');
 Route::post('/participants/{id}/reject', [CompagneParticipationsController::class, 'rejectParticipation'])->name('participation.reject');
 
-Route::get('/participants/search', [CompagneParticipationsController::class, 'search'])->name('participation.search');
-Route::get('/participants/searchByStatusP', [CompagneParticipationsController::class, 'searchByStatus'])->name('participation.searchByStatus');
+Route::get('/participants/search/{campaign_id}', [CompagneParticipationsController::class, 'search'])->name('participation.search');
+Route::get('/participants/searchByStatusP/{campaign_id}', [CompagneParticipationsController::class, 'searchByStatus'])->name('participation.searchByStatus');
+Route::get('/calendarData', [SensibilisatioCompagneController::class, 'calendarData'])->name('calendarData');
+Route::get('/calendar', [SensibilisatioCompagneController::class, 'calendar'])->name('calendar');
+Route::post('/calendar/updateEvent', [SensibilisatioCompagneController::class, 'updateDateCampaignCalendar'])->name('updateEvent');

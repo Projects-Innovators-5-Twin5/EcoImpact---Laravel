@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="{{ asset('css/compaign.css') }}">
 <script src="{{ asset('js/compaign.js') }}"></script>
 <script src="{{ asset('js/participation.js') }}"></script>
+<script src="{{ asset('js/landing.js') }}"></script>
 
 
 @section('content')
@@ -12,8 +13,6 @@
 
 <title>EcoImpact - Awareness Campaign Details page</title>
 
-<link rel="stylesheet" href="{{ asset('css/compaign.css') }}">
-<script src="{{ asset('js/landing.js') }}"></script>
 
 <div class="d-block mb-4 mb-md-0 mt-4">
         <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
@@ -94,10 +93,6 @@
                 
                 <h2 class="h5 mb-4 mt-4">Join Our Campaign! 🌟</h2>
                 <p class="d-flex align-items-center"><span class="text-des">{{$campaign -> reasons_join_campaign}}</span></p>
-                <div class="d-flex justify-content-end">
-                   <button class="btn btn-secondary btn-join " type="button"><a href="/register" class="text-btn" style="color:white;" >Join the Campaign!</a></button>
-                </div>   
-
             </div>
 
         </div>
@@ -116,6 +111,7 @@
                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                     </svg>
                 </span>
+                <input type="hidden" id="campaignId" value="{{ $campaign->id }}">
                 <input type="text" class="form-control" id="searchInputP" placeholder="Search participants">
             </div>
                 <select class="form-select fmxw-200 d-none d-md-inline" id="statusP" name="statusP" aria-label="Message select example 2">
@@ -145,7 +141,6 @@
     <table class="table table-hover" id="participationList">
         <thead>
             <tr>
-                <th class="border-gray-200">#</th>
                 <th class="border-gray-200">Name</th>						
                 <th class="border-gray-200">Email</th>
                 <th class="border-gray-200">Phone</th>
@@ -159,11 +154,7 @@
 
             @foreach($campaigns_participations as $campaign_participation)
             <tr>
-                <td>
-                    <a href="#" class="fw-bold">
-                    {{ $campaign_participation->id }}
-                    </a>
-                </td>
+                
                 <td>
                     <span class="fw-normal">{{ $campaign_participation->name }}</span>
                 </td>

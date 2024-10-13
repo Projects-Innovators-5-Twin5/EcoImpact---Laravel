@@ -76,7 +76,24 @@ class SensibilisatioCompagneController extends Controller
      */
     public function create()
     {
+        
     }
+
+
+    public function calendar()
+    {
+    
+        return view('Back.CompagneSensibilisation.compagneCalendar');
+    }
+
+
+    public function calendarData()
+    {
+        $campaigns = SensibilisationCampaign::all();
+    
+        return response()->json($campaigns);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -146,8 +163,7 @@ class SensibilisatioCompagneController extends Controller
         $startDate = Carbon::parse($campaign->start_date);
         $endDate = Carbon::parse($campaign->end_date);
 
-        $campaigns_participations = CampaignParticipation::where('campaign_id', $campaign->id)->get();
-        $campaigns_participations  = CampaignParticipation::paginate(5);
+        $campaigns_participations = CampaignParticipation::where('campaign_id', $campaign->id)->paginate(5);
 
         return view('Back.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate','endDate','campaigns_participations'));
     }
@@ -276,5 +292,28 @@ class SensibilisatioCompagneController extends Controller
 
         return $pdf->download('table_campaigns.pdf');
     }
+
+    public function updateDateCampaignCalendar(Request $request)
+    {
+       
+        $campaignId = $request->input('id');
+        $campaignStartDate = $request->input('start');
+        $campaignEndDate = $request->input('end');
+
+        $campaign = SensibilisationCampaign::find($campaignId);
+    
+        $campaign->start_date = $campaignStartDate;
+        $campaign->end_date = $campaignEndDate;
+    
+        $campaign->save();
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Les dates de la campagne ont été mises à jour avec succès.',
+            'campaign' => $campaign
+        ]);
+       
+    }
+
 
 }
