@@ -103,6 +103,15 @@
     <div class="table-settings mb-4">
     <div class="row align-items-center justify-content-between">
     <h2 class="h3 mb-4 mt-4">Participants List</h2>
+    <div class="btn-toolbar mb-2 mb-md-0 py-4 d-flex justify-content-end">
+   <button  class="btn btn-sm btn-gray-800" data-bs-toggle="modal" data-bs-target="#modal-createC-form">
+       <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>Add Participants
+   </button>
+    <div class="btn-group ms-2 ms-lg-3">
+        <a type="button"  href="{{ route('participation.export.pdf' , $campaign->id) }}" class="btn btn-sm btn-outline-gray-600 export-pdf">Export PDF</a>
+    </div>      
+</div>
+
 
         <div class="d-flex col col-md-6 col-lg-8 col-xl-8">
             <div class="input-group me-2 me-lg-3 fmxw-400">

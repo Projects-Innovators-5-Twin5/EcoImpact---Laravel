@@ -109,7 +109,6 @@ h2.complete , h4.complete{
     margin-top: 55px;
 }
 
-
 @media (max-width: 1190px) {
     .block_details{
         display: flex;

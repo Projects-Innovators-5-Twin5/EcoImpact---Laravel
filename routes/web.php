@@ -65,3 +65,4 @@ Route::get('/participants/searchByStatusP/{campaign_id}', [CompagneParticipation
 Route::get('/calendarData', [SensibilisatioCompagneController::class, 'calendarData'])->name('calendarData');
 Route::get('/calendar', [SensibilisatioCompagneController::class, 'calendar'])->name('calendar');
 Route::post('/calendar/updateEvent', [SensibilisatioCompagneController::class, 'updateDateCampaignCalendar'])->name('updateEvent');
+Route::get('/export-participant-pdf/{campaign_id}', [CompagneParticipationsController::class, 'exportPdf_Participants'])->name('participation.export.pdf');

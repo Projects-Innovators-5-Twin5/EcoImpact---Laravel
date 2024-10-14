@@ -9,6 +9,7 @@ use App\Mail\MailParticipationAccepted;
 use App\Mail\MailParticipation;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use PDF;
 
 
 class CompagneParticipationsController extends Controller
@@ -186,5 +187,16 @@ class CompagneParticipationsController extends Controller
         }
         
         return response()->json($results);
+    }
+
+    public function exportPdf_Participants($id)
+    {
+        $participants = CampaignParticipation::where('campaign_id', $id)->get();
+
+        $campaign = SensibilisationCampaign::findOrFail($id);
+
+        $pdf = PDF::loadView('Back.CompagneSensibilisation.participantsPDF', compact('participants' , 'campaign'));
+
+        return $pdf->download('table_participants.pdf');
     }
 }
