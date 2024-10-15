@@ -5,7 +5,7 @@
     <h1 class="text-center mb-4">Votre panier</h1>
 
     @if(session('panier'))
-        <form action="{{ route('commande.store') }}" method="POST">
+        <form action="{{ route('commande.passer') }}" method="POST">
             @csrf
             <div class="row">
                 @foreach(session('panier') as $id => $details)

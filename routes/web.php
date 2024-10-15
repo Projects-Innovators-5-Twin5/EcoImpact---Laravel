@@ -51,6 +51,7 @@ Route::post('/panier/ajouter/{id}', [PanierController::class, 'addToCart'])->nam
 Route::get('/checkout', [PaiementController::class, 'createPayment'])->name('checkout');
 Route::post('/checkout/payer', [PaiementController::class, 'payer'])->name('payer');
 Route::post('/commande/store', [CommandeController::class, 'store'])->name('commande.store');
+Route::post('/commande/passer', [CommandeController::class, 'passer'])->name('commande.passer');
 
 
 
