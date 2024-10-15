@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var phone = button.getAttribute('data-phonep');
         var status = button.getAttribute('data-statusp');
 
+
         if (status == 'accepted') {
             btnAccept.classList.add('d-none'); 
             btnRejected.classList.remove('d-none'); 
@@ -27,11 +28,13 @@ document.addEventListener('DOMContentLoaded', function() {
         var emailDisplay = document.getElementById('email');
         var phoneDisplay = document.getElementById('phone');
         var reasonsDisplay = document.getElementById('reasons');
+        var imageDisplay = document.getElementById('image-user');
+
         nameDisplay.textContent = name;
         emailDisplay.textContent = email;
         reasonsDisplay.textContent = reasons;
         phoneDisplay.textContent = "+216 " + phone;
-
+        imageDisplay.src = imageSrc;
 
         var participantId = button.getAttribute('data-participant-id'); 
         console.log(participantId);
@@ -208,8 +211,27 @@ selectElement.addEventListener('change', function() {
 })});
 
 
+
+
 function getStatusBadge(status) {
     if (status === 'pending') return '<span class="fw-bold status-pending">Pending</span>';
     if (status === 'accepted') return '<span class="fw-bold status-active">Accepted</span>';
     if (status === 'rejected') return '<span class="fw-bold status-archived">Rejected</span>';
 }
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const usersSelect = document.getElementById('users');
+    
+    fetch('/getUsers')
+        .then(response => response.json() )  
+        .then(users => {
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.name;  
+                option.textContent = user.name; 
+                usersSelect.appendChild(option);  
+            });
+        })
+        .catch(error => console.error('Error fetching users:', error));  
+});

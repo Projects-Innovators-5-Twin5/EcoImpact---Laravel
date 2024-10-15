@@ -30,9 +30,15 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashb
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'loginSubmit'])->name('login.submit');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('/forgotPassword', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
 
 Route::get('/profile', [AuthController::class, 'profileUser'])->name('ProfileUser');
+Route::post('/updateImage', [AuthController::class, 'updateImage'])->name('updateImageProfile');
+Route::post('/updateProfile', [AuthController::class, 'updateProfile'])->name('updateProfile');
+Route::get('/getUsers', [AuthController::class, 'getUsers'])->name('getUsers');
 
 
 //module compagne de sensibilisation

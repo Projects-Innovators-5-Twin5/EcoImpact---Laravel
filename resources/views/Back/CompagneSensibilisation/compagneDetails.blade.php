@@ -9,6 +9,7 @@
 @include('Back.CompagneSensibilisation.createCompagne')
 @include('Back.CompagneSensibilisation.modalConfirmationSuppParticipant')
 @include('Back.CompagneSensibilisation.modalParticipantDetails')
+@include('Back.CompagneSensibilisation.modalAddParticipant')
 
 
 <title>EcoImpact - Awareness Campaign Details page</title>
@@ -104,9 +105,7 @@
     <div class="row align-items-center justify-content-between">
     <h2 class="h3 mb-4 mt-4">Participants List</h2>
     <div class="btn-toolbar mb-2 mb-md-0 py-4 d-flex justify-content-end">
-   <button  class="btn btn-sm btn-gray-800" data-bs-toggle="modal" data-bs-target="#modal-createC-form">
-       <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>Add Participants
-   </button>
+ 
     <div class="btn-group ms-2 ms-lg-3">
         <a type="button"  href="{{ route('participation.export.pdf' , $campaign->id) }}" class="btn btn-sm btn-outline-gray-600 export-pdf">Export PDF</a>
     </div>      
@@ -165,13 +164,13 @@
             <tr>
                 
                 <td>
-                    <span class="fw-normal">{{ $campaign_participation->name }}</span>
+                    <span class="fw-normal">{{ $campaign_participation->user->name }}</span>
                 </td>
                 <td>
-                    <span class="fw-normal">{{ $campaign_participation->email }}</span>
+                    <span class="fw-normal">{{ $campaign_participation->user->email }}</span>
                 </td>
                 <td>
-                    <span class="fw-normal">{{ $campaign_participation->phone }}</span>
+                    <span class="fw-normal">{{ $campaign_participation->user->phone }}</span>
                 </td>
                 <td>
                     <span class="fw-normal">{{ $campaign_participation->created_at->format('l, F j, Y') }}</span>
@@ -196,7 +195,7 @@
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu py-0">
-                            <a class="dropdown-item rounded-top" data-bs-toggle="modal" data-bs-target="#modal-default"  data-namep="{{$campaign_participation->name }}" data-phonep="{{$campaign_participation->phone }}" data-emailp="{{$campaign_participation->email }}" data-reasonsp="{{$campaign_participation->reasons }}" data-participant-id="{{$campaign_participation->id}}" data-statusp="{{$campaign_participation->status}}"><span class="fas fa-eye me-2" ></span>View Details</a>
+                            <a class="dropdown-item rounded-top" data-bs-toggle="modal" data-bs-target="#modal-default" data-imagep="{{$campaign_participation->user->image }}"  data-namep="{{$campaign_participation->user->name }}" data-phonep="{{$campaign_participation->user->phone }}" data-emailp="{{$campaign_participation->user->email }}" data-reasonsp="{{$campaign_participation->reasons }}" data-participant-id="{{$campaign_participation->id}}" data-statusp="{{$campaign_participation->status}}"><span class="fas fa-eye me-2" ></span>View Details</a>
 
                             <button type="button" class="dropdown-item text-danger rounded-bottom" 
                                         data-bs-toggle="modal" 
@@ -259,3 +258,8 @@
        </div>
 </div>
 @endsection
+
+
+<script>
+    var imageSrc = "{{ asset('assets/img/team/default_img.png') }}";
+</script>

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 use App\Models\SensibilisationCampaign;
-
+use App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,9 +14,7 @@ class CampaignParticipation extends Model
 
     protected $fillable = [
         'campaign_id', 
-        'name',
-        'email',
-        'phone',
+        'user_id',
         'reasons',
         'status'
     ];
@@ -25,5 +23,10 @@ class CampaignParticipation extends Model
     public function campaign()
     {
         return $this->belongsTo(SensibilisationCampaign::class);
+    }
+
+    public function user()
+    {
+         return $this->belongsTo(User::class);
     }
 }

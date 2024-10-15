@@ -77,7 +77,7 @@
                 <div class="form-group mb-4">
                     <label for="name">Full name</label>
                     <div class="input-group">
-                        <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="name" placeholder="Enter your full name" value="{{ old('name') }}" id="name" autofocus>
+                        <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="name" placeholder="Enter your full name"  value="{{ old('name', Auth::user()->name) }}"  id="name" autofocus readonly>
                     </div>  
                     @if ($errors->has('name'))
                             @foreach ($errors->get('name') as $error)
@@ -94,7 +94,7 @@
                 <div class="form-group mb-4">
                     <label for="email">Email</label>
                     <div class="input-group">
-                        <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" placeholder="Enter your email" value="{{ old('email') }}" id="email" autofocus>
+                        <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" placeholder="Enter your email" value="{{ old('name', Auth::user()->email) }}" id="email" autofocus readonly>
                     </div>  
 
                     @if ($errors->has('email'))
@@ -114,7 +114,7 @@
                 <div class="form-group mb-4">
                     <label for="phone">Phone</label>
                     <div class="input-group">
-                        <input type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" name="phone" placeholder="Enter your phone" value="{{ old('phone') }}" id="phone" autofocus>
+                        <input type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" name="phone" placeholder="Enter your phone" value="{{ old('name', Auth::user()->phone) }}" id="phone" autofocus readonly>
                     </div>  
 
                     @if ($errors->has('phone'))
