@@ -3,7 +3,6 @@
 
 @section('content')
 <div class="bg-white">
-     <!-- Section de l'annonce -->
      <div class="annonce-header mb-4 p-3 bg-primary text-white text-center animated-header" style="    margin-bottom: -3rem !important;">
         <h2 class="mb-0"><i class="fas fa-bullhorn"></i> Nouveauté : Découvrez nos dernières solutions énergétiques !</h2>
     </div>
@@ -24,7 +23,7 @@
             </p>
         </div>
 
-        @if($article->image) <!-- Check if there is an image -->
+        @if($article->image) 
             <div class="mb-4 mt-2 d-flex py-4 justify-content-center border-bottom border-light ">
                 <img class="shadow-lg rounded" style="    width: 695px;max-height: 375px;" src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->titre }}" class="img-fluid rounded mb-3">
             </div>
@@ -43,10 +42,8 @@
         <div class="card mb-2 bg-gray-50" style="border:none;">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
-                    <!-- Comment Content -->
                     <p id="comment-content-{{ $commentaire->id }}">{{ $commentaire->contenu }}</p>
     
-                    <!-- Form for editing (initially hidden) -->
                     <form action="{{ route('front.commentaires.update', $commentaire->id) }}" method="POST" style="width:90%;" id="edit-form-{{ $commentaire->id }}" class="d-none">
                         @csrf
                         @method('PUT')
@@ -55,7 +52,6 @@
                         <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit({{ $commentaire->id }})">Annuler</button>
                     </form>
     
-                    <!-- 3-dot menu for edit/delete actions -->
                     <div class="dropdown">
                         <button class="btn btn-link p-0 text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-ellipsis-v"></i>
@@ -63,7 +59,6 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="#" onclick="editComment({{ $commentaire->id }})">Modifier</a></li>
                             <li>
-                                <!-- Supprimer Button -->
                                 <button type="button" class="dropdown-item btn-danger" dropdown-item text-danger data-id="{{ $commentaire->id }}"  data-bs-toggle="modal" data-bs-target="#deleteModal">
                                     Supprimer
                                 </button>
@@ -108,7 +103,6 @@
     </div>
    </div>
 </div>
-    <!-- Include the delete modal -->
     @include('front.articles.modal_delete')
     <script>
        var deleteModal = document.getElementById('deleteModal');
@@ -122,18 +116,14 @@ deleteModal.addEventListener('show.bs.modal', function (event) {
     
 <script>
     function editComment(commentId) {
-        // Hide the comment content
         document.getElementById('comment-content-' + commentId).classList.add('d-none');
         
-        // Show the edit form
         document.getElementById('edit-form-' + commentId).classList.remove('d-none');
     }
     
     function cancelEdit(commentId) {
-        // Show the comment content again
         document.getElementById('comment-content-' + commentId).classList.remove('d-none');
         
-        // Hide the edit form
         document.getElementById('edit-form-' + commentId).classList.add('d-none');
     }
     </script>

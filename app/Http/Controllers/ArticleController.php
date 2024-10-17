@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Enums\CategorieEnum;
-use Illuminate\Support\Facades\Storage; // Add this import
+use Illuminate\Support\Facades\Storage; 
 use Auth;
 
 class ArticleController extends Controller
@@ -39,7 +39,7 @@ class ArticleController extends Controller
         $imagePath = $request->file('image')->store('images', 'public');
 
         $data = $request->all();
-        $data['user_id'] = Auth::id(); // Use the authenticated user ID
+        $data['user_id'] = 1; 
         $data['image'] = $imagePath;
 
         Article::create($data);
@@ -70,7 +70,6 @@ class ArticleController extends Controller
         $article = Article::find($id);
 
         if ($request->hasFile('image')) {
-            // Validation des champs
             $request->validate([
                 'titre' => 'required|string|max:255',
                 'contenu' => 'required|string',
@@ -78,13 +77,12 @@ class ArticleController extends Controller
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
     
-            // Update image if a new one is uploaded
             if ($article->image) {
                 Storage::delete('public/' . $article->image);
             }
     
             $imagePath = $request->file('image')->store('images', 'public');
-            $article->image = $imagePath; // Store the new image path
+            $article->image = $imagePath;
         }
         else{
             $request->validate([
@@ -94,15 +92,12 @@ class ArticleController extends Controller
             ]);
         }
     
-        // Update other fields
         $article->titre = $request->input('titre');
         $article->contenu= $request->input('contenu');
         $article->categories = $request->input('categories');
         
-        // Save the article
         $article->save();
     
-        // Redirect with success message
         return redirect()->route('back.articles.index')->with('success', 'Article mis à jour avec succès.');
     }
     
@@ -111,9 +106,7 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
         
-       /* if ($article->image) {
-            Storage::disk('public')->delete($article->image);
-        }*/
+      
 
         $article->delete();
 

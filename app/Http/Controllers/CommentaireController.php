@@ -37,18 +37,14 @@ class CommentaireController extends Controller
             return back()->with('error', 'Commentaire non trouvé.');
         }
 
-        // Validate the request
         $request->validate([
             'contenu' => 'required|string',
         ]);
 
-        // Update the commentaire's content
         $commentaire->contenu = $request->input('contenu');
         
-        // Save the updated commentaire
         $commentaire->save();
         
-        // Redirect back with success message
         return back()->with('success', 'Commentaire mis à jour avec succès.');
     }
     public function destroy($id)

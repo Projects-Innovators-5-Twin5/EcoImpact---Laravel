@@ -8,7 +8,7 @@
         <small>Publié par: {{ $article->user->name }} le {{ $article->created_at->format('d M Y') }}</small>
     </p>
     </div>
-    @if($article->image) <!-- Check if there is an image -->
+    @if($article->image) 
         <div class="mb-4 mt-2 d-flex justify-content-center border-bottom border-light">
             <img style="max-width: 825px; height: auto;" src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->titre }}" class="img-fluid rounded mb-3">
         </div>

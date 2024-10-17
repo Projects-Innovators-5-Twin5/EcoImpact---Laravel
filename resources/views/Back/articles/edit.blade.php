@@ -11,7 +11,7 @@
         <div class="container card-body py-2">
             <form action="{{ route('back.articles.update', $article->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('PUT') <!-- Utiliser la méthode PUT pour la mise à jour -->
+                @method('PUT')
                 
                 <div class="row">
                     <div class="form-group col-md-6">

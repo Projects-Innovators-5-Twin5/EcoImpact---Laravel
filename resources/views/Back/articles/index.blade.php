@@ -30,7 +30,6 @@
                                 <a href="{{ route('back.articles.edit', $article->id) }}" class="btn btn-warning" title="Modifier l'article">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <!-- Updated trigger button for Bootstrap 5 -->
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" 
                                 data-id="{{ $article->id }}" data-title="{{ $article->titre }}">
                                 <i class="fas fa-trash"></i>
@@ -55,14 +54,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteModalLabel">Confirmer la suppression</h5>
-                <!-- Updated close button for Bootstrap 5 -->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>Êtes-vous sûr de vouloir supprimer l'article "<span id="articleTitle"></span>" ?</p>
             </div>
             <div class="modal-footer">
-                <form method="POST" action="{{ route('back.articles.destroy', $article->id) }}">
+                <form method="POST" action="{{ route('back.articles.destroy',  ['id' => '-1']) }}">
                     @csrf
                     @method('DELETE')
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -75,23 +73,19 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Code à exécuter lorsque le document est complètement chargé
-        console.log("Document is ready");
-        
-        const deleteButtons = document.querySelectorAll('.btn-danger');
-    
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const articleId = this.getAttribute('data-id');
-                const articleTitle = this.getAttribute('data-title');
+var deleteModal = document.getElementById('deleteModal');
+deleteModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                const articleId = button.getAttribute('data-id');
+                const articleTitle = button.getAttribute('data-title');
     
                 document.getElementById('articleTitle').textContent = articleTitle;
+                console.log(articleId);
+                var deleteForm = document.querySelector('.modal-footer form');
+                deleteForm.action = "{{ route('back.articles.destroy', '') }}" + '/' + articleId; 
+
+});
     
-                const deleteForm = document.querySelector('.modal-footer form');
-            });
-        });
-    });
-    </script>
+</script>
     
 @endsection

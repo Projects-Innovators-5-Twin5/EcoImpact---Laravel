@@ -5,11 +5,11 @@
 <div class="bg-white p-4">
     <div class="p-4 row">
         <div class="card m-4 shadow-lg col-md-7" style="border:none !important;padding: 0;" >
-            <img class="card-img-top"  src="{{ asset('storage/' . $articles[3]->image) }}" alt="{{ $articles[3]->titre }} style="max-height: 300px;">
+            <img class="card-img-top"  src="{{ asset('storage/' . $articles[0]->image) }}" alt="{{ $articles[0]->titre }} style="max-height: 300px;">
             
             <div class="card-body">
               <p class="card-text">Energie Renouvelables</p>
-              <a class="card-text" style="font-weight: bold; font-size:20px;">{{Str::limit($articles[3]->contenu, 100)}}</a>
+              <a class="card-text" style="font-weight: bold; font-size:20px;">{{Str::limit($articles[0]->contenu, 100)}}</a>
             </div>
         </div>
         <div class="col-md-4 mt-4 ml-4 text-black">

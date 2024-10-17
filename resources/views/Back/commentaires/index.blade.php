@@ -33,9 +33,7 @@
                                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal" data-content="{{ $commentaire->contenu }}" data-author="{{ $commentaire->user->name }}" title="Voir le commentaire">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <a href="#" class="btn btn-warning btn-sm" title="Modifier le commentaire">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                            
                                 <button class="btn btn-danger btn-sm" data-id="{{ $commentaire->id }}" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Supprimer le commentaire">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -94,7 +92,6 @@
 </div>
 
 <script>
-    // Script to set content for the view modal
     var viewModal = document.getElementById('viewModal');
     viewModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
@@ -108,7 +105,6 @@
         modalAuthor.textContent = commentAuthor;
     });
 
-  // Script to set data for the delete modal
 var deleteModal = document.getElementById('deleteModal');
 deleteModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
