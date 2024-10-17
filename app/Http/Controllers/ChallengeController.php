@@ -63,6 +63,21 @@ class ChallengeController extends Controller
     
         $data = $request->all();
 
+        $currentDate = Carbon::now();
+
+        // Set the initial status based on the dates
+        $startDate = Carbon::parse($data['start_date']);
+        $endDate = Carbon::parse($data['end_date']);
+        
+        if ($currentDate->gte($endDate)) {
+            $data['status'] = 'closed';
+        } elseif ($currentDate->lt($startDate)) {
+            $data['status'] = 'upcoming';
+        } else {
+            $data['status'] = 'open';
+        }
+    
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('challenges', 'public'); // Store image in 'public/challenges'
         }
@@ -138,16 +153,45 @@ class ChallengeController extends Controller
     
         // Prepare data for updating
         $data = $request->all();
+
+        $currentDate = Carbon::now();
+
+        // Update the status based on the dates
+        $startDate = Carbon::parse($data['start_date']);
+        $endDate = Carbon::parse($data['end_date']);
+    
+        if ($currentDate->gte($endDate)) {
+            $data['status'] = 'closed';
+
+            $winningSolution = Solution::where('challenge_id', $challenge->id)
+            ->withCount('votes')
+            ->orderBy('votes_count', 'desc')
+            ->first();
+
+        if ($winningSolution) {
+            $user = User::find($winningSolution->user_id);
+            if ($user) {
+                $user->score += $challenge->reward_points;
+                $user->save();
+                \Log::info('Sending email to: ' . $user->email);
+                Mail::to($user->email)->send(new ChallengeWinnerMail($user, $challenge));
+
+            }
+        }
+
+        } elseif ($currentDate->lt($startDate)) {
+            $data['status'] = 'upcoming';
+        } else {
+            $data['status'] = 'open';
+        }
+    
     
         // Check if there's a new image and store it
         if ($request->hasFile('image')) {
             // Store the new image
             $data['image'] = $request->file('image')->store('challenges', 'public');
     
-            // Optionally, delete the old image if necessary
-            // if ($challenge->image) {
-            //     Storage::disk('public')->delete($challenge->image);
-            // }
+           
         } else {
             // If no new image is uploaded, keep the old image
             $data['image'] = $challenge->image;

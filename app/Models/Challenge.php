@@ -21,6 +21,7 @@ class Challenge extends Model
         'end_date',
         'reward_points',
         'image',
+        'status',
         
     ];
     public function solutions()
