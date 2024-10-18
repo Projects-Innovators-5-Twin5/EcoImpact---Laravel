@@ -1,0 +1,158 @@
+.solution-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #ffffff; /* White background for clarity */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s; /* Add a hover effect */
+}
+.solution-item:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+
+
+.solution-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px; /* Increased space between header and vote section */
+}
+
+.solution-header .user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-image {
+    width: 45px; /* Slightly larger profile picture */
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #ffa500; /* Optional border around profile image */
+}
+
+
+.solution-content h5 {
+    font-size: 20px; /* Slightly larger title */
+    margin-top: 0;
+    margin-bottom: 8px; /* Adjust margin for spacing */
+    color: #333; /* Darker title color */
+}
+
+.solution-content p {
+    margin-top: 5px;
+    font-size: 15px; /* Increased font size */
+    line-height: 1.6;
+    color: #666; /* Slightly lighter color for description */
+}
+
+.solution-date {
+    font-size: 12px;
+    color: #999;
+    margin-left: auto;
+}
+
+.dropdown {
+    margin-left: 10px;
+}
+
+.vote-section {
+    display: flex;
+    justify-content: flex-end; /* Moves the button to the right */
+    margin-top: 10px; /* Adds some spacing below the header */
+}
+
+.vote-btn {
+    background-color: transparent;
+    border: none;
+    color: #000;
+    font-size: 24px; /* Increased font size for visibility */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.vote-btn:hover {
+    color: #ffa500; 
+}
+
+.vote-btn:focus {
+    outline: none;
+}
+
+.vote-btn.voted {
+    color: #ffa500; /* Color for voted state */
+}
+
+
+.solution-filter-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+
+.solution-filter {
+    display: flex;
+    align-items: center; /* Vertically centers the label and dropdown */
+}
+
+.solution-filter label {
+    margin-right: 0.5rem; /* Space between label and dropdown */
+}
+
+
+/* Optional: Style the select dropdown */
+#solutionSort {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.winner-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.podium {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+.podium-position {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 15px;
+    text-align: center; /* Center the text */
+}
+
+
+.trophy-icon {
+    font-size: 40px; /* Increase trophy size */
+    color: gold; /* Optional: give a gold color to the trophy */
+    margin-bottom: 5px; /* Space between trophy and text */
+}
+
+.winner-info {
+    background-color: rgba(255, 255, 255, 0.8); /* Light background for contrast */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+
+.winner-name {
+    font-weight: bold;
+    font-size: 16px; /* Adjust name font size */
+}
+
+.winner-title {
+    font-size: 14px; /* Adjust title font size */
+    color: #555; /* Subtitle color */
+    margin-top: 5px; /* Space between name and title */
+}

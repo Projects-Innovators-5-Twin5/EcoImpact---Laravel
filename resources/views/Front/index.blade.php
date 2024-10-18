@@ -1,3 +1,5 @@
+<script src="{{ asset('js/landing.js') }}"></script>
+
 @extends('front.layout')
 
 @section('content')

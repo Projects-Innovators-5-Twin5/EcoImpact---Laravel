@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Commande;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log; // Pour la journalisation
+use Illuminate\Support\Facades\Log;
 
 class CommandeController extends Controller
 {

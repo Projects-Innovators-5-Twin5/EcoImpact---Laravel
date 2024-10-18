@@ -1,3 +1,5 @@
+<script src="{{ asset('js/landing.js') }}"></script>
+
 @extends('front.layout')
 
 @section('content')
@@ -19,7 +21,7 @@
                             <p class="card-text">{{ Str::limit($produit->description, 70) }}</p>
                             <p class="card-text"><strong>Price:</strong> {{ $produit->prix }} DT</p>
                             <p class="card-text"><strong>Quantity:</strong> {{ $produit->quantite }}</p>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-center">
                                 <a href="{{ route('produits.show', $produit->id) }}" class="btn btn-info btn-sm">View Details</a>
                             </div>
                         </div>

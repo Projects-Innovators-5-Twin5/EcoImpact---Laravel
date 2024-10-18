@@ -1,11 +1,9 @@
-body{
-    padding-top: 130px;
-}
-.nav-content{
-    margin-left: 8%;
-    margin-right: 8%;
-}
 
+.navbar{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+}
 .navbar.scrolled {
     background-color: white; 
 }
@@ -19,6 +17,7 @@ body{
     font-weight: bold;
 }
 
+
 .navbar-brand img{
     height: 80px;
 }
@@ -31,8 +30,6 @@ body{
 .text-btncontact{
     font-size: 18px;
 }
-
-
 
 .btn:hover .text-btn {
     color: white; 
@@ -160,4 +157,8 @@ body{
     .card{
         margin-top: 2%;
     }
+}
+
+.nav-item {
+    list-style: none; /* Remove the bullet point */
 }

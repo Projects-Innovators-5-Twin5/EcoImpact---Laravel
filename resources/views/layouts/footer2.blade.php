@@ -61,9 +61,9 @@
                         <a href="https://themesberg.com/contact">Contact</a>
                     </li>
                 </ul>
-                <p class="mb-0 text-center">© 2019-<span class="current-year"></span> <a
-                        class="text-primary fw-normal" href="https://themesberg.com" target="_blank">Themesberg &
-                    </a><a href="https://updivision.com/" target="_blank">Updivision</a></p>
+                <p class="mb-0 text-center">© 2024-<span class="current-year"></span> <a
+                        class="text-primary fw-normal" href="https://themesberg.com" target="_blank">Innovators
+                    </a>
             </div>
         </div>
     </div>
