@@ -36,7 +36,7 @@
 
                     <!-- Payment Button -->
                     <button id="submit" class="btn btn-success btn-block" style="background-color: #28a745; border: none;">
-                        Payer {{ $total ?? '555' }} DT
+                        Payer {{ session('total', '0') }} DT
                     </button>
 
                     <div id="payment-result" class="mt-3 text-center"></div>
@@ -89,7 +89,7 @@
                         'X-CSRF-TOKEN': csrfToken
                     },
                     body: JSON.stringify({
-                        total: {{ $total ?? 0 }}, // Utiliser un total par défaut si non défini
+                        total: {{ session('total', 0) }}, // Utilisez le total de la session
                         produits: produits,
                         client_nom: clientNom,
                         client_email: clientEmail,
