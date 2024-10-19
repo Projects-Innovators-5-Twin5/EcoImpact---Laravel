@@ -94,7 +94,7 @@
                 <div class="form-group mb-4">
                     <label for="email">Email</label>
                     <div class="input-group">
-                        <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" placeholder="Enter your email" value="{{ old('name', Auth::user()->email) }}" id="email" autofocus readonly>
+                        <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" placeholder="Enter your email" value="{{ old('email', Auth::user()->email) }}" id="email" autofocus readonly>
                     </div>  
 
                     @if ($errors->has('email'))
@@ -114,7 +114,7 @@
                 <div class="form-group mb-4">
                     <label for="phone">Phone</label>
                     <div class="input-group">
-                        <input type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" name="phone" placeholder="Enter your phone" value="{{ old('name', Auth::user()->phone) }}" id="phone" autofocus readonly>
+                        <input type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" name="phone" placeholder="Enter your phone" value="{{ old('phone', Auth::user()->phone) }}" id="phone" autofocus readonly>
                     </div>  
 
                     @if ($errors->has('phone'))

@@ -27,6 +27,17 @@ class CompagneParticipationsController extends Controller
         
     }
 
+
+    public function listParticipation()
+    { 
+        $userId = Auth::id();
+        $user = User::findOrFail($userId);
+        $participations = CampaignParticipation::with('campaign')->where('user_id' , Auth::id())->whereIn('status', ['accepted', 'pending'])->get();
+
+        return view('Front.CompagneSensibilisation.campaignParticipationList', compact('participations','user'));
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -78,7 +89,7 @@ class CompagneParticipationsController extends Controller
 
         Mail::to($user->email)->send(new MailParticipation($data));
 
-        return redirect()->route('campaignsFront.index')->with('success', 'participation created successfully.');
+        return redirect()->route('campaigns.show' , $id)->with('success', 'participation created successfully.');
     }
 
     /**
@@ -151,6 +162,16 @@ class CompagneParticipationsController extends Controller
     }
 
 
+    public function cancelParticipation($id)
+    {
+        $campaign_participation = CampaignParticipation::findOrFail($id);
+
+        $campaign_participation->delete();
+         
+        return redirect()->route('participation.front.list');
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -171,9 +192,12 @@ class CompagneParticipationsController extends Controller
     {
         $query = $request->input('query');
 
-        $results = CampaignParticipation::where('campaign_id', $id)
-                                    ->where('name', 'LIKE', "%{$query}%")
-                                    ->get();
+        $results = CampaignParticipation::with('user') 
+        ->where('campaign_id', $id) 
+        ->whereHas('user', function ($q) use ($query) { 
+            $q->where('name', 'LIKE', "%{$query}%");
+        })
+        ->get();
         return response()->json($results);
     }
 
@@ -182,9 +206,9 @@ class CompagneParticipationsController extends Controller
         $query = $request->input('query', ''); 
 
         if ($query === 'all' || empty($query)) {
-            $results = CampaignParticipation::where('campaign_id', $id)->get();
+            $results = CampaignParticipation::with('user')->where('campaign_id', $id)->get();
         } else {
-            $results = CampaignParticipation::where('campaign_id', $id)
+            $results = CampaignParticipation::with('user')->where('campaign_id', $id)
                                             ->where('status', 'LIKE', "%{$query}%")
                                             ->get();
         }

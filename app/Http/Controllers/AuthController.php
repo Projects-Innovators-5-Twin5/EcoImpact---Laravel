@@ -82,9 +82,9 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
-            'phone' => 'nullable|string|max:8',
-            'address' => 'nullable|string|max:255',
-            'birthDate' => 'nullable|date',
+            'phone' => 'required|string|max:8',
+            'address' => 'required|string|max:255',
+            'birthDate' => 'required|date',
         ]);
 
         $user = Auth::user();

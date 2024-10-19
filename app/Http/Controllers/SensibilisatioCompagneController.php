@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\SensibilisationCampaign;
 use App\Models\CampaignParticipation;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -154,7 +155,9 @@ class SensibilisatioCompagneController extends Controller
         $campaign = SensibilisationCampaign::findOrFail($id);
         $startDate = Carbon::parse($campaign->start_date);
         $endDate = Carbon::parse($campaign->end_date);
-        return view('Front.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate','endDate'));
+
+        $participation = CampaignParticipation::where('campaign_id', $campaign->id)->where('user_id', Auth::id())->first();     
+        return view('Front.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate','endDate','participation'));
     }
 
 

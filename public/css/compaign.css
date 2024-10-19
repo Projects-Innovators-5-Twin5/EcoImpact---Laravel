@@ -31,6 +31,12 @@
     border-radius: 12px;
 }
 
+.status-canceled {
+    color: #ffffff; 
+    background-color: black; 
+    padding: 5px 10px;
+    border-radius: 12px;
+}
 
 .btn-gray{
     background-color: rgb(179, 177, 177) ;
@@ -108,6 +114,11 @@ h2.complete , h4.complete{
 .btn-join{
     margin-top: 55px;
 }
+
+.card-participation{
+    height: 780px;
+}
+
 
 @media (max-width: 1190px) {
     .block_details{

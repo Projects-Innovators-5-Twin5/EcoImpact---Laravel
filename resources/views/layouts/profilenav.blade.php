@@ -66,7 +66,7 @@
                             </a>
                         </li>
                         <li class="nav-item-profile {{ Request::segment(1) == 'dashboard' ? 'active' : '' }}">
-                            <a href="/dashboard" class="nav-link">
+                            <a href="/listParticipation" class="nav-link">
                             <span class="sidebar-icon"> <i class="fa-solid fa-calendar-week"></i></span>
                             <span class="sidebar-text">Campaign Participation History</span>
                             </a>
@@ -78,7 +78,7 @@
                             </a>
                         </li>
                         <li class="nav-item-profile {{ Request::segment(1) == 'dashboard' ? 'active' : '' }}">
-                            <a href="/dashboard" class="nav-link">
+                            <a href="/profile" class="nav-link">
                             <span class="sidebar-icon"> <i class="fa-solid fa-gear"></i></span>
                             <span class="sidebar-text">Profile Settings</span>
                             </a>

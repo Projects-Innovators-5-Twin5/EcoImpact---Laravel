@@ -72,3 +72,6 @@ Route::get('/calendarData', [SensibilisatioCompagneController::class, 'calendarD
 Route::get('/calendar', [SensibilisatioCompagneController::class, 'calendar'])->name('calendar');
 Route::post('/calendar/updateEvent', [SensibilisatioCompagneController::class, 'updateDateCampaignCalendar'])->name('updateEvent');
 Route::get('/export-participant-pdf/{campaign_id}', [CompagneParticipationsController::class, 'exportPdf_Participants'])->name('participation.export.pdf');
+Route::get('/listParticipation', [CompagneParticipationsController::class, 'listParticipation'])->name('participation.front.list');
+
+Route::put('/participants/{id}/cancel', [CompagneParticipationsController::class, 'cancelParticipation'])->name('participation.cancel');

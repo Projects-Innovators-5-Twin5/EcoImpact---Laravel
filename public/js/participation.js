@@ -71,7 +71,6 @@ document.getElementById('searchInputP').addEventListener('keyup', function() {
             const thead = 
                 `  <thead>
                         <tr>
-                            <th class="border-gray-200">#</th>
                             <th class="border-gray-200">Name</th>						
                             <th class="border-gray-200">Email</th>
                             <th class="border-gray-200">Phone</th>
@@ -92,16 +91,12 @@ document.getElementById('searchInputP').addEventListener('keyup', function() {
                 results += `
                 
                 <tr>
-                 <td>
-                    <a href="#" class="fw-bold">
-                       ${participation.id}
-                    </a>
-                </td>
+              
                 <td>
-                    <span class="fw-normal">${participation.name }</span>
+                    <span class="fw-normal">${participation.user.name }</span>
                 </td>
-                <td><span class="fw-normal">${participation.email }</span></td>                        
-                <td><span class="fw-normal">${participation.phone }</span></td>
+                <td><span class="fw-normal">${participation.user.email }</span></td>                        
+                <td><span class="fw-normal">${participation.user.phone }</span></td>
                 <td><span class="fw-normal">${formattedCreatedAtDate }</span></td>
                 <td>
                    ${getStatusBadge(participation.status)}
@@ -147,7 +142,6 @@ selectElement.addEventListener('change', function() {
             const thead = 
                 `  <thead>
                         <tr>
-                            <th class="border-gray-200">#</th>
                             <th class="border-gray-200">Name</th>						
                             <th class="border-gray-200">Email</th>
                             <th class="border-gray-200">Phone</th>
@@ -168,16 +162,12 @@ selectElement.addEventListener('change', function() {
                 results += `
                 
                 <tr>
-                 <td>
-                    <a href="#" class="fw-bold">
-                       ${participation.id}
-                    </a>
-                </td>
+              
                 <td>
-                    <span class="fw-normal">${participation.name }</span>
+                    <span class="fw-normal">${participation.user.name }</span>
                 </td>
-                <td><span class="fw-normal">${participation.email }</span></td>                        
-                <td><span class="fw-normal">${participation.phone }</span></td>
+                <td><span class="fw-normal">${participation.user.email }</span></td>                        
+                <td><span class="fw-normal">${participation.user.phone }</span></td>
                 <td><span class="fw-normal">${formattedCreatedAtDate }</span></td>
                 <td>
                    ${getStatusBadge(participation.status)}

@@ -17,9 +17,20 @@
                         <div class="col-md-12 mb-3">
                             <div>
                                 <label for="name">Full Name</label>
-                                <input class="form-control" id="name" name="name" type="text"
-                                    placeholder="Enter your first name" required value="{{ $user->name }}">
+                                <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name" type="text"
+                                    placeholder="Enter your first name"  value="{{ old('name' ,$user->name) }}">
                             </div>
+                            @if ($errors->has('name'))
+                                                        @foreach ($errors->get('name') as $error)
+                                                            @if ($error == 'The fullname field is required.')
+                                                                <div class="text-danger h6 mt-1" id="error-title">Fullname is required</div>
+                                                            @elseif ($error == 'The title may not be greater than 255 characters.')
+                                                                <div class="text-danger h6 mt-1" id="error-title">The fullname cannot be more than 255 characters long</div>
+                                                            @else
+                                                                <div class="text-danger h6 mt-1" id="error-title">{{ $error }}</div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
                         </div>
                         
                     </div>
@@ -27,9 +38,20 @@
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input  class="form-control" id="email" name="email" type="email"
-                                     value="{{ $user->email }}">
+                                <input  class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" id="email" name="email" 
+                                     value="{{ old('email' , $user->email) }}">
                             </div>
+                            @if ($errors->has('email'))
+                        @foreach ($errors->get('email') as $error)
+                            @if ($error == 'The email field is required.')
+                                <div class="text-danger h6 mt-1" id="error-email">Email is required</div>
+                            @elseif ($error == 'The email must be a valid email address.')
+                                <div class="text-danger h6 mt-1" id="error-email">Please provide a valid email address</div>
+                            @else
+                                <div class="text-danger h6 mt-1" id="error-email">{{ $error }}</div>
+                            @endif
+                        @endforeach
+                    @endif
                         </div>
                         
                     </div>
@@ -50,9 +72,20 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label for="phone">Phone</label>
-                                <input class="form-control" id="phone" name="phone" type="number"
-                                 value="{{ $user->phone }}">
+                                <input class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" id="phone" name="phone" type="number"
+                                 value="{{ old('phone' , $user->phone) }}">
                             </div>
+                            @if ($errors->has('phone'))
+                        @foreach ($errors->get('phone') as $error)
+                            @if ($error == 'The phone field is required.')
+                                <div class="text-danger h6 mt-1" id="error-phone">Phone number is required</div>
+                            @elseif (str_contains($error, 'digits'))
+                                <div class="text-danger h6 mt-1" id="error-phone">Phone number must be exactly 8 digits, you entered {{ old('phone') }}</div>
+                            @else
+                                <div class="text-danger h6 mt-1" id="error-phone">{{ $error }}</div>
+                            @endif
+                        @endforeach
+                    @endif
                         </div>
                     </div>
                    
@@ -61,15 +94,28 @@
                         <div class="col-sm-12 mb-3">
                             <div class="form-group">
                                 <label for="address">Address</label>
-                                <input  class="form-control" id="address" name="address" type="text"
-                                    placeholder="Enter your home address" value="{{ $user->address }}">
+                                <input  class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" id="address" name="address" type="text"
+                                    placeholder="Enter your home address" value="{{ old('address' , $user->address) }}">
 
                             </div>
+                            @if ($errors->has('address'))
+                                                        @foreach ($errors->get('address') as $error)
+                                                            @if ($error == 'The address field is required.')
+                                                                <div class="text-danger h6 mt-1" id="error-title">Address is required</div>
+                                                            @elseif ($error == 'The address may not be greater than 255 characters.')
+                                                                <div class="text-danger h6 mt-1" id="error-title">The address cannot be more than 255 characters long</div>
+                                                            @else
+                                                                <div class="text-danger h6 mt-1" id="error-title">{{ $error }}</div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+
+                            
                         </div>
                         
                     </div>
                     
-                    <div class="d-flex justify-content-end" style="margin-top:50px;">
+                    <div class="d-flex justify-content-end" style="margin-top:185px;">
                         <button type="submit" class="btn btn-gray-800 mt-4 animate-up-2">Save All</button>
                     </div>
                 </form>
