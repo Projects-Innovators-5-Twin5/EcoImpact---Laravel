@@ -4,7 +4,8 @@
 
 @section('content')
     <h1 class="text-center mb-4">Products</h1>
-    <div class="container">
+    <div class="card">
+    <div class="container  p-3">
         <div class="row">
             @foreach ($produits as $produit)
                 <div class="col-md-4 mb-4">
@@ -22,7 +23,7 @@
                             <p class="card-text"><strong>Price:</strong> {{ $produit->prix }} DT</p>
                             <p class="card-text"><strong>Quantity:</strong> {{ $produit->quantite }}</p>
                             <div class="d-flex justify-content-center">
-                                <a href="{{ route('produits.show', $produit->id) }}" class="btn btn-info btn-sm">View Details</a>
+                                <a href="{{ route('produits.show', $produit->id) }}" class="btn btn-primary btn-sm">View Details</a>
                             </div>
                         </div>
                     </div>
@@ -30,4 +31,5 @@
             @endforeach
         </div>
     </div>
+</div>
 @endsection

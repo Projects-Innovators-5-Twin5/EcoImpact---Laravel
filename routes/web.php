@@ -77,7 +77,6 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::delete('/solutions/{solution}', [SolutionController::class, 'destroy'])->name('solutions.destroy');
 
      //produits back
-     Route::resource('produits', ProduitController::class);
    //consumption back 
    Route::get('/liste-consommationsBack', [ConsommationController::class, 'listConsumptionsBack'])->name('consommationBack.list');
    Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
@@ -86,6 +85,8 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
 
 });
+Route::resource('produits', ProduitController::class);
+
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginSubmit'])->name('login.submit');

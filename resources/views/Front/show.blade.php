@@ -3,8 +3,10 @@
 @extends('front.layout')
 
 @section('content')
+
+
+<div class="card p-3">
     <div class="container mt-5">
-        <h1 class="text-center mb-4">{{ $produit->nom }}</h1>
 
         <div class="row">
             <div class="col-md-6">
@@ -20,18 +22,18 @@
             <div class="col-md-6">
                 <div class="product-details border p-3 rounded shadow-sm">
                     <h3 class="mb-3">Détails du produit</h3>
+                    <p><strong>Nom:</strong> {{ $produit->nom }}</p>
                     <p><strong>Description:</strong> {{ $produit->description }}</p>
                     <p><strong>Prix:</strong> <span class="text-success">{{ $produit->prix }} DT</span></p>
                     <p><strong>Quantité disponible:</strong> {{ $produit->quantite }}</p>
 
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ route('produitCards.front') }}" class="btn btn-secondary">Retour à la liste</a>
+                    <div class=" mt-4">
+                        <a href="{{ route('produitCards.front') }}" class="btn btn-secondary ">Retour à la liste</a>
 
                         <form action="{{ route('panier.ajouter', $produit->id) }}" method="POST" style="display:inline;">
                             @csrf
                             <button type="submit" class="btn btn-primary">Ajouter au panier</button>
-                        </form>
-
+</form>
 
 
                     </div>
@@ -39,4 +41,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

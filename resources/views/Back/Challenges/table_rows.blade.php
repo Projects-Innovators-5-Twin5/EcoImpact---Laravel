@@ -55,7 +55,7 @@
                         <div class="image-framecard">
         <img src="{{ asset('storage/' . $challenge->image) }}" alt="Challenge Image" class="img-fluid challenge-image" />
     </div>                            <strong>Title:</strong> <span id="viewTitle{{ $challenge->id }}">{{ $challenge->title }}</span><br>
-                            <strong>Description:</strong> <span id="viewDescription{{ $challenge->id }}">{{ $challenge->description }}</span><br>
+                            <strong>Description:</strong> <span id="viewDescription{{ $challenge->id }}">{{ Str::limit($challenge->description, 10, '...') }}</span><br>
                             <strong>Start Date:</strong> <span id="viewStartDate{{ $challenge->id }}">{{ $challenge->start_date }}</span><br>
                             <strong>End Date:</strong> <span id="viewEndDate{{ $challenge->id }}">{{ $challenge->end_date }}</span><br>
                             <strong>Reward Points:</strong> <span id="viewRewardPoints{{ $challenge->id }}">{{ $challenge->reward_points }}</span><br>

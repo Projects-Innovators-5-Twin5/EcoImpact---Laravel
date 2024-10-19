@@ -4,7 +4,6 @@
 <title>EcoImpact - Liste des Produits</title>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
@@ -107,7 +106,7 @@
                                                     <img src="{{ asset('storage/' . $produit->image) }}" alt="Image du produit" class="img-fluid product-image" />
                                                 </div>
                                                 <strong>Nom:</strong> {{ $produit->nom }}<br>
-                                                <strong>Description:</strong> {{ $produit->description }}<br>
+                                                <strong>Description:</strong> {{ Str::limit($produit->description, 50, '...') }}<br>
                                                 <strong>Prix:</strong> {{ $produit->prix }} DT<br>
                                                 <strong>Quantité:</strong> {{ $produit->quantite }}<br>
                                             </div>

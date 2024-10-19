@@ -102,7 +102,7 @@
                <div class="col-md-9">
                    <div class="form-group">
                        <label for="contenu" class="form-label">Votre commentaire</label>
-                       <textarea name="contenu" class="form-control" rows="2" required></textarea>
+                       <textarea name="contenu" class="form-control" rows="2" ></textarea>
                    </div>
                </div>
                <div class="col-md-3 mt-4">    
