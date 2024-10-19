@@ -13,7 +13,7 @@
                 <img class="card-img-top"  src="{{ asset('storage/' . $randomArticle->image) }}" alt="{{ $randomArticle->titre }}" style="max-height: 300px;">
                 
                 <div class="card-body">
-                  <p class="card-text"></p>
+                  <p class="card-text">{{$randomArticle->categories}}</p>
                   <a class="card-text" style="font-weight: bold; font-size:20px;">{{Str::limit($randomArticle->contenu, 100)}}</a>
                 </div>
             </div>

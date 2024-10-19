@@ -39,8 +39,8 @@
                         @endif
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="categorie">Categorie</label>
-                        <select name="categorie" id="categorie" class="form-control">
+                        <label for="categories">Categorie</label>
+                        <select name="categories" id="categorie" class="form-control">
                             <option value="solutions-ecologiques">Solutions Écologiques</option>
                             <option value="energie-solaire">Énergie Solaire</option>
                             <option value="energie-eolienne">Énergie Éolienne</option>

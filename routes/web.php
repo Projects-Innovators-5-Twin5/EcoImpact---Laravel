@@ -54,6 +54,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/export-pdf', [SensibilisatioCompagneController::class, 'exportPdf'])->name('export.pdf');
     Route::post('/participants/{id}/accept', [CompagneParticipationsController::class, 'acceptParticipation'])->name('participation.accept');
     Route::post('/participants/{id}/reject', [CompagneParticipationsController::class, 'rejectParticipation'])->name('participation.reject');
+    //articles back
+    Route::get('/articles', [ArticleController::class, 'index'])->name('back.articles.index'); 
+
     Route::get('/back/commentaires', [CommentaireController::class, 'index'])->name('back.commentaires.index'); 
     Route::get('/articles/create', [ArticleController::class, 'create'])->name('back.articles.create'); 
     Route::post('/articles', [ArticleController::class, 'store'])->name('back.articles.store'); 
@@ -102,7 +105,6 @@ Route::delete('/participants/{id}/delete', [CompagneParticipationsController::cl
 Route::get('/participants/search', [CompagneParticipationsController::class, 'search'])->name('participation.search');
 Route::get('/participants/searchByStatusP', [CompagneParticipationsController::class, 'searchByStatus'])->name('participation.searchByStatus');
 //article routes 
-Route::get('/articles', [ArticleController::class, 'index'])->name('back.articles.index'); 
 Route::get('/front/articles', [ArticleController::class, 'index_front'])->name('front.articles.index_front'); 
 Route::get('/front/articles/{id}', [ArticleController::class, 'show_front'])->name('front.articles.show'); 
 

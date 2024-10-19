@@ -15,6 +15,7 @@ class CommentaireController extends Controller
     }
     public function store(Request $request, $articleId)
     {
+        
         $request->validate([
             'contenu' => 'required|string',
         ]);

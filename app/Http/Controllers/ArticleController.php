@@ -38,7 +38,7 @@ class ArticleController extends Controller
             'titre' => 'required|max:255',
             'contenu' => 'required|min:10',
             'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-            'categorie' => ['required', 'in:'.implode(',', CategorieEnum::getValues())],
+            'categories' => ['required', 'in:'.implode(',', CategorieEnum::getValues())],
         ]);
 
         $imagePath = $request->file('image')->store('images', 'public');
