@@ -34,14 +34,6 @@ use App\Http\Controllers\PaiementController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/send-test-email', function () {
-    MailFacade::raw('This is a test email from Laravel!', function ($message) {
-        $message->to('recipient@example.com')
-                ->subject('Test Email');
-    });
-
-    return 'Test email sent!';
-});
 
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password; // Add this line for the Password facade
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
