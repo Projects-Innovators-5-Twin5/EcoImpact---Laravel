@@ -25,7 +25,7 @@
                     <p><strong>Quantité disponible:</strong> {{ $produit->quantite }}</p>
 
                     <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ route('produits.index') }}" class="btn btn-secondary">Retour à la liste</a>
+                        <a href="{{ route('produitCards.front') }}" class="btn btn-secondary">Retour à la liste</a>
 
                         <form action="{{ route('panier.ajouter', $produit->id) }}" method="POST" style="display:inline;">
                             @csrf

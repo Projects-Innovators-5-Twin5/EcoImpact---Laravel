@@ -15,14 +15,30 @@
             </div>
             <div class="card-body">
                 <form id="payment-form">
+                    <!-- Client Name -->
+                    <div class="form-group">
+                        <label for="client_nom">Nom du Client</label>
+                        <input type="text" class="form-control" id="client_nom" name="client_nom" required>
+                    </div>
+
+                    <!-- Client Email -->
+                    <div class="form-group">
+                        <label for="client_email">Email du Client</label>
+                        <input type="email" class="form-control" id="client_email" name="client_email" required>
+                    </div>
+
+                    <!-- Card Information -->
                     <div class="form-group">
                         <label for="card-element">Informations de Carte</label>
                         <div id="card-element" class="form-control" style="padding: 10px; border: 1px solid #ced4da; border-radius: .25rem;"></div>
                         <small class="form-text text-muted">Nous acceptons les cartes de crédit et de débit.</small>
                     </div>
+
+                    <!-- Payment Button -->
                     <button id="submit" class="btn btn-success btn-block" style="background-color: #28a745; border: none;">
-                        Payer {{ $total }} DT
+                        Payer {{ session('total', '0') }} DT
                     </button>
+
                     <div id="payment-result" class="mt-3 text-center"></div>
                 </form>
             </div>
@@ -43,6 +59,9 @@
             event.preventDefault();
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const clientNom = document.getElementById('client_nom').value;
+            const clientEmail = document.getElementById('client_email').value;
+            const produits = JSON.parse(sessionStorage.getItem('panier')) || []; // Assurez-vous d'avoir un panier valide
 
             const { paymentIntent, error } = await stripe.confirmCardPayment('{{ $clientSecret }}', {
                 payment_method: {
@@ -62,8 +81,6 @@
             document.getElementById('payment-result').className = 'text-success';
 
             // Envoi des détails de la commande au serveur
-            const produits = JSON.parse(sessionStorage.getItem('panier'));
-
             try {
                 const response = await fetch('{{ route('commande.store') }}', {
                     method: 'POST',
@@ -72,9 +89,11 @@
                         'X-CSRF-TOKEN': csrfToken
                     },
                     body: JSON.stringify({
-                        total: {{ $total }},
+                        total: {{ session('total', 0) }}, // Utilisez le total de la session
                         produits: produits,
-                        statut: 'en attente' // Ajoutez ceci si ce champ est requis
+                        client_nom: clientNom,
+                        client_email: clientEmail,
+                        statut: 'en attente'
                     })
                 });
 

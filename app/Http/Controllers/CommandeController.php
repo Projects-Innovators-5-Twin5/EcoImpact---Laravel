@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Commande;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Log;
 
 class CommandeController extends Controller
 {
@@ -15,32 +15,59 @@ class CommandeController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'quantites.*' => 'required|integer|min:1',
-    ]);
+    {
+        // Valider la requête
+        $validatedData = $request->validate([
+            'quantites.*' => 'required|integer|min:1',
+            'client_nom' => 'required|string|max:255',
+            'client_email' => 'required|email|max:255',
+        ]);
 
-    $commande = new Commande();
-    $commande->client_nom = $request->input('client_nom', "Nom par défaut"); // Remplacez par les données réelles si disponibles
-    $commande->client_email = $request->input('client_email', "email@example.com"); // Remplacez par les données réelles si disponibles
-    $panier = session('panier', []);
+        // Récupérer le panier depuis la session
+        $panier = session('panier', []);
+        $collectionPanier = collect($panier);
 
-    $total = array_sum(array_map(function ($produit) use ($request) {
-        $id = $produit['id'] ?? null;
-        return $id ? $produit['prix'] * $request->quantites[$id] : 0;
-    }, $panier));
+        // Calculer le total de la commande
+        $total = $request->input('total', 0); // Assurez-vous que le total est récupéré
 
-    $commande->total = $total; // Enregistrez le total dans la commande
 
-    // Enregistrez la commande
-    $commande->statut = 'en attente';
-    $commande->save();
+        // Enregistrer la commande
+        $commande = new Commande();
+        $commande->client_nom = $request->input('client_nom');
+        $commande->client_email = $request->input('client_email');
+        $commande->total = $total; // Enregistrer le total calculé ou passé
+        $commande->statut = 'Reussi'; // Statut par défaut
+        $commande->save();
 
-    // Rediriger vers la page de paiement
-    return redirect()->route('checkout')->with([
-        'total' => $total,
-        'panier' => $panier // Passez le panier si nécessaire
-    ]);
-}
+        // Retourner une réponse JSON ou un message de succès
+        return response()->json([
+            'message' => 'Commande enregistrée avec succès !',
+            'total' => $total,
+            'commande_id' => $commande->id // Inclure l'ID de la commande si nécessaire
+        ], 201); // 201 Created
+    }
 
+
+    public function passer(Request $request)
+    {
+        // Valider la requête
+        $validatedData = $request->validate([
+            'quantites.*' => 'required|integer|min:1',
+        ]);
+
+        // Récupérer le panier depuis la session
+        $panier = session('panier', []);
+        $collectionPanier = collect($panier);
+
+        // Calculer le total
+        $total = $collectionPanier->sum(function ($item) {
+            return ($item['prix'] ?? 0) * ($item['quantite'] ?? 0); // Assurez-vous que les clés existent
+        });
+
+        // Rediriger vers la page de paiement
+        return redirect()->route('checkout')->with([
+            'total' => $total,
+            'panier' => $panier // Passez le panier si nécessaire
+        ]);
+    }
 }

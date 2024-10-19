@@ -7,7 +7,7 @@
     <h1 class="text-center mb-4">Votre panier</h1>
 
     @if(session('panier'))
-        <form action="{{ route('commande.store') }}" method="POST">
+        <form action="{{ route('commande.passer') }}" method="POST">
             @csrf
             <div class="row">
                 @foreach(session('panier') as $id => $details)
@@ -50,6 +50,8 @@
             </div>
 
             <div class="text-center mt-4">
+                <a href="{{ route('produitCards.front') }}" class="btn btn-secondary">Retour à la liste</a>
+
                 <button type="submit" class="btn btn-success">Enregistrer ma commande et payer</button>
             </div>
         </form>

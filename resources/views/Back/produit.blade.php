@@ -23,10 +23,10 @@
 <br>
 
 <!-- Products Table -->
-<div class=" border-0 shadow mb-4">
-    <div class="">
+<div class="card border-0 shadow mb-4">
+    <div class="card-body">
         <div class="d-flex justify-content-between">
-            <h5 class="">Liste des Produits</h5>
+            <h5 class="card-title">Liste des Produits</h5>
             <a href="{{ route('produits.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus-circle"></i> Ajouter un Produit
             </a>

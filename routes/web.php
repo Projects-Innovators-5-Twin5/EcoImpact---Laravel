@@ -20,6 +20,7 @@ use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PanierController;
+use Illuminate\Support\Facades\Mail as MailFacade;
 
 
 use App\Http\Controllers\PaiementController;
@@ -36,6 +37,8 @@ use App\Http\Controllers\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
 
 Route::get('/', function () {
     return redirect()->route('landing');
@@ -94,6 +97,13 @@ Route::get('/profile', [AuthController::class, 'profileUser'])->name('ProfileUse
 Route::post('/updateImage', [AuthController::class, 'updateImage'])->name('updateImageProfile');
 Route::post('/updateProfile', [AuthController::class, 'updateProfile'])->name('updateProfile');
 Route::get('/getUsers', [AuthController::class, 'getUsers'])->name('getUsers');
+//Password
+Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('password.request');
+Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+// end
+
 
 
 //module compagne de sensibilisation front
@@ -132,20 +142,6 @@ Route::get('produits/{id}', [ProduitController::class, 'showDetail'])->name('pro
 
 //back
 
-Route::get('/panier', [PanierController::class, 'afficherPanier'])->name('panier.index');
-Route::post('mettre-a-jour-panier', [PanierController::class, 'mettreAJourPanier'])->name('panier.mettreAJour');
-Route::get('supprimer-du-panier/{id}', [PanierController::class, 'supprimerDuPanier'])->name('panier.supprimer');
-Route::post('/panier/update', [PanierController::class, 'update'])->name('panier.update');
-
-Route::post('/panier/ajouter/{id}', [PanierController::class, 'addToCart'])->name('panier.ajouter');
-
-Route::get('/checkout', [PaiementController::class, 'createPayment'])->name('checkout');
-Route::post('/checkout/payer', [PaiementController::class, 'payer'])->name('payer');
-Route::post('/commande/store', [CommandeController::class, 'store'])->name('commande.store');
-
-
-
-Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
 //gestion utilisateurs
 Route::middleware(['auth', 'isAdmin'])->prefix('back')->name('users.')->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('index');
@@ -209,3 +205,21 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/register', function () {
     return view('auth.register'); // Assurez-vous que cette vue existe
 })->name('register');
+
+
+
+Route::get('/panier', [PanierController::class, 'afficherPanier'])->name('panier.index');
+Route::post('mettre-a-jour-panier', [PanierController::class, 'mettreAJourPanier'])->name('panier.mettreAJour');
+Route::get('supprimer-du-panier/{id}', [PanierController::class, 'supprimerDuPanier'])->name('panier.supprimer');
+Route::post('/panier/update', [PanierController::class, 'update'])->name('panier.update');
+
+Route::post('/panier/ajouter/{id}', [PanierController::class, 'addToCart'])->name('panier.ajouter');
+
+Route::get('/checkout', [PaiementController::class, 'createPayment'])->name('checkout');
+Route::post('/checkout/payer', [PaiementController::class, 'payer'])->name('payer');
+Route::post('/commande/store', [CommandeController::class, 'store'])->name('commande.store');
+Route::post('/commande/passer', [CommandeController::class, 'passer'])->name('commande.passer');
+
+
+
+Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
