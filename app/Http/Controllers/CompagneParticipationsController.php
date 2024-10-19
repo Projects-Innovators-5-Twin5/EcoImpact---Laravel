@@ -100,7 +100,15 @@ class CompagneParticipationsController extends Controller
      */
     public function show($id)
     {
-        //
+        $campaign_participation = CampaignParticipation::with('campaign')->findOrFail($id);
+        $userId = Auth::id();
+        $user = User::findOrFail($userId);
+        $campaign = SensibilisationCampaign::findOrFail($campaign_participation->campaign_id);
+        $startDate = Carbon::parse($campaign->start_date);
+        $endDate = Carbon::parse($campaign->end_date);
+
+        return view('Front.CompagneSensibilisation.detailsParticipationCompagne', compact('campaign_participation','user','startDate','endDate'));
+
     }
 
     /**
@@ -111,7 +119,11 @@ class CompagneParticipationsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $campaign_participation = CampaignParticipation::with('user')->findOrFail($id);
+        $userId = Auth::id();
+        $user = User::findOrFail($userId);
+
+        return view('Front.CompagneSensibilisation.editParticipationCompagne', compact('campaign_participation','user'));
     }
 
     /**
@@ -123,7 +135,17 @@ class CompagneParticipationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'reasons' => 'required|string|min:100|max:1000',
+        ]);
+
+        $participation_campaign = CampaignParticipation::findOrFail($id);
+
+        $participation_campaign->update([
+            'reasons' => $request->input('reasons'),
+        ]);
+
+        return redirect()->route('participation.front.list')->with('success', 'participation campaign edited successfully.');
     }
 
 

@@ -10,8 +10,10 @@
 @section('content')
         <div class="col-10 col-xl-8">
             <div class="card card-body border-0 shadow mb-4">
-                <h2 class="h5 mb-4">General information</h2>
-                <form action="{{ route('updateProfile') }}" method="post">
+                <h2 class="h5">General information</h2>
+                <span style="display: block; border-top: 1px solid #ccc; margin: 10px 0;"></span>
+
+                <form action="{{ route('updateProfile') }}" method="post" class="mt-2">
                 @csrf
                     <div class="row">
                         <div class="col-md-12 mb-3">

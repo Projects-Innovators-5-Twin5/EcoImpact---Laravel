@@ -62,6 +62,11 @@ Route::get('/export-pdf', [SensibilisatioCompagneController::class, 'exportPdf']
 
 Route::get('/campaigns/show/{campaign_id}/participate', [CompagneParticipationsController::class, 'create'])->name('participation.create');
 Route::post('/campaigns/participateAdd', [CompagneParticipationsController::class, 'store'])->name('participation.store');
+Route::get('/campaigns/{id}/participateEdit', [CompagneParticipationsController::class, 'edit'])->name('participation.edit');
+Route::put('/campaigns/{id}/participateUpdate', [CompagneParticipationsController::class, 'update'])->name('participation.update');
+Route::get('/campaigns/{id}/details', [CompagneParticipationsController::class, 'show'])->name('participation.details');
+
+
 Route::delete('/participants/{id}/delete', [CompagneParticipationsController::class, 'destroy'])->name('participation.delete');
 Route::post('/participants/{id}/accept', [CompagneParticipationsController::class, 'acceptParticipation'])->name('participation.accept');
 Route::post('/participants/{id}/reject', [CompagneParticipationsController::class, 'rejectParticipation'])->name('participation.reject');

@@ -12,8 +12,10 @@
 @section('content')
         <div class="col-10 col-xl-8">
             <div class="card card-body card-participation border-0 shadow mb-4">
-                <h2 class="h5 mb-4">Campaign participation</h2>
-                <table class="table table-hover" id="participationList">
+                <h2 class="h5 ">Campaign participation</h2>
+                <span style="display: block; border-top: 1px solid #ccc; margin: 10px 0;"></span>
+                
+                <table class="table table-hover mt-2" id="participationList">
                     <thead>
                         <tr>
                             <th class="border-gray-200">Campaign name</th>						
@@ -51,7 +53,8 @@
                                         <span class="visually-hidden">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu py-0">
-                                        <a class="dropdown-item" href="#" ><span class="fas fa-edit me-2" ></span>Edit</a>   
+                                        <a class="dropdown-item rounded-top" href="{{route('participation.details', $participation->id)}}"><span class="fas fa-eye me-2" ></span>View Details</a>
+                                        <a class="dropdown-item" href="{{ route('participation.edit',  $participation->id) }}" ><span class="fas fa-edit me-2" ></span>Edit</a>   
                                         <button type="button" class="dropdown-item text-danger rounded-bottom" 
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#modal-confirmationcancel-participant"
