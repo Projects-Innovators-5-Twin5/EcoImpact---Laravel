@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Enums\CategorieEnum;
-use Illuminate\Support\Facades\Storage; // Add this import
+use Illuminate\Support\Facades\Storage; 
 use Auth;
 
 class ArticleController extends Controller
@@ -19,7 +19,12 @@ class ArticleController extends Controller
     public function index_front()
     {
         $articles = Article::with('user')->latest()->paginate(5);
-        return view('front.articles.index_front', compact('articles'));
+        $categories = CategorieEnum::getValues();
+        shuffle($categories);
+    
+  
+        $randomCategories = array_slice($categories, 0, 4);    
+        return view('front.articles.index_front', compact('articles', 'randomCategories'));
     }
 
     public function create()
@@ -39,7 +44,7 @@ class ArticleController extends Controller
         $imagePath = $request->file('image')->store('images', 'public');
 
         $data = $request->all();
-        $data['user_id'] = 1; // Use the authenticated user ID
+        $data['user_id'] = Auth::id();
         $data['image'] = $imagePath;
 
         Article::create($data);

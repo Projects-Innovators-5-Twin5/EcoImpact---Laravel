@@ -21,7 +21,7 @@ class CommentaireController extends Controller
 
         $commentaire = new Commentaire();
         $commentaire->contenu = $request->contenu;
-        $commentaire->user_id = 1;
+        $commentaire->user_id = Auth::id();
         $commentaire->article_id = $articleId;
         $commentaire->likes = 0;
 

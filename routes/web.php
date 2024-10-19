@@ -22,6 +22,8 @@ use App\Http\Controllers\PanierController;
 
 
 use App\Http\Controllers\PaiementController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -39,8 +41,44 @@ Route::get('/', function () {
 });
 
 Route::get('/landing', [LandingController::class, 'landing'])->name('landing');
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    //module compagne de sensibilisation back
+    Route::get('/campaigns', [SensibilisatioCompagneController::class, 'index'])->name('campaigns.index');
+    Route::post('/campaigns/create', [SensibilisatioCompagneController::class, 'store'])->name('campaigns.store');
+    Route::get('/campaigns/{id}/edit', [SensibilisatioCompagneController::class, 'edit'])->name('campaigns.edit');
+    Route::put('/campaigns/{id}', [SensibilisatioCompagneController::class, 'update'])->name('campaigns.update');
+    Route::get('/campaigns/back/show/{id}', [SensibilisatioCompagneController::class, 'showBack'])->name('campaigns.showBack');
+    Route::put('/campaigns/{id}/archive', [SensibilisatioCompagneController::class, 'archive'])->name('campaigns.archive');
+    Route::put('/campaigns/{id}/delete', [SensibilisatioCompagneController::class, 'destroy'])->name('campaigns.delete');
+    Route::get('/export-pdf', [SensibilisatioCompagneController::class, 'exportPdf'])->name('export.pdf');
+    Route::post('/participants/{id}/accept', [CompagneParticipationsController::class, 'acceptParticipation'])->name('participation.accept');
+    Route::post('/participants/{id}/reject', [CompagneParticipationsController::class, 'rejectParticipation'])->name('participation.reject');
+    Route::get('/back/commentaires', [CommentaireController::class, 'index'])->name('back.commentaires.index'); 
+    Route::get('/articles/create', [ArticleController::class, 'create'])->name('back.articles.create'); 
+    Route::post('/articles', [ArticleController::class, 'store'])->name('back.articles.store'); 
+    Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('back.articles.show'); 
+    Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('back.articles.edit');
+    Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('back.articles.update');
+    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('back.articles.destroy'); 
+    //module challenges back
+    Route::resource('challenges', ChallengeController::class);
+    Route::get('challenges/export/pdf', [ChallengeController::class, 'exportPdf'])->name('challenges.export.pdf');
+    Route::get('/challenges/{challenge}/solutions/create', [SolutionController::class, 'create'])->name('solutions.create');
+    Route::post('/solutions', [SolutionController::class, 'store'])->name('solutions.store');
+    Route::resource('solutions', SolutionController::class)->only(['store', 'edit', 'update', 'destroy']);
+    Route::delete('/solutions/{solution}', [SolutionController::class, 'destroy'])->name('solutions.destroy');
 
+     //produits back
+     Route::resource('produits', ProduitController::class);
+   //consumption back 
+   Route::get('/liste-consommationsBack', [ConsommationController::class, 'listConsumptionsBack'])->name('consommationBack.list');
+   Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
+   Route::get('/consumptions/editback/{id}', [ConsommationController::class, 'editback'])->name('editConsumptionback');
+   Route::put('/consumptions/updateback/{id}', [ConsommationController::class, 'updateback'])->name('consumptionsback.update');
+
+
+});
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginSubmit'])->name('login.submit');
@@ -48,103 +86,72 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/forgotPassword', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
 
-Route::get('/profile', [AuthController::class, 'profileUser'])->name('ProfileUser');
+Route::get('/profile', [AuthController::class, 'profileUser'])->name('ProfileUser')->middleware('isAuth');
 
 
-//module compagne de sensibilisation
-Route::get('/campaigns', [SensibilisatioCompagneController::class, 'index'])->name('campaigns.index');
+//module compagne de sensibilisation front
 Route::get('/campaigns/front', [SensibilisatioCompagneController::class, 'indexFront'])->name('campaignsFront.index');
-
-Route::post('/campaigns/create', [SensibilisatioCompagneController::class, 'store'])->name('campaigns.store');
-Route::get('/campaigns/{id}/edit', [SensibilisatioCompagneController::class, 'edit'])->name('campaigns.edit');
-Route::put('/campaigns/{id}', [SensibilisatioCompagneController::class, 'update'])->name('campaigns.update');
 Route::get('/campaigns/show/{id}', [SensibilisatioCompagneController::class, 'show'])->name('campaigns.show');
-Route::get('/campaigns/back/show/{id}', [SensibilisatioCompagneController::class, 'showBack'])->name('campaigns.showBack');
-Route::put('/campaigns/{id}/archive', [SensibilisatioCompagneController::class, 'archive'])->name('campaigns.archive');
-Route::put('/campaigns/{id}/delete', [SensibilisatioCompagneController::class, 'destroy'])->name('campaigns.delete');
-
-
 Route::get('/search', [SensibilisatioCompagneController::class, 'search'])->name('search');
 Route::get('/searchByStatus', [SensibilisatioCompagneController::class, 'searchByStatus'])->name('searchByStatus');
-Route::get('/export-pdf', [SensibilisatioCompagneController::class, 'exportPdf'])->name('export.pdf');
+Route::get('/campaigns/show/{campaign_id}/participate', [CompagneParticipationsController::class, 'create'])->name('participation.create')->middleware('isAuth');;
+Route::post('/campaigns/participateAdd', [CompagneParticipationsController::class, 'store'])->name('participation.store')->middleware('isAuth');;
+Route::delete('/participants/{id}/delete', [CompagneParticipationsController::class, 'destroy'])->name('participation.delete')->middleware('isAuth');;
 
-
-
-Route::get('/campaigns/show/{campaign_id}/participate', [CompagneParticipationsController::class, 'create'])->name('participation.create');
-Route::post('/campaigns/participateAdd', [CompagneParticipationsController::class, 'store'])->name('participation.store');
-Route::delete('/participants/{id}/delete', [CompagneParticipationsController::class, 'destroy'])->name('participation.delete');
-Route::post('/participants/{id}/accept', [CompagneParticipationsController::class, 'acceptParticipation'])->name('participation.accept');
-Route::post('/participants/{id}/reject', [CompagneParticipationsController::class, 'rejectParticipation'])->name('participation.reject');
 
 Route::get('/participants/search', [CompagneParticipationsController::class, 'search'])->name('participation.search');
 Route::get('/participants/searchByStatusP', [CompagneParticipationsController::class, 'searchByStatus'])->name('participation.searchByStatus');
 //article routes 
-// Routes pour l'article
 Route::get('/articles', [ArticleController::class, 'index'])->name('back.articles.index'); 
 Route::get('/front/articles', [ArticleController::class, 'index_front'])->name('front.articles.index_front'); 
 Route::get('/front/articles/{id}', [ArticleController::class, 'show_front'])->name('front.articles.show'); 
 
-Route::get('/articles/create', [ArticleController::class, 'create'])->name('back.articles.create'); 
-Route::post('/articles', [ArticleController::class, 'store'])->name('back.articles.store'); 
-Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('back.articles.show'); 
-Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('back.articles.edit');
-Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('back.articles.update');
-Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('back.articles.destroy'); 
+
 
 // Routes pour les commentaires
-Route::post('/articles/{article_id}/commentaires', [CommentaireController::class, 'store'])->name('commentaires.store'); // Ajouter un commentaire à un article
-Route::put('/front//commentaires/{id}', [CommentaireController::class, 'update'])->name('front.commentaires.update');
-Route::get('/back/commentaires', [CommentaireController::class, 'index'])->name('back.commentaires.index'); 
+Route::post('/articles/{article_id}/commentaires', [CommentaireController::class, 'store'])->name('commentaires.store')->middleware('isAuth'); 
+Route::put('/front/commentaires/{id}', [CommentaireController::class, 'update'])->name('front.commentaires.update')->middleware('isAuth');
 
-Route::delete('/commentaires/{id}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy'); // Supprimer un commentaire
-Route::resource('challenges', ChallengeController::class);
-
+Route::delete('/commentaires/{id}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy')->middleware('isAuth'); 
+//challenges front
 Route::get('/challengesfront', [ChallengeController::class, 'indexfront'])->name('challenges.indexfront');
 Route::get('/challengesfront/{id}', [ChallengeController::class, 'showfront'])->name('challenges.showfront');
-Route::get('challenges/export/pdf', [ChallengeController::class, 'exportPdf'])->name('challenges.export.pdf');
-Route::get('/challenges/{challenge}/solutions/create', [SolutionController::class, 'create'])->name('solutions.create');
-Route::post('/solutions', [SolutionController::class, 'store'])->name('solutions.store');
-Route::resource('solutions', SolutionController::class)->only(['store', 'edit', 'update', 'destroy']);
-Route::delete('/solutions/{solution}', [SolutionController::class, 'destroy'])->name('solutions.destroy');
-Route::post('/solutions/{solution}/vote', [SolutionController::class, 'voteSolution'])->name('solutions.vote');
+
+Route::post('/solutions/{solution}/vote', [SolutionController::class, 'voteSolution'])->name('solutions.vote')->middleware('isAuth');
 Route::get('/leaderboard', [ChallengeController::class, 'leaderboard'])->name('leaderboard');
 Route::get('/solutions/{solution}/voters', [SolutionController::class, 'getVoters']);
 
-Route::resource('produits', ProduitController::class);
-Route::get('/produitss', [ProduitController::class, 'frontaffichage'])->name('produitCards.front');
+Route::get('/produitss', [ProduitController::class, 'frontaffichage'])->name('produitCards.front')->middleware('isAuth');
 Route::get('produits/{id}', [ProduitController::class, 'showDetail'])->name('produits.produit_detail');
 
 
 
 
 Route::get('/Consommation', [ConsommationController::class, 'Consommation'])->name('Consommation');
-Route::post('/consommation-energie', [ConsommationController::class, 'store']);
+Route::post('/consommation-energie', [ConsommationController::class, 'store'])->middleware('isAuth');
 Route::get('/liste-consommations', [ConsommationController::class, 'listConsumptions'])->name('consommation.list');
 
-Route::get('/consumption-data', [ConsommationController::class, 'getConsumptionDataByType']);
-Route::get('/carbonneDetails', [CarbonneFootPrintController::class, 'carbonneDetails']);
-Route::get('/carbon-footprint', [CarbonneFootPrintController::class, 'showEnergyConsumption'])->name('carbon.footprint');
-Route::post('/carbon-footprint/add/{userId}', [CarbonneFootPrintController::class, 'addCarbonFootprintWithConsumption'])->name('carbon.footprint.add');
-Route::get('/carbon-footprints', [CarbonneFootPrintController::class, 'listCarbonFootprintsWithConsumption'])->name('carbon.footprints.list');
+Route::get('/consumption-data', [ConsommationController::class, 'getConsumptionDataByType'])->middleware('isAuth');
+Route::get('/carbonneDetails', [CarbonneFootPrintController::class, 'carbonneDetails'])->middleware('isAuth');
+Route::get('/carbon-footprint', [CarbonneFootPrintController::class, 'showEnergyConsumption'])->name('carbon.footprint')->middleware('isAuth');
+Route::post('/carbon-footprint/add/{userId}', [CarbonneFootPrintController::class, 'addCarbonFootprintWithConsumption'])->name('carbon.footprint.add')->middleware('isAuth');
+Route::get('/carbon-footprints', [CarbonneFootPrintController::class, 'listCarbonFootprintsWithConsumption'])->name('carbon.footprints.list')->middleware('isAuth');
 
-Route::get('/global-consumption-data', [ConsommationController::class, 'getGlobalConsumptionData'])->name('global.consumption.data');
+Route::get('/global-consumption-data', [ConsommationController::class, 'getGlobalConsumptionData'])->name('global.consumption.data')->middleware('isAuth');
 
-Route::get('/liste-consommationsBack', [ConsommationController::class, 'listConsumptionsBack'])->name('consommationBack.list');
-Route::get('/consumptions/edit/{id}', [ConsommationController::class, 'edit'])->name('editConsumption');
-Route::put('/consumptions/update/{id}', [ConsommationController::class, 'update'])->name('consumptions.update');
-Route::get('/consommation/{id}',[ConsommationController::class, 'show']);
+Route::get('/consumptions/edit/{id}', [ConsommationController::class, 'edit'])->name('editConsumption')->middleware('isAuth');
+Route::put('/consumptions/update/{id}', [ConsommationController::class, 'update'])->name('consumptions.update')->middleware('isAuth');
+Route::get('/consommation/{id}',[ConsommationController::class, 'show'])->middleware('isAuth');
 
 
 // Route pour mettre à jour la consommation
-Route::put('/consumptions/{id}', [ConsommationController::class, 'updateConsumption'])->name('updateConsumption');
+Route::put('/consumptions/{id}', [ConsommationController::class, 'updateConsumption'])->name('updateConsumption')->middleware('isAuth');
 
 // Route pour supprimer la consommation
 // web.php
-Route::delete('/consumptions/{id}/delete', [ConsommationController::class, 'destroy'])->name('consumptions.delete');
+Route::delete('/consumptions/{id}/delete', [ConsommationController::class, 'destroy'])->name('consumptions.delete')->middleware('isAuth');
 //back
-Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
-Route::get('/consumptions/editback/{id}', [ConsommationController::class, 'editback'])->name('editConsumptionback');
-Route::put('/consumptions/updateback/{id}', [ConsommationController::class, 'updateback'])->name('consumptionsback.update');
+
 Route::get('/panier', [PanierController::class, 'afficherPanier'])->name('panier.index');
 Route::post('mettre-a-jour-panier', [PanierController::class, 'mettreAJourPanier'])->name('panier.mettreAJour');
 Route::get('supprimer-du-panier/{id}', [PanierController::class, 'supprimerDuPanier'])->name('panier.supprimer');
@@ -159,3 +166,12 @@ Route::post('/commande/store', [CommandeController::class, 'store'])->name('comm
 
 
 Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
+//gestion utilisateurs
+Route::middleware(['auth', 'isAdmin'])->prefix('back')->name('users.')->group(function () {
+    Route::get('users', [UserController::class, 'index'])->name('index');
+    Route::get('users/create', [UserController::class, 'create'])->name('create');
+    Route::post('users', [UserController::class, 'store'])->name('store');
+    Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('edit');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('update');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('destroy');
+});

@@ -4,14 +4,25 @@
 @section('content')
 <div class="bg-white p-4">
     <div class="p-4 row">
-        <div class="card m-4 shadow-lg col-md-7" style="border:none !important;padding: 0;" >
-            <img class="card-img-top"  src="{{ asset('storage/' . $articles[0]->image) }}" alt="{{ $articles[0]->titre }} style="max-height: 300px;">
-            
-            <div class="card-body">
-              <p class="card-text">Energie Renouvelables</p>
-              <a class="card-text" style="font-weight: bold; font-size:20px;">{{Str::limit($articles[0]->contenu, 100)}}</a>
+        @if($articles->count() > 0)
+            @php
+                // Sélectionner un article aléatoire
+                $randomArticle = $articles->random();
+            @endphp
+            <div class="card m-4 shadow-lg col-md-7" style="border:none !important;padding: 0;" >
+                <img class="card-img-top"  src="{{ asset('storage/' . $randomArticle->image) }}" alt="{{ $randomArticle->titre }}" style="max-height: 300px;">
+                
+                <div class="card-body">
+                  <p class="card-text"></p>
+                  <a class="card-text" style="font-weight: bold; font-size:20px;">{{Str::limit($randomArticle->contenu, 100)}}</a>
+                </div>
             </div>
-        </div>
+        @else
+            <div class="col-md-7 m-4">
+                <p>Aucun article disponible pour le moment.</p>
+            </div>
+        @endif
+
         <div class="col-md-4 mt-4 ml-4 text-black">
             <h4><i class="fas fa-tags text-secondary"></i> Catégories </h4>
             <ul class="category-list">
@@ -33,6 +44,7 @@
             </ul>
         </div>
     </div>
+
     <div class="row p-4">
         @foreach($articles as $index => $article)
         <a href="{{ route('front.articles.show', $article->id) }}" class="card m-2 col-12 col-md-perso smal-card " style="border:none !important;cursor: pointer; text-decoration: none;">
@@ -45,7 +57,6 @@
         @endforeach
     </div>
     
-
     <div class="d-flex justify-content-center mt-4">
         {{ $articles->links('pagination::bootstrap-4') }}
     </div>
