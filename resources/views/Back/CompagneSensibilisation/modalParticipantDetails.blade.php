@@ -14,8 +14,8 @@
                                         <div class="d-flex align-items-center">
                                             <div class="me-3">
                                                 <!-- Avatar -->
-                                                <img class="rounded avatar-xl" src="{{ '/assets/img/team/profile-picture-2.jpg' }}"
-                                                    alt="change avatar">
+                                                <img class="rounded avatar-xl" src=""
+                                                   id="image-user" alt="change avatar">
                                             </div>
                                             <div class="file-field">
                                                 <div class="d-flex justify-content-xl-center ms-xl-3">
@@ -53,4 +53,6 @@
                                 </div>
                             </div>
                         </div>
+
+
 

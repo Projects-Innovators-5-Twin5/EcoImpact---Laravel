@@ -15,12 +15,10 @@ return new class extends Migration
     {
         Schema::create('campaign_participations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('campaign_id')->constrained('sensibilisation_campaigns', 'id')->onDelete('cascade');
-            $table->string('name'); 
-            $table->string('email')->unique();
-            $table->string('phone');
+            $table->foreignId('campaign_id')->constrained('sensibilisation_campaigns')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('reasons')->nullable();
-            $table->enum('status', ['pending', 'accepted', 'rejected', 'archived'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'rejected', 'archived','canceled'])->default('pending');
             $table->timestamps();
         });
     }

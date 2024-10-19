@@ -2,18 +2,18 @@
 <link rel="stylesheet" href="{{ asset('css/compaign.css') }}">
 <script src="{{ asset('js/compaign.js') }}"></script>
 <script src="{{ asset('js/participation.js') }}"></script>
+<script src="{{ asset('js/landing.js') }}"></script>
 
 
 @section('content')
 @include('Back.CompagneSensibilisation.createCompagne')
 @include('Back.CompagneSensibilisation.modalConfirmationSuppParticipant')
 @include('Back.CompagneSensibilisation.modalParticipantDetails')
+@include('Back.CompagneSensibilisation.modalAddParticipant')
 
 
 <title>EcoImpact - Awareness Campaign Details page</title>
 
-<link rel="stylesheet" href="{{ asset('css/compaign.css') }}">
-<script src="{{ asset('js/landing.js') }}"></script>
 
 <div class="d-block mb-4 mb-md-0 mt-4">
         <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
@@ -94,10 +94,6 @@
                 
                 <h2 class="h5 mb-4 mt-4">Join Our Campaign! 🌟</h2>
                 <p class="d-flex align-items-center"><span class="text-des">{{$campaign -> reasons_join_campaign}}</span></p>
-                <div class="d-flex justify-content-end">
-                   <button class="btn btn-secondary btn-join " type="button"><a href="/register" class="text-btn" style="color:white;" >Join the Campaign!</a></button>
-                </div>   
-
             </div>
 
         </div>
@@ -108,6 +104,13 @@
     <div class="table-settings mb-4">
     <div class="row align-items-center justify-content-between">
     <h2 class="h3 mb-4 mt-4">Participants List</h2>
+    <div class="btn-toolbar mb-2 mb-md-0 py-4 d-flex justify-content-end">
+ 
+    <div class="btn-group ms-2 ms-lg-3">
+        <a type="button"  href="{{ route('participation.export.pdf' , $campaign->id) }}" class="btn btn-sm btn-outline-gray-600 export-pdf">Export PDF</a>
+    </div>      
+</div>
+
 
         <div class="d-flex col col-md-6 col-lg-8 col-xl-8">
             <div class="input-group me-2 me-lg-3 fmxw-400">
@@ -116,6 +119,7 @@
                         <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
                     </svg>
                 </span>
+                <input type="hidden" id="campaignId" value="{{ $campaign->id }}">
                 <input type="text" class="form-control" id="searchInputP" placeholder="Search participants">
             </div>
                 <select class="form-select fmxw-200 d-none d-md-inline" id="statusP" name="statusP" aria-label="Message select example 2">
@@ -145,7 +149,6 @@
     <table class="table table-hover" id="participationList">
         <thead>
             <tr>
-                <th class="border-gray-200">#</th>
                 <th class="border-gray-200">Name</th>						
                 <th class="border-gray-200">Email</th>
                 <th class="border-gray-200">Phone</th>
@@ -159,19 +162,15 @@
 
             @foreach($campaigns_participations as $campaign_participation)
             <tr>
+                
                 <td>
-                    <a href="#" class="fw-bold">
-                    {{ $campaign_participation->id }}
-                    </a>
+                    <span class="fw-normal">{{ $campaign_participation->user->name }}</span>
                 </td>
                 <td>
-                    <span class="fw-normal">{{ $campaign_participation->name }}</span>
+                    <span class="fw-normal">{{ $campaign_participation->user->email }}</span>
                 </td>
                 <td>
-                    <span class="fw-normal">{{ $campaign_participation->email }}</span>
-                </td>
-                <td>
-                    <span class="fw-normal">{{ $campaign_participation->phone }}</span>
+                    <span class="fw-normal">{{ $campaign_participation->user->phone }}</span>
                 </td>
                 <td>
                     <span class="fw-normal">{{ $campaign_participation->created_at->format('l, F j, Y') }}</span>
@@ -187,6 +186,7 @@
                        <span class="fw-bold status-archived">archived</span>
                     @endif
                 </td>
+                
                 <td> 
                     <div class="btn-group">
                         <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -196,7 +196,7 @@
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu py-0">
-                            <a class="dropdown-item rounded-top" data-bs-toggle="modal" data-bs-target="#modal-default"  data-namep="{{$campaign_participation->name }}" data-phonep="{{$campaign_participation->phone }}" data-emailp="{{$campaign_participation->email }}" data-reasonsp="{{$campaign_participation->reasons }}" data-participant-id="{{$campaign_participation->id}}" data-statusp="{{$campaign_participation->status}}"><span class="fas fa-eye me-2" ></span>View Details</a>
+                            <a class="dropdown-item rounded-top" data-bs-toggle="modal" data-bs-target="#modal-default" data-imagep="{{$campaign_participation->user->image }}"  data-namep="{{$campaign_participation->user->name }}" data-phonep="{{$campaign_participation->user->phone }}" data-emailp="{{$campaign_participation->user->email }}" data-reasonsp="{{$campaign_participation->reasons }}" data-participant-id="{{$campaign_participation->id}}" data-statusp="{{$campaign_participation->status}}"><span class="fas fa-eye me-2" ></span>View Details</a>
 
                             <button type="button" class="dropdown-item text-danger rounded-bottom" 
                                         data-bs-toggle="modal" 
@@ -259,3 +259,8 @@
        </div>
 </div>
 @endsection
+
+
+<script>
+    var imageSrc = "{{ asset('assets/img/team/default_img.png') }}";
+</script>

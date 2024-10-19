@@ -10,23 +10,52 @@
 @section('content')
         <div class="col-10 col-xl-8">
             <div class="card card-body border-0 shadow mb-4">
-                <h2 class="h5 mb-4">General information</h2>
-                <form action="#">
+                <h2 class="h5">General information</h2>
+                <span style="display: block; border-top: 1px solid #ccc; margin: 10px 0;"></span>
+
+                <form action="{{ route('updateProfile') }}" method="post" class="mt-2">
+                @csrf
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <div>
-                                <label for="first_name">First Name</label>
-                                <input class="form-control" id="first_name" type="text"
-                                    placeholder="Enter your first name" required>
+                                <label for="name">Full Name</label>
+                                <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name" type="text"
+                                    placeholder="Enter your first name"  value="{{ old('name' ,$user->name) }}">
                             </div>
+                            @if ($errors->has('name'))
+                                                        @foreach ($errors->get('name') as $error)
+                                                            @if ($error == 'The fullname field is required.')
+                                                                <div class="text-danger h6 mt-1" id="error-title">Fullname is required</div>
+                                                            @elseif ($error == 'The title may not be greater than 255 characters.')
+                                                                <div class="text-danger h6 mt-1" id="error-title">The fullname cannot be more than 255 characters long</div>
+                                                            @else
+                                                                <div class="text-danger h6 mt-1" id="error-title">{{ $error }}</div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="last_name">Last Name</label>
-                                <input class="form-control" id="last_name" type="text"
-                                    placeholder="Also your last name" required>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input  class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" id="email" name="email" 
+                                     value="{{ old('email' , $user->email) }}">
                             </div>
+                            @if ($errors->has('email'))
+                        @foreach ($errors->get('email') as $error)
+                            @if ($error == 'The email field is required.')
+                                <div class="text-danger h6 mt-1" id="error-email">Email is required</div>
+                            @elseif ($error == 'The email must be a valid email address.')
+                                <div class="text-danger h6 mt-1" id="error-email">Please provide a valid email address</div>
+                            @else
+                                <div class="text-danger h6 mt-1" id="error-email">{{ $error }}</div>
+                            @endif
+                        @endforeach
+                    @endif
                         </div>
+                        
                     </div>
                     <div class="row align-items-center">
                         <div class="col-md-6 mb-3">
@@ -38,71 +67,57 @@
                                             d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                                             clip-rule="evenodd"></path>
                                     </svg></span>
-                                <input data-datepicker=""
-                                    class="form-control datepicker-input" id="birthday" type="text"
-                                    placeholder="yyyy/mm/dd" disabled>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="gender">Gender</label>
-                            <select class="form-select mb-0" id="gender"
-                                aria-label="Gender select example">
-                                <option selected>Gender</option>
-                                <option value="Female">Female</option>
-                                <option value="Male">Male</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input  class="form-control" id="email" type="email"
-                                    placeholder="name@company.com" disabled>
+                                    <input data-datepicker=""  class="form-control" id="birthDate" name="birthDate" type="date" value="{{ old('birthDate', $user->birthDate) }}" >   
+
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label for="phone">Phone</label>
-                                <input class="form-control" id="phone" type="number"
-                                    placeholder="+12-345 678 910">
+                                <input class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" id="phone" name="phone" type="number"
+                                 value="{{ old('phone' , $user->phone) }}">
                             </div>
+                            @if ($errors->has('phone'))
+                        @foreach ($errors->get('phone') as $error)
+                            @if ($error == 'The phone field is required.')
+                                <div class="text-danger h6 mt-1" id="error-phone">Phone number is required</div>
+                            @elseif (str_contains($error, 'digits'))
+                                <div class="text-danger h6 mt-1" id="error-phone">Phone number must be exactly 8 digits, you entered {{ old('phone') }}</div>
+                            @else
+                                <div class="text-danger h6 mt-1" id="error-phone">{{ $error }}</div>
+                            @endif
+                        @endforeach
+                    @endif
                         </div>
                     </div>
+                   
                     <h2 class="h5 my-4">Location</h2>
                     <div class="row">
-                        <div class="col-sm-9 mb-3">
+                        <div class="col-sm-12 mb-3">
                             <div class="form-group">
                                 <label for="address">Address</label>
-                                <input  class="form-control" id="address" type="text"
-                                    placeholder="Enter your home address">
+                                <input  class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" id="address" name="address" type="text"
+                                    placeholder="Enter your home address" value="{{ old('address' , $user->address) }}">
+
                             </div>
+                            @if ($errors->has('address'))
+                                                        @foreach ($errors->get('address') as $error)
+                                                            @if ($error == 'The address field is required.')
+                                                                <div class="text-danger h6 mt-1" id="error-title">Address is required</div>
+                                                            @elseif ($error == 'The address may not be greater than 255 characters.')
+                                                                <div class="text-danger h6 mt-1" id="error-title">The address cannot be more than 255 characters long</div>
+                                                            @else
+                                                                <div class="text-danger h6 mt-1" id="error-title">{{ $error }}</div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+
+                            
                         </div>
-                        <div class="col-sm-3 mb-3">
-                            <div class="form-group">
-                                <label for="number">Number</label>
-                                <input class="form-control" id="number" type="number"
-                                    placeholder="No.">
-                            </div>
-                        </div>
+                        
                     </div>
-                    <div class="row">
-                        <div class="col-sm-4 mb-3">
-                            <div class="form-group">
-                                <label for="city">City</label>
-                                <input class="form-control" id="city" type="text"
-                                    placeholder="City">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="zip">ZIP</label>
-                                <input class="form-control" id="zip" type="tel" placeholder="ZIP">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end" style="margin-top:50px;">
+                    
+                    <div class="d-flex justify-content-end" style="margin-top:185px;">
                         <button type="submit" class="btn btn-gray-800 mt-4 animate-up-2">Save All</button>
                     </div>
                 </form>

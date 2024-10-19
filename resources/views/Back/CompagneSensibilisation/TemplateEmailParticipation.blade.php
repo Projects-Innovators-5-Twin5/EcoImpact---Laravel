@@ -343,8 +343,6 @@
                                     {{ $data['name'] }}
                                   </span>
 
-                                   <h1>Dear {{ $data['name'] }},</h1>
-
                                     <p>Thank you for your participation request for our campaign, <strong>{{ $data['campaign_name'] }}</strong>. We sincerely appreciate your interest and the time you took to apply.</p>
 
                                     <p>We want to inform you that your request is currently under review. Our team will assess all submissions, and if you do not receive a response from us within the next few days, please understand that your participation in this campaign has not been accepted at this time.</p>

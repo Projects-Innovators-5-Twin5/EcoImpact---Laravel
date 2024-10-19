@@ -26,7 +26,7 @@
         
     </div>
 
-<!--<div class="row mt-4">
+<!--<div class="row d-flex justify-content-center justify-content-around mt-4">
     <div class="col-12 col-sm-6 col-xl-3 mb-4">
         <div class="card border-0 shadow">
             <div class="card-body">
@@ -92,28 +92,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-xl-3 mb-4">
-        <div class="card border-0 shadow">
-            <div class="card-body">
-                <div class="row d-block d-xl-flex align-items-center">
-                    <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                        <div class="icon-shape icon-shape-danger rounded me-4 me-sm-0">
-                        <i class="fas fa-trash" style="font-size: 25px; color: red;"></i>
-
-                        </div>
-                    
-                    </div>
-                    <div class="col-12 col-xl-7 px-xl-0">
-                        <div class="d-none d-sm-block mt-2">
-                            <h2 class="h5 text-danger mb-0">Archived</h2>
-                            <h4 class="fw-bold mt-2 text-danger">{{$completedCampaignsCount}}</h4>
-                        </div>
-                      
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </div>-->
 
 
@@ -123,7 +102,10 @@
    </button>
     <div class="btn-group ms-2 ms-lg-3">
         <a type="button"  href="{{ route('export.pdf') }}" class="btn btn-sm btn-outline-gray-600 export-pdf">Export PDF</a>
-    </div>       
+    </div>     
+    <div class="btn-group ms-2 ms-lg-3">
+        <a type="button"  href="{{ route('calendar') }}" class="btn btn-sm btn-outline-gray-600 export-pdf"><i class="fas fa-calendar-alt" style="font-size: 15px;"></i>  Calendar</a>
+    </div>     
 </div>
 
 

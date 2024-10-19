@@ -19,7 +19,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/landing">Home</a>
+                <a class="nav-link active" aria-current="page" href="{{ route('landing') }}">Home</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" href="/liste-consommations">Consumption</a>
@@ -41,19 +41,18 @@
         </div>
 <div>
         @if (Auth::check()) 
-  <li class="nav-item dropdown ms-lg-3">
     <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
        aria-expanded="false">
       <div class="media d-flex align-items-center">
-        <img class="avatar rounded-circle" alt="Image placeholder" src="/assets/img/team/profile-picture-1.jpg">
-        <span style="color:black;font-size:15px;margin-left:10px;">
+        <img class="avatar rounded-circle" style="margin-right:20px" alt="Image placeholder" src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('assets/img/team/default_img.png') }}">
+        <span style="color:black;font-size:18px;margin-right:20px">
           {{ Auth::user()->name }} <!-- Display the user's name -->
         </span>
       </div>
     </a>
 
-    <div class="dropdown-menu dashboard-dropdown dropdown-menu-end mt-2 py-1">
-      <a class="dropdown-item d-flex align-items-center" href="/profile">
+    <div class="dropdown-menu dashboard-dropdown dropdown-menu-end mt-2 py-1" style="margin-right:10px">
+      <a class="dropdown-item d-flex align-items-center" href="{{ route('ProfileUser') }}">
         <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20"
              xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd"
@@ -82,19 +81,13 @@
         });
       </script>
     </div>
-  </li>
 @else
   <!-- Show Login/Register button if not signed in -->
-  <li class="nav-item ms-lg-3">
-    <button class="btn btn-outline-secondary" type="button">
-      <a href="/login" class="text-btn">Login/Register</a>
-    </button>
-  </li>
+      <button class="btn btn-outline-secondary" type="button"><a href="/register" class="text-btn">  Login/Regsiter</a></button>
 @endif
 
 
 </div>
-
     </div>
     </nav>
 </div>

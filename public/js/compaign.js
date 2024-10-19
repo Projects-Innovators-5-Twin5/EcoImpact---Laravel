@@ -12,7 +12,7 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
             const thead = 
                 `<thead>
                     <tr>
-                        <th class="border-gray-200">#</th><th class="border-gray-200">Title</th>						
+                        <th class="border-gray-200">Title</th>						
                         <th class="border-gray-200">Start Date</th>
                         <th class="border-gray-200">End Date</th>
                         <th class="border-gray-200">target audience</th>
@@ -34,11 +34,7 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
                 results += `
                 
                 <tr>
-                 <td>
-                    <a href="#" class="fw-bold">
-                       ${campaign.id}
-                    </a>
-                </td>
+              
                 <td>
                     <span class="fw-normal">${campaign.title }</span>
                 </td>
@@ -93,7 +89,7 @@ selectElement.addEventListener('change', function() {
             const thead = 
                 `<thead>
                     <tr>
-                        <th class="border-gray-200">#</th><th class="border-gray-200">Title</th>						
+                       <th class="border-gray-200">Title</th>						
                         <th class="border-gray-200">Start Date</th>
                         <th class="border-gray-200">End Date</th>
                         <th class="border-gray-200">target audience</th>
@@ -115,11 +111,7 @@ selectElement.addEventListener('change', function() {
                 results += `
                 
                 <tr>
-                 <td>
-                    <a href="#" class="fw-bold">
-                       ${campaign.id}
-                    </a>
-                </td>
+             
                 <td>
                     <span class="fw-normal">${campaign.title }</span>
                 </td>

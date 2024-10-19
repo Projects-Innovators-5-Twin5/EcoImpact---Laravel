@@ -73,7 +73,11 @@
                 <h2 class="h5 mb-4 mt-4">Join Our Campaign! 🌟</h2>
                 <p class="d-flex align-items-center"><span class="text-des">{{$campaign -> reasons_join_campaign}}</span></p>
                 <div class="d-flex justify-content-end">
-                   <button class="btn btn-secondary btn-join " type="button"><a href="{{route('participation.create' , $campaign->id) }}" class="text-btn" style="color:white;" >Join the Campaign!</a></button>
+                    @if($participation)
+                     <button class="btn btn-secondary btn-join " type="button" disabled><a href="{{route('participation.create' , $campaign->id) }}" class="text-btn" style="color:white;">Join the Campaign!</a></button>
+                    @else
+                    <button class="btn btn-secondary btn-join " type="button"><a href="{{route('participation.create' , $campaign->id) }}" class="text-btn" style="color:white;" >Join the Campaign!</a></button>
+                    @endif
                 </div>   
 
             </div>

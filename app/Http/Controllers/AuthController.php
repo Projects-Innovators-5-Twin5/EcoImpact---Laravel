@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -63,7 +65,66 @@ class AuthController extends Controller
         return View("Auth.forgotPassword");
     }
 
-    public function ProfileUser(){
-        return View("Profile.profileUser");
+
+    public function profileUser(){
+        $user = Auth::user();
+        return view("Profile.profileUser", compact('user'));
+    }
+
+    public function profileUserNav(){
+        $user = Auth::user();
+        return view("Profile.profilenav", compact('user'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
+            'phone' => 'required|string|max:8',
+            'address' => 'required|string|max:255',
+            'birthDate' => 'required|date',
+        ]);
+
+        $user = Auth::user();
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->address = $request->input('address');
+        $user->birthDate = $request->input('birthDate');
+        
+        $user->save();
+
+        return redirect('/profile')->with('success', 'Profile updated successfully!');
+    }
+
+    public function updateImage(Request $request)
+    {
+            $request->validate([
+                'image' => 'required|image|mimes:jpg,png,jpeg,gif',
+            ]);
+
+            $user = Auth::user();
+
+            if ($request->hasFile('image')) {
+                if ($user->image) {
+                    Storage::delete('public/' . $user->image);
+                }
+
+                $path = $request->file('image')->store('profiles', 'public');
+
+                $user->image = $path;
+                $user->save();
+            }
+
+            return redirect('/profile');
+    }
+
+
+    public function getUsers(){
+
+        $users = User::where('role' , 'user')->get(); 
+        return response()->json($users);
     }
 }

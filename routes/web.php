@@ -90,6 +90,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/forgotPassword', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
 
 Route::get('/profile', [AuthController::class, 'profileUser'])->name('ProfileUser')->middleware('isAuth');
+Route::post('/updateImage', [AuthController::class, 'updateImage'])->name('updateImageProfile');
+Route::post('/updateProfile', [AuthController::class, 'updateProfile'])->name('updateProfile');
+Route::get('/getUsers', [AuthController::class, 'getUsers'])->name('getUsers');
 
 
 //module compagne de sensibilisation front
@@ -177,3 +180,24 @@ Route::middleware(['auth', 'isAdmin'])->prefix('back')->name('users.')->group(fu
     Route::put('users/{user}', [UserController::class, 'update'])->name('update');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('destroy');
 });
+
+Route::get('/campaigns/show/{campaign_id}/participate', [CompagneParticipationsController::class, 'create'])->name('participation.create');
+Route::post('/campaigns/participateAdd', [CompagneParticipationsController::class, 'store'])->name('participation.store');
+Route::get('/campaigns/{id}/participateEdit', [CompagneParticipationsController::class, 'edit'])->name('participation.edit');
+Route::put('/campaigns/{id}/participateUpdate', [CompagneParticipationsController::class, 'update'])->name('participation.update');
+Route::get('/campaigns/{id}/details', [CompagneParticipationsController::class, 'show'])->name('participation.details');
+
+
+Route::delete('/participants/{id}/delete', [CompagneParticipationsController::class, 'destroy'])->name('participation.delete');
+Route::post('/participants/{id}/accept', [CompagneParticipationsController::class, 'acceptParticipation'])->name('participation.accept');
+Route::post('/participants/{id}/reject', [CompagneParticipationsController::class, 'rejectParticipation'])->name('participation.reject');
+
+Route::get('/participants/search/{campaign_id}', [CompagneParticipationsController::class, 'search'])->name('participation.search');
+Route::get('/participants/searchByStatusP/{campaign_id}', [CompagneParticipationsController::class, 'searchByStatus'])->name('participation.searchByStatus');
+Route::get('/calendarData', [SensibilisatioCompagneController::class, 'calendarData'])->name('calendarData');
+Route::get('/calendar', [SensibilisatioCompagneController::class, 'calendar'])->name('calendar');
+Route::post('/calendar/updateEvent', [SensibilisatioCompagneController::class, 'updateDateCampaignCalendar'])->name('updateEvent');
+Route::get('/export-participant-pdf/{campaign_id}', [CompagneParticipationsController::class, 'exportPdf_Participants'])->name('participation.export.pdf');
+Route::get('/listParticipation', [CompagneParticipationsController::class, 'listParticipation'])->name('participation.front.list');
+
+Route::put('/participants/{id}/cancel', [CompagneParticipationsController::class, 'cancelParticipation'])->name('participation.cancel');

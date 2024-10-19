@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MailParticipation extends Mailable
+class MailParticipationAccepted extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -33,7 +33,7 @@ class MailParticipation extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Mail Participation',
+            subject: 'Mail Participation Accepted',
         );
     }
 
@@ -45,7 +45,7 @@ class MailParticipation extends Mailable
     public function content()
     {
         return new Content(
-            view: 'Back.CompagneSensibilisation.TemplateEmailParticipation',
+            view: 'Back.CompagneSensibilisation.TemplateEmailParticipationAccept',
         );
     }
 
