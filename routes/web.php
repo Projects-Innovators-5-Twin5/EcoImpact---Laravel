@@ -12,6 +12,7 @@ use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\SolutionController;
 use Illuminate\Support\Facades\Mail;
 
+use App\Http\Controllers\RegisterController;
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentaireController;
@@ -129,32 +130,6 @@ Route::get('/solutions/{solution}/voters', [SolutionController::class, 'getVoter
 Route::get('/produitss', [ProduitController::class, 'frontaffichage'])->name('produitCards.front')->middleware('isAuth');
 Route::get('produits/{id}', [ProduitController::class, 'showDetail'])->name('produits.produit_detail');
 
-
-
-
-Route::get('/Consommation', [ConsommationController::class, 'Consommation'])->name('Consommation');
-Route::post('/consommation-energie', [ConsommationController::class, 'store'])->middleware('isAuth');
-Route::get('/liste-consommations', [ConsommationController::class, 'listConsumptions'])->name('consommation.list');
-
-Route::get('/consumption-data', [ConsommationController::class, 'getConsumptionDataByType'])->middleware('isAuth');
-Route::get('/carbonneDetails', [CarbonneFootPrintController::class, 'carbonneDetails'])->middleware('isAuth');
-Route::get('/carbon-footprint', [CarbonneFootPrintController::class, 'showEnergyConsumption'])->name('carbon.footprint')->middleware('isAuth');
-Route::post('/carbon-footprint/add/{userId}', [CarbonneFootPrintController::class, 'addCarbonFootprintWithConsumption'])->name('carbon.footprint.add')->middleware('isAuth');
-Route::get('/carbon-footprints', [CarbonneFootPrintController::class, 'listCarbonFootprintsWithConsumption'])->name('carbon.footprints.list')->middleware('isAuth');
-
-Route::get('/global-consumption-data', [ConsommationController::class, 'getGlobalConsumptionData'])->name('global.consumption.data')->middleware('isAuth');
-
-Route::get('/consumptions/edit/{id}', [ConsommationController::class, 'edit'])->name('editConsumption')->middleware('isAuth');
-Route::put('/consumptions/update/{id}', [ConsommationController::class, 'update'])->name('consumptions.update')->middleware('isAuth');
-Route::get('/consommation/{id}',[ConsommationController::class, 'show'])->middleware('isAuth');
-
-
-// Route pour mettre à jour la consommation
-Route::put('/consumptions/{id}', [ConsommationController::class, 'updateConsumption'])->name('updateConsumption')->middleware('isAuth');
-
-// Route pour supprimer la consommation
-// web.php
-Route::delete('/consumptions/{id}/delete', [ConsommationController::class, 'destroy'])->name('consumptions.delete')->middleware('isAuth');
 //back
 
 Route::get('/panier', [PanierController::class, 'afficherPanier'])->name('panier.index');
@@ -201,3 +176,36 @@ Route::get('/export-participant-pdf/{campaign_id}', [CompagneParticipationsContr
 Route::get('/listParticipation', [CompagneParticipationsController::class, 'listParticipation'])->name('participation.front.list');
 
 Route::put('/participants/{id}/cancel', [CompagneParticipationsController::class, 'cancelParticipation'])->name('participation.cancel');
+Route::get('/Consommation', [ConsommationController::class, 'Consommation'])->name('Consommation');
+Route::post('/consommation-energie', [ConsommationController::class, 'store']);
+Route::get('/liste-consommations', [ConsommationController::class, 'listConsumptions'])->name('consommation.list');
+
+
+Route::get('/consumption-data', [ConsommationController::class, 'getConsumptionDataByType']);
+Route::get('/carbonneDetails', [CarbonneFootPrintController::class, 'carbonneDetails']);
+Route::get('/carbon-footprint', [CarbonneFootPrintController::class, 'showEnergyConsumption'])->name('carbon.footprint');
+Route::post('/carbon-footprint/add/{userId}', [CarbonneFootPrintController::class, 'addCarbonFootprintWithConsumption'])->name('carbon.footprint.add');
+Route::get('/carbon-footprints', [CarbonneFootPrintController::class, 'listCarbonFootprintsWithConsumption'])->name('carbon.footprints.list');
+
+Route::get('/global-consumption-data', [ConsommationController::class, 'getGlobalConsumptionData'])->name('global.consumption.data');
+
+Route::get('/liste-consommationsBack', [ConsommationController::class, 'listConsumptionsBack'])->name('consommationBack.list');
+Route::get('/consumptions/edit/{id}', [ConsommationController::class, 'edit'])->name('editConsumption');
+Route::put('/consumptions/update/{id}', [ConsommationController::class, 'update'])->name('consumptions.update');
+Route::get('/consommation/{id}',[ConsommationController::class, 'show']);
+
+
+// Route pour mettre à jour la consommation
+Route::put('/consumptions/{id}', [ConsommationController::class, 'updateConsumption'])->name('updateConsumption');
+
+// Route pour supprimer la consommation
+// web.php
+Route::delete('/consumptions/{id}/delete', [ConsommationController::class, 'destroy'])->name('consumptions.delete');
+//back
+Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
+Route::get('/consumptions/editback/{id}', [ConsommationController::class, 'editback'])->name('editConsumptionback');
+Route::put('/consumptions/updateback/{id}', [ConsommationController::class, 'updateback'])->name('consumptionsback.update');
+Route::post('/register', [AuthController::class, 'register']);
+Route::get('/register', function () {
+    return view('auth.register'); // Assurez-vous que cette vue existe
+})->name('register');

@@ -8,7 +8,9 @@
         <div class="container">
             <p class="text-center">
                 <a href="/landing" class="d-flex align-items-center justify-content-center">
-                    <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                    <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                    </svg>
                     Back to homepage
                 </a>
             </p>
@@ -16,75 +18,116 @@
                 <div class="col-12 d-flex align-items-center justify-content-center">
                     <div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100 fmxw-500">
                         <div class="text-center text-md-center mb-4 mt-md-0">
-                            <h1 class="mb-0 h3">Create Account </h1>
+                            <h1 class="mb-0 h3">Create Account</h1>
                         </div>
-                        <form action="#" class="mt-4">
-                            <!-- Form -->
+                        <form action="{{ url('/register') }}" method="POST" class="mt-4">
+                            @csrf
+
+                            <!-- Nom -->
+                            <div class="form-group mb-4">
+                                <label for="name">Nom</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                        </svg>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Emna Khiari" id="name" name="name" value="{{ old('name') }}" autofocus >
+                                </div>
+                                @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Email -->
                             <div class="form-group mb-4">
                                 <label for="email">Your Email</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1">
-                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                                        </svg>
                                     </span>
-                                    <input type="email" class="form-control" placeholder="example@company.com" id="email" autofocus required>
-                                </div>  
+                                    <input type="email" class="form-control" placeholder="example@company.com" id="email" name="email" value="{{ old('email') }}" >
+                                </div>
+                                @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
-                            <!-- End of Form -->
-                            <div class="form-group">
-                                <!-- Form -->
-                                <div class="form-group mb-4">
-                                    <label for="password">Your Password</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon2">
-                                            <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
-                                        </span>
-                                        <input type="password" placeholder="Password" class="form-control" id="password" required>
-                                    </div>  
+
+                            <!-- Mot de passe -->
+                            <div class="form-group mb-4">
+                                <label for="password">Your Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon2">
+                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                    <input type="password" placeholder="Password" class="form-control" id="password" name="password" >
                                 </div>
-                                <!-- End of Form -->
-                                <!-- Form -->
-                                <div class="form-group mb-4">
-                                    <label for="confirm_password">Confirm Password</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon2">
-                                            <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
-                                        </span>
-                                        <input type="password" placeholder="Confirm Password" class="form-control" id="confirm_password" required>
-                                    </div>  
+                                @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Confirmation mot de passe -->
+                            <div class="form-group mb-4">
+                                <label for="confirm_password">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon2">
+                                        <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                    <input type="password" placeholder="Confirm Password" class="form-control" id="confirm_password" name="password_confirmation">
                                 </div>
-                                <!-- End of Form -->
-                                <div class="mb-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="remember">
-                                        <label class="form-check-label fw-normal mb-0" for="remember">
-                                            I agree to the <a href="#" class="fw-bold">terms and conditions</a>
-                                        </label>
-                                    </div>
+                                @error('password_confirmation')
+                                <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Checkbox termes et conditions -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terms" >
+                                    <label class="form-check-label fw-normal mb-0" for="terms">
+                                        I agree to the <a href="#" class="fw-bold">terms and conditions</a>
+                                    </label>
                                 </div>
                             </div>
+
+                            <!-- Bouton d'envoi -->
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-gray-800">Sign up</button>
                             </div>
                         </form>
+
                         <div class="mt-3 mb-4 text-center">
                             <span class="fw-normal">or login with</span>
                         </div>
                         <div class="d-flex justify-content-center my-4">
+                            <!-- Social media buttons -->
                             <a href="#" class="btn btn-icon-only btn-pill btn-outline-gray-500 me-2" aria-label="facebook button" title="facebook button">
-                                <svg class="icon icon-xxs" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="facebook-f" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path></svg>
+                                <svg class="icon icon-xxs" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="facebook-f" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                    <path fill="currentColor" d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path>
+                                </svg>
                             </a>
                             <a href="#" class="btn btn-icon-only btn-pill btn-outline-gray-500 me-2" aria-label="twitter button" title="twitter button">
-                                <svg class="icon icon-xxs" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitter" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg>
+                                <svg class="icon icon-xxs" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitter" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path fill="currentColor" d="M459.37 151.72c.32 4.84.32 9.68.32 14.52 0 147.54-112.23 317.24-317.24 317.24-63.17 0-121.64-18.43-171.17-50.25 8.77 1.07 17.58 1.4 26.58 1.4 52.1 0 100.17-17.79 138.73-47.68-48.71-1.07-89.99-32.97-104.23-76.87 6.81 1.34 13.74 2.04 20.81 2.04 10.11 0 19.99-1.39 29.45-4.02-51-10.19-89.22-55.29-89.22-109.76 0-.49 0-1 .02-1.48 15.07 8.4 32.28 13.43 50.54 14.01-29.99-20.05-49.89-54.16-49.89-92.66 0-20.47 5.56-39.67 15.17-56.15 55.46 68.05 138.56 112.39 232.6 117.06-1.97-8.2-2.98-16.79-2.98-25.68 0-62.27 50.62-112.89 112.89-112.89 32.52 0 61.82 13.73 82.45 35.85 25.99-5.08 50.35-14.51 72.23-27.44-8.47 26.45-26.17 48.59-49.59 62.79 22.93-2.72 44.67-8.77 64.82-17.61-15.13 22.88-34.09 43.1-55.72 59.27z"></path>
+                                </svg>
                             </a>
                             <a href="#" class="btn btn-icon-only btn-pill btn-outline-gray-500" aria-label="github button" title="github button">
-                                <svg class="icon icon-xxs" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+                                <svg class="icon icon-xxs" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                                    <path fill="currentColor" d="M632 488c-18 0-34-2-50-5-4-8-7-14-11-20-3-5-5-11-8-16-5 4-10 7-16 9-4 1-9 2-14 2s-9-1-14-2c-5-2-11-5-16-9-3 5-6 11-9 16-4 6-8 12-12 20-16 3-32 5-50 5-35 0-67-7-95-21-26-13-49-31-67-54-12 5-27 9-44 9-43 0-81-24-101-58-8-13-14-27-16-43-2-10-3-21-4-33-5-2-8-6-11-10-4-5-8-11-12-16-7-9-11-18-16-27-1-3-2-7-3-10-1-4-2-8-2-13 0-1 0-2 0-3v-3c4-3 9-6 14-8 5-2 9-5 12-8 10-11 15-25 15-42 0-18-8-35-22-44-4-3-8-5-12-7-12-5-24-8-37-8-9 0-17 1-25 3-12 3-25 10-34 19-5 5-10 11-12 18-5-3-10-5-16-6-14-2-27-1-39 3-6 2-10 4-14 6-4 3-7 7-9 11-2 5-4 11-5 16-1 5-2 10-2 15-1 7-1 14-2 21-1 2-2 4-4 5-6 1-4 1-8 1-12 0-18-1-36-2-54 0-6 1-12 1-18 0-16 0-33 1-50s2-32 5-49c2-12 4-23 7-34 1-5 1-9 3-12 1-4 4-8 8-10 0-1 0-1-1-1 0 0-1 0-1 1-1 2-1 5-1 8-1 5-1 10-1 15 0 4 0 7 1 11 0 3 0 7 0 10 1 10 1 21 3 32s4 19 7 29c0 1 1 2 1 3 1 5 2 9 4 13 2 6 5 11 9 16 7 9 17 17 29 22 14 6 31 10 48 10 31 0 64-11 92-28 3 0 7 0 10-1 2-1 4-2 6-3 8-4 17-10 23-17 11-10 16-24 18-39s-2-32-12-43c-8-8-21-14-35-14-7 0-15 2-22 5 5-11 9-22 11-34s1-25-1-37c-1-5-2-10-3-15-2-9-3-18-3-28s1-19 3-28c1-5 2-10 3-15 1-6 2-12 4-18 1-4 3-8 6-11 4-4 10-5 16-5 11 0 22 3 32 8 14 6 25 18 33 32 3 5 4 10 5 15 2 8 2 15 2 23 0 14-2 27-6 39-5 13-10 25-16 37-8 14-18 27-31-1 0 0-1 1-1 1 2 7 4 12 7 17 8 11 12 26 12 42 0 12-1 23-3 34-1 5-1 10-2 15-3 0 0 0 0 0 0z"></path>
+                                </svg>
                             </a>
                         </div>
-                        <div class="d-flex justify-content-center align-items-center mt-4">
-                            <span class="fw-normal">
-                                Already have an account? 
-                                <a href="/login" class="fw-bold">Login here</a>
-                            </span>
+                        <div class="text-center">
+                            <p class="text-muted mb-0">Already have an account? <a href="{{ url('/login') }}" class="fw-bold">Login</a></p>
                         </div>
                     </div>
                 </div>
@@ -92,5 +135,4 @@
         </div>
     </section>
 </main>
-
 @endsection

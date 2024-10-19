@@ -51,7 +51,7 @@
                     </tbody>
                 </table>
 
-                <button type="button" class="btn btn-secondary mb-2" onclick="addRow()">Ajouter une consommation</button>
+              
                 <button type="submit" class="btn btn-primary">Mettre à jour</button>
             </form>
         </div>

@@ -40,6 +40,8 @@
         "chartist-plugin-tooltip": "^0.0.11",
         "chartist-plugin-tooltips": "^0.0.17",
         "fullcalendar": "^6.1.15",
+        "jspdf": "^2.5.2",
+        "jspdf-autotable": "^3.8.3",
         "notyf": "^3.10.0",
         "nouislider": "^15.8.1",
         "onscreen": "^1.4.0",
