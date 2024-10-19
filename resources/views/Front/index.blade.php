@@ -50,6 +50,8 @@
             </div>
 
             <div class="text-center mt-4">
+                <a href="{{ route('produitCards.front') }}" class="btn btn-secondary">Retour à la liste</a>
+
                 <button type="submit" class="btn btn-success">Enregistrer ma commande et payer</button>
             </div>
         </form>
