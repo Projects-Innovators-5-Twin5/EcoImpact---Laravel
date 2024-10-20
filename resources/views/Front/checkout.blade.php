@@ -61,7 +61,7 @@
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const clientNom = document.getElementById('client_nom').value;
             const clientEmail = document.getElementById('client_email').value;
-            const produits = JSON.parse(sessionStorage.getItem('panier')) || []; // Assurez-vous d'avoir un panier valide
+            const produits = JSON.parse(sessionStorage.getItem('panier')) || []; // Récupérer le panier depuis la session
 
             const { paymentIntent, error } = await stripe.confirmCardPayment('{{ $clientSecret }}', {
                 payment_method: {
@@ -93,7 +93,7 @@
                         produits: produits,
                         client_nom: clientNom,
                         client_email: clientEmail,
-                        statut: 'en attente'
+                        statut: 'en attente' // Statut par défaut
                     })
                 });
 

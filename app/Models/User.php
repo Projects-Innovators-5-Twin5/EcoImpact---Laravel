@@ -28,7 +28,10 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
+    public function commandes()
+    {
+        return $this->hasMany(Commande::class, 'client_id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

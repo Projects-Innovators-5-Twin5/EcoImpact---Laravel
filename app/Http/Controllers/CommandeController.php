@@ -29,7 +29,7 @@ class CommandeController extends Controller
 }
 
 
-    public function store(Request $request)
+public function store(Request $request)
     {
         // Valider la requête
         $validatedData = $request->validate([
@@ -45,14 +45,26 @@ class CommandeController extends Controller
         // Calculer le total de la commande
         $total = $request->input('total', 0); // Assurez-vous que le total est récupéré
 
-
         // Enregistrer la commande
         $commande = new Commande();
         $commande->client_nom = $request->input('client_nom');
         $commande->client_email = $request->input('client_email');
         $commande->total = $total; // Enregistrer le total calculé ou passé
         $commande->statut = 'Reussi'; // Statut par défaut
+
+        // Vérifier si l'utilisateur est authentifié
+        if (auth()->check()) {
+            $commande->client_id = auth()->id(); // Récupérez l'ID de l'utilisateur authentifié
+        }
         $commande->save();
+
+        // Enregistrer les détails des produits associés à la commande
+        foreach ($panier as $item) {
+            $commande->produits()->attach($item['id'], [
+                'quantite' => $item['quantite'], // Supposons que 'quantite' est dans le panier
+                'prix' => $item['prix'], // Si vous avez besoin du prix du produit
+            ]);
+        }
 
         // Retourner une réponse JSON ou un message de succès
         return response()->json([
@@ -61,7 +73,6 @@ class CommandeController extends Controller
             'commande_id' => $commande->id // Inclure l'ID de la commande si nécessaire
         ], 201); // 201 Created
     }
-
 
     public function passer(Request $request)
     {
@@ -78,6 +89,9 @@ class CommandeController extends Controller
         $total = $collectionPanier->sum(function ($item) {
             return ($item['prix'] ?? 0) * ($item['quantite'] ?? 0); // Assurez-vous que les clés existent
         });
+
+        // Stocker les produits et le total dans la session pour l'étape de paiement
+        session(['total' => $total, 'panier' => $panier]);
 
         // Rediriger vers la page de paiement
         return redirect()->route('checkout')->with([
