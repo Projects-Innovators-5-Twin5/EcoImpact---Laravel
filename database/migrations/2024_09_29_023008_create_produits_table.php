@@ -19,6 +19,7 @@ class CreateProduitsTable extends Migration
             $table->decimal('prix', 8, 2); // Prix avec 8 chiffres dont 2 après la virgule
             $table->integer('quantite');   // Quantité en stock
             $table->string('image')->nullable();  // Chemin vers l'image du produit
+            $table->foreignId('commande_id')->constrained()->onDelete('cascade'); // Ajouter la clé étrangère ici
             $table->timestamps();
         });
     }

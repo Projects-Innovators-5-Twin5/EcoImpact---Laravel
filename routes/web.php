@@ -21,6 +21,7 @@ use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PanierController;
 use Illuminate\Support\Facades\Mail as MailFacade;
 
+use App\Http\Controllers\CategorieController;
 
 use App\Http\Controllers\PaiementController;
 
@@ -178,3 +179,9 @@ Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('p
 //commande
 Route::get('/mescommandes', [CommandeController::class, 'frontaffichage'])->name('commandes.index');
 Route::delete('/commandes/{commande}', [CommandeController::class, 'destroy'])->name('commandes.destroy');
+
+// Routes pour les catégories
+Route::resource('categories', CategorieController::class);
+Route::get('categories/{id}/assign-products', [CategorieController::class, 'assignProducts'])->name('categories.assignProducts');
+Route::post('categories/{id}/assign-products', [CategorieController::class, 'storeAssignedProducts'])->name('categories.storeAssignedProducts');
+Route::delete('categories/{categoryId}/remove-product/{productId}', [CategorieController::class, 'removeAssignedProduct'])->name('categories.removeAssignedProduct');
