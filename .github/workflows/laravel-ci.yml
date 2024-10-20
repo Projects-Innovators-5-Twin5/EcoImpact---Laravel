@@ -16,8 +16,8 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: 
           MYSQL_DATABASE: laravel_test
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
         options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
         ports:
           - 3306:3306
@@ -52,13 +52,6 @@ jobs:
 
     - name: Run migrations
       run: php artisan migrate --force
-      env:
-          DB_CONNECTION: mysql
-          DB_HOST: mysql
-          DB_PORT: 3306
-          DB_DATABASE: laravel_test
-          DB_USERNAME: root
-          DB_PASSWORD: 
 
     - name: Run tests
       run: php artisan test --no-coverage
