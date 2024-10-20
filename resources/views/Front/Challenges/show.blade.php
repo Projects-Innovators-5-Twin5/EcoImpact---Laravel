@@ -6,6 +6,15 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 @section('content')
+
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
 <div id="alert-container" class="mt-3"></div>
 <div class="challenge-container">
     <div class="challenge-header">
@@ -13,8 +22,11 @@
         <div class="button-group">
             <a href="{{ route('challenges.indexfront') }}" class="btn btn-secondary back-btn">Back to Challenges</a>
             @if ($challenge->isOpen() && !$challenge->isUpcoming())
-                <a href="#" class="btn btn-primary add-solution-btn" data-bs-toggle="modal" data-bs-target="#addSolutionModal">Add Solution</a>
-            @endif        </div>
+            <button class="btn btn-primary add-solution-btn" onclick="toggleAddSolutionSection()">Add Solution</button>
+
+
+
+                @endif        </div>
     </div>
 
     <div class="challenge-content">
@@ -29,7 +41,42 @@
             <p><strong>Reward Points:</strong> {{ $challenge->reward_points }}</p>
         </div>
     </div>
- 
+    <div id="addSolutionSection" style="display: {{ old('form_type') === 'add_solution' && $errors->any() ? 'block' : 'none' }};">
+
+    <h3>Add a Solution</h3>
+    <form id="solutionForm" action="{{ route('solutions.store') }}" method="POST">
+        @csrf
+        <input type="hidden" name="form_type" value="add_solution">
+        <div class="form-group">
+        <input type="hidden" name="challenge_id" value="{{ $challenge->id }}">
+            <label for="title">Title</label>
+            <div class="input-group">
+                <input type="text" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" name="title" placeholder="Enter Title" value="{{ old('title') }}" id="title" autofocus>
+            </div>
+            @if ($errors->has('title'))
+                @foreach ($errors->get('title') as $error)
+                    <div class="text-danger h6 mt-1" id="error-title">{{ $error }}</div>
+                @endforeach
+            @endif
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <div class="input-group">
+                <textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description" placeholder="Enter description..." id="description" rows="4">{{ old('description') }}</textarea>
+            </div>
+            @if ($errors->has('description'))
+                @foreach ($errors->get('description') as $error)
+                    <div class="text-danger h6 mt-1" id="error-description">{{ $error }}</div>
+                @endforeach
+            @endif
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Solution</button>
+    </form>
+</div>
+
+
 
 
     <div class="solution-list">
@@ -37,7 +84,7 @@
         @if ($isClosed && $winningSolutions->count())
 <div class="winner-container">
     <div class="podium">
-    
+
         @foreach ($winningSolutions as $solution)
             <div class="podium-position">
                 <i class="fas fa-trophy trophy-icon"></i>
@@ -75,7 +122,7 @@
         <div class="solution-item">
     <div class="solution-header">
     <div class="user-info">
-            <img src="/assets/img/team/profile-picture-5.jpg" alt="User Image" class="user-image">
+            <img src="{{ $solution->user->image ? asset('storage/' . $solution->user->image) : asset('assets/img/team/default_img.png') }}" alt="User Image" class="user-image">
             <strong>{{ $solution->user->name }}</strong>
         </div>
         <span class="solution-date">{{ $solution->created_at->format('d-m-Y H:i') }}</span>
@@ -85,7 +132,10 @@
                     &#x2026;
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item edit-solution" data-solution-id="{{ $solution->id }}" data-bs-toggle="modal" data-bs-target="#editSolutionModal">Edit</a></li>
+
+                <li><a class="dropdown-item" href="#" onclick="editSolution({{ $solution->id }})">Edit</a></li>
+
+
                     <li><a class="dropdown-item" href="{{ route('solutions.destroy', $solution->id) }}" onclick="event.preventDefault(); document.getElementById('delete-solution-{{ $solution->id }}').submit();">Delete</a></li>
                 </ul>
             </div>
@@ -109,82 +159,57 @@
         <span id="vote-count-{{ $solution->id }}">{{ $solution->votes()->count() }}</span>
     </div>
 
-
     <div class="solution-content">
         <h5 id="solution-title-{{ $solution->id }}">{{ $solution->title }}</h5>
         <p id="solution-description-{{ $solution->id }}">{{ $solution->description }}</p>
+        <form action="{{ route('solutions.update', $solution->id) }}" method="POST" style="width:90%; display:none;" id="edit-form-{{ $solution->id }}">
+
+        @csrf
+            @method('PUT')
+
+            <input type="hidden" name="form_type" value="edit_solution">
+            <input type="hidden" name="solution_id" value="{{ $solution->id }}">
+
+            <div class="form-group">
+                    <label for="edit-title">Title</label>
+                    <input type="text" name="title" value="{{ old('title', $solution->title) }}" class="form-control @error('title') is-invalid @enderror">
+                    @error('title')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-description">Description</label>
+                    <textarea name="description" class="form-control @error('description') is-invalid @enderror">{{ old('description', $solution->description) }}</textarea>
+                    @error('description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+            <button type="submit" class="btn btn-primary">Update Solution</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit({{ $solution->id }})">Cancel</button>
+        </form>
     </div>
 </div>
+@endforeach
 
-        @endforeach
+
+
+
 
         @if($solutions->isEmpty())
             <p>No solutions have been submitted yet.</p>
         @endif
     </div>
 
-<!-- Add Solution Modal -->
-<div class="modal fade" id="addSolutionModal" tabindex="-1" aria-labelledby="addSolutionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addSolutionModalLabel">Add Solution</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="solutionForm" method="POST" action="{{ route('solutions.store') }}" novalidate>
-                    @csrf
-                    <div class="mb-3">
-                        <label for="solutionTitle" class="form-label">Solution Title</label>
-                        <input type="text" class="form-control" id="solutionTitle" name="title" required minlength="3" maxlength="100">
-                        <div class="invalid-feedback">Please enter a valid solution title (3-100 characters).</div>
-                        <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="solutionDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="solutionDescription" name="description" rows="3" required minlength="10" maxlength="500"></textarea>
-                        <div class="invalid-feedback">Please provide a description (10-500 characters).</div>
-                        <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <input type="hidden" name="challenge_id" value="{{ $challenge->id }}">
-                    <button type="submit" class="btn btn-primary">Submit Solution</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Edit Solution Modal -->
-<div class="modal fade" id="editSolutionModal" tabindex="-1" aria-labelledby="editSolutionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editSolutionModalLabel">Edit Solution</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editSolutionForm" method="POST" action="" novalidate>
-                    @csrf
-                    @method('PUT')
-                    <div class="mb-3">
-                        <label for="editSolutionTitle" class="form-label">Solution Title</label>
-                        <input type="text" class="form-control" id="editSolutionTitle" name="title" required minlength="3" maxlength="100">
-                        <div class="invalid-feedback">Please enter a valid solution title (3-100 characters).</div>
-                        <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editSolutionDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="editSolutionDescription" name="description" rows="3" required minlength="10" maxlength="500"></textarea>
-                        <div class="invalid-feedback">Please provide a description (10-500 characters).</div>
-                        <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <input type="hidden" id="editSolutionId" name="solution_id">
-                    <button type="submit" class="btn btn-primary">Update Solution</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+
+
+
+
+
+
+
 
 
 
@@ -193,60 +218,47 @@
 </div>
 
 <script>
+  // Toggle Add Solution section visibility
+function toggleAddSolutionSection() {
+    const addSolutionSection = document.getElementById('addSolutionSection');
+    addSolutionSection.style.display = addSolutionSection.style.display === 'none' || addSolutionSection.style.display === '' ? 'block' : 'none';
+}
+
+// Toggle Edit Solution section visibility
+function editSolution(solutionId) {
+    const editForm = document.getElementById(`edit-form-${solutionId}`);
+    editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none';
+
+    // Hide other edit forms
+    const allEditForms = document.querySelectorAll('.solution-content form');
+    allEditForms.forEach(form => {
+        if (form !== editForm) {
+            form.style.display = 'none';
+        }
+    });
+}
+
+// Cancel edit and hide form
+function cancelEdit(solutionId) {
+    const editForm = document.getElementById(`edit-form-${solutionId}`);
+    editForm.style.display = 'none';
+}
+// Check for validation errors after the page loads and ensure the edit form with errors is visible
 document.addEventListener('DOMContentLoaded', function () {
-    // Attach click event listeners to the edit buttons
-    document.querySelectorAll('.edit-solution').forEach(button => {
-        button.addEventListener('click', function () {
-            const solutionId = this.getAttribute('data-solution-id');
-            
-            // Fetch the solution data for the clicked edit button
-            fetch(`/solutions/${solutionId}/edit`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('editSolutionTitle').value = data.title;
-                    document.getElementById('editSolutionDescription').value = data.description;
-                    document.getElementById('editSolutionId').value = solutionId;
+    const errorSolutionId = "{{ old('solution_id') }}"; // The solution ID that had errors
 
-                    // Update form action for submission
-                    const form = document.getElementById('editSolutionForm');
-                    form.setAttribute('action', `/solutions/${solutionId}`);
-                });
-        });
-    });
-
-    // Handle form submission via AJAX
-    const editSolutionForm = document.getElementById('editSolutionForm');
-    editSolutionForm.addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent default form submission
-
-        const solutionId = document.getElementById('editSolutionId').value;
-        const formData = new FormData(editSolutionForm);
-
-        fetch(`/solutions/${solutionId}`, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editSolutionModal'));
-                modal.hide();
-
-                document.querySelector(`#solution-title-${solutionId}`).textContent = document.getElementById('editSolutionTitle').value;
-                document.querySelector(`#solution-description-${solutionId}`).textContent = document.getElementById('editSolutionDescription').value;
-
-                showAlert('Solution updated successfully!', 'success');
-            }
-        })
-        .catch(error => {
-            console.error('Error updating the solution:', error);
-        });
-    });
+    if (errorSolutionId) {
+        const editForm = document.getElementById(`edit-form-${errorSolutionId}`);
+        if (editForm) {
+            editForm.style.display = 'block';
+        }
+    }
 });
+
+
+
+
+
 
 function showAlert(message, type) {
     const alertContainer = document.getElementById('alert-container');
@@ -264,7 +276,7 @@ function showAlert(message, type) {
             alertNode.classList.remove('show');
             alertNode.addEventListener('transitionend', () => alertNode.remove());
         }
-    }, 3000); 
+    }, 3000);
 }
 function voteSolution(solutionId) {
     fetch(`/solutions/${solutionId}/vote`, {
@@ -301,57 +313,9 @@ function sortSolutions() {
     const sortValue = document.getElementById('solutionSort').value;
     const url = new URL(window.location.href);
     url.searchParams.set('sort', sortValue);
-    window.location.href = url.toString(); 
+    window.location.href = url.toString();
 }
-// JavaScript to handle form validation on submit
-(function () {
-    'use strict';
-    var forms = document.querySelectorAll('form');
 
-    Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-        }, false);
-    });
-})();
-// JavaScript to handle live validation
-document.addEventListener('DOMContentLoaded', function () {
-    var solutionForm = document.getElementById('solutionForm');
-    var editSolutionForm = document.getElementById('editSolutionForm');
-
-    // Live validation for both forms
-    [solutionForm, editSolutionForm].forEach(function (form) {
-        if (form) {
-            var inputs = form.querySelectorAll('input, textarea');
-
-            inputs.forEach(function (input) {
-                input.addEventListener('input', function () {
-                    if (input.checkValidity()) {
-                        input.classList.remove('is-invalid');
-                        input.classList.add('is-valid');
-                    } else {
-                        input.classList.remove('is-valid');
-                        input.classList.add('is-invalid');
-                    }
-                });
-            });
-
-            form.addEventListener('submit', function (event) {
-                inputs.forEach(function (input) {
-                    if (!input.checkValidity()) {
-                        event.preventDefault();
-                        input.classList.add('is-invalid');
-                    }
-                });
-                form.classList.add('was-validated');
-            });
-        }
-    });
-});
 
     // Get the end date from the PHP variable
     const endDate = new Date("{{ $challenge->end_date }}").getTime();
@@ -385,5 +349,10 @@ document.addEventListener('DOMContentLoaded', function () {
     updateCountdown();
 
 
+
+
+
+
 </script>
+
 @endsection

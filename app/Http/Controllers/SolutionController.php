@@ -23,7 +23,7 @@ class SolutionController extends Controller
             'description' => 'required|string|min:10|max:500',
                 'challenge_id' => 'required|exists:challenges,id',
         ]);
-    
+
         // Assuming you have a Solution model set up
         Solution::create([
             'title' => $validatedData['title'],
@@ -31,43 +31,41 @@ class SolutionController extends Controller
             'challenge_id' => $validatedData['challenge_id'],
             'user_id' => auth()->id(), // Store the logged-in user's ID
         ]);
-    
+
         $admin = User::where('role', 'admin')->first(); // You can adjust this to notify all admins
         $challenge = Challenge::findOrFail($validatedData['challenge_id']);
         $user = auth()->user();
-    
+
         $admin->notify(new SolutionSubmitted($user, $challenge));
-    
-    
+
+
         return redirect()->back()->with('success', 'Solution added successfully!');
     }
- 
 
-    public function edit($id)
-    {
-        $solution = Solution::findOrFail($id);
-        return response()->json($solution); // Return as JSON for AJAX
-    }
 
-    public function update(Request $request, $id)
-    {
-        // Validate the incoming request
-        $request->validate([
-            'title' => 'required|string|min:3|max:100',
-            'description' => 'required|string|min:10|max:500',
-        ]);
-    
-        $solution = Solution::findOrFail($id);
-    
-        // Update the solution with the validated data
-        $solution->update($request->only(['title', 'description']));
-    
-        // Return JSON response for AJAX success handling
-        return response()->json(['success' => 'Solution updated successfully!']);
-    }
-    
-    
-    
+
+public function update(Request $request, $id)
+{
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'title' => 'required|string|min:3|max:100',
+        'description' => 'required|string|min:10|max:500',
+    ]);
+    // Find the solution by its ID
+    $solution = Solution::findOrFail($id);
+
+    $solution->update([
+        'title' => $validatedData['title'],
+        'description' => $validatedData['description'],
+    ]);
+
+    // Return a success response
+    return redirect()->route('challenges.showfront', $solution->challenge_id)->with('success', 'Solution updated successfully');
+
+}
+
+
+
     public function destroy($id)
     {
         $solution = Solution::findOrFail($id);
@@ -78,14 +76,14 @@ class SolutionController extends Controller
     public function voteSolution(Request $request, $solutionId)
     {
         $solution = Solution::findOrFail($solutionId);
-        
+
         // Here we can assume you have a pivot table called 'solution_votes'
         // You may need to create a migration for it
         $userId = auth()->id();
-    
+
         // Check if the user has already voted
         $hasVoted = $solution->votes()->where('user_id', $userId)->exists();
-    
+
         if ($hasVoted) {
             // User has already voted, you can choose to unvote
             $solution->votes()->where('user_id', $userId)->delete();
@@ -98,12 +96,12 @@ class SolutionController extends Controller
             return response()->json(['message' => 'Voted successfully!', 'voteCount' => $voteCount]);
         }
     }
-    
+
     public function getVoters($solutionId)
     {
         $solution = Solution::findOrFail($solutionId);
         $voters = $solution->voters; // Assuming you have a relationship defined in your Solution model
-    
+
         return response()->json(['voters' => $voters]);
     }
 
@@ -123,5 +121,5 @@ class SolutionController extends Controller
     return back()->with('success', 'Solution submitted successfully.');
 }
 
-    
+
 }

@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    const title = document.getElementById('title');
+    /*const title = document.getElementById('title');
     const start_date = document.getElementById('start_date');
     const end_date = document.getElementById('end_date');
     const description = document.getElementById('description');
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    /*const today = new Date();
+    const today = new Date();
     const startDateValue = new Date(start_date.value);
     console.log(today);
     console.log(start_date.value)
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
             errorEdate.classList.remove('d-none'); 
             errorEdate.textContent = 'End date is invalid'
         }
-    });*/
+    });
 
 
     description.addEventListener('input', function() {
@@ -275,6 +275,6 @@ document.addEventListener('DOMContentLoaded', function() {
             errorImage.textContent = 'Image is invalid';
 
         }
-    });
+    });*/
 
 });

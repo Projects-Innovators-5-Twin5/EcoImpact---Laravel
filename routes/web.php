@@ -72,10 +72,6 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::resource('challenges', ChallengeController::class);
     Route::get('challenges/export/pdf', [ChallengeController::class, 'exportPdf'])->name('challenges.export.pdf');
     Route::get('/challenges/{challenge}/solutions/create', [SolutionController::class, 'create'])->name('solutions.create');
-    Route::post('/solutions', [SolutionController::class, 'store'])->name('solutions.store');
-    Route::resource('solutions', SolutionController::class)->only(['store', 'edit', 'update', 'destroy']);
-    Route::delete('/solutions/{solution}', [SolutionController::class, 'destroy'])->name('solutions.destroy');
-
      //produits back
    //consumption back 
    Route::get('/liste-consommationsBack', [ConsommationController::class, 'listConsumptionsBack'])->name('consommationBack.list');
@@ -85,6 +81,11 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
 
 });
+
+Route::post('/solutions', [SolutionController::class, 'store'])->name('solutions.store');
+Route::put('/solutions/{id}', [SolutionController::class, 'update'])->name('solutions.update');
+Route::delete('/solutions/{solution}', [SolutionController::class, 'destroy'])->name('solutions.destroy');
+
 Route::resource('produits', ProduitController::class);
 
 Route::get('/register', [AuthController::class, 'register'])->name('register');
