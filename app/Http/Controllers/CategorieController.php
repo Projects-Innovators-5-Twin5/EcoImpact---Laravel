@@ -14,6 +14,30 @@ class CategorieController extends Controller
         return view('back.categorie', compact('categories'));
     }
 
+    // Afficher toutes les catégories
+    public function indexfront()
+    {
+        $categories = Categorie::with('produits')->get();
+        return view('front.afficheCategorie', compact('categories'));
+    }
+
+
+// Afficher tous les produits d'une catégorie
+public function produitsParCategorie($id)
+{
+    // Récupérer la catégorie avec ses produits
+    $categorie = Categorie::with('produits')->findOrFail($id);
+    $produits = $categorie->produits; // Obtenez les produits de la catégorie
+
+    // Vérifiez ici si la variable 'categorie' est bien passée
+    return view('front.produitCards', compact('produits', 'categorie')); // Retourne la vue avec les produits et la catégorie
+}
+
+
+
+
+
+
     // Afficher le formulaire de création de catégorie
     public function create()
     {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produit;
 use Illuminate\Http\Request;
+use App\Models\Categorie;
 
 class ProduitController extends Controller
 {
@@ -16,14 +17,25 @@ class ProduitController extends Controller
 
     }
 
-      // Afficher tous les produits
-      public function frontaffichage()
-      {
-          $produits = Produit::all();
-          return view('front.produitCards', compact('produits')); // Retourne la vue avec les produits
+    // Afficher les produits par catégorie
+public function produitsParCategorie($id)
+{
+    $categorie = Categorie::with('produits')->findOrFail($id);
+    $produits = $categorie->produits;
+    $categories = Categorie::all(); // Fetch all categories for dropdown
+
+    return view('front.produitCards', compact('produits', 'categorie', 'categories'));
+}
 
 
-      }
+
+     public function frontaffichage()
+     {
+         $produits = Produit::all();
+         $categories = Categorie::all(); // Récupérer toutes les catégories
+         return view('front.produitCards', compact('produits', 'categories')); // Passer les catégories à la vue
+     }
+
 
      // Afficher un produit spécifique par ID
 public function showDetail($id)
@@ -65,7 +77,7 @@ public function showDetail($id)
     Produit::create($requestData);
 
     // Redirection avec un message de succès
-    return redirect()->route('produits.index')->with('success', 'Produit créé avec succès.');
+    return redirect()->route('produits.backproduit')->with('success', 'Produit créé avec succès.');
 }
 
 
@@ -93,14 +105,14 @@ public function showDetail($id)
         ]);
 
         $produit->update($request->all());
-        return redirect()->route('produits.index')->with('success', 'Produit mis à jour avec succès.');
+        return redirect()->route('produits.backproduit')->with('success', 'Produit mis à jour avec succès.');
     }
 
     // Supprimer un produit
     public function destroy(Produit $produit)
     {
         $produit->delete();
-        return redirect()->route('produits.index')->with('success', 'Produit supprimé avec succès.');
+        return redirect()->route('produits.backproduit')->with('success', 'Produit supprimé avec succès.');
     }
 
 

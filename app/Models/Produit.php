@@ -24,6 +24,11 @@ class Produit extends Model
         return $this->belongsTo(Categorie::class);
     }
 
+     // Accessor pour obtenir le nom de la catégorie
+     public function getCategorieNomAttribute()
+     {
+         return $this->categorie ? $this->categorie->nom : 'Aucune catégorie';
+     }
     // Relation one-to-many: un produit peut avoir plusieurs commandes
     public function commandes()
     {

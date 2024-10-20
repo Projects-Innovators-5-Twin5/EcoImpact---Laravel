@@ -127,6 +127,8 @@ Route::resource('produits', ProduitController::class);
 Route::get('/produitss', [ProduitController::class, 'frontaffichage'])->name('produitCards.front');
 Route::get('produits/{id}', [ProduitController::class, 'showDetail'])->name('produits.produit_detail');
 
+Route::get('/produits', [ProduitController::class, 'frontaffichage'])->name('produits.index');
+Route::get('/backproduit', [ProduitController::class, 'index'])->name('produits.backproduit');
 
 
 
@@ -185,3 +187,6 @@ Route::resource('categories', CategorieController::class);
 Route::get('categories/{id}/assign-products', [CategorieController::class, 'assignProducts'])->name('categories.assignProducts');
 Route::post('categories/{id}/assign-products', [CategorieController::class, 'storeAssignedProducts'])->name('categories.storeAssignedProducts');
 Route::delete('categories/{categoryId}/remove-product/{productId}', [CategorieController::class, 'removeAssignedProduct'])->name('categories.removeAssignedProduct');
+Route::get('/catcat', [CategorieController::class, 'indexfront'])->name('categories.indexfront');
+Route::get('/categories/{id}/produits', [CategorieController::class, 'produitsParCategorie'])->name('categories.produits');
+Route::get('/categorie/{id}/produits', [ProduitController::class, 'produitsParCategorie'])->name('categorie.produits');
