@@ -45,7 +45,10 @@ jobs:
       run: npm install
 
     - name: Run NPM build
-      run: npm run build  
+      run: npm run build 
+
+    - name: Copy .env file
+      run: cp .env.example .env    
 
     - name: Generate application key
       run: php artisan key:generate
