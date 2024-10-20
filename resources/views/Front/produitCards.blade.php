@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="container">
-        <h1 class="text-center mb-4">Produits par Catégorie: {{ $categorie->nom }}</h1>
+        <h1 class="text-center mb-4">Produits par Catégorie: {{ $categorie->nom ?? 'Tous les produits' }}</h1>
 
         <div class="row mb-4">
             <div class="col-md-4 offset-md-4">
                 <select id="categorieSelect" class="form-select" onchange="location = this.value;">
-                    <option value="">Sélectionnez une catégorie</option>
+                    <option value="{{ route('produits.backproduit') }}">Tous les produits</option>
                     @foreach ($categories as $category)
-                        <option value="{{ route('categorie.produits', $category->id) }}" {{ $category->id === $categorie->id ? 'selected' : '' }}>
+                        <option value="{{ route('categorie.produits', $category->id) }}" {{ $category->id === ($categorie->id ?? null) ? 'selected' : '' }}>
                             {{ $category->nom }}
                         </option>
                     @endforeach
