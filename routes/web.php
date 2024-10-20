@@ -172,3 +172,9 @@ Route::post('/commande/passer', [CommandeController::class, 'passer'])->name('co
 
 
 Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
+
+
+
+//commande
+Route::get('/mescommandes', [CommandeController::class, 'frontaffichage'])->name('commandes.index');
+Route::delete('/commandes/{commande}', [CommandeController::class, 'destroy'])->name('commandes.destroy');

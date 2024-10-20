@@ -8,11 +8,26 @@ use Illuminate\Support\Facades\Log;
 
 class CommandeController extends Controller
 {
-    public function index()
+
+
+    public function frontaffichage()
     {
-        $commandes = Commande::with('produits')->get();
-        return view('front.panier', compact('commandes'));
+        $commandes = Commande::with('produits')->get(); // Récupérer les commandes et leurs produits
+        return view('back.mescommandes', compact('commandes')); // Retourner la vue
     }
+
+    public function destroy($id)
+{
+    // Find the order by ID
+    $commande = Commande::findOrFail($id);
+
+    // Delete the order
+    $commande->delete();
+
+    // Redirect back with a success message
+    return redirect()->route('commandes.index')->with('success', 'Commande supprimée avec succès.');
+}
+
 
     public function store(Request $request)
     {
