@@ -24,6 +24,9 @@
                 <a class="nav-link" href="#">Services</a>
                 </li>
                 <li class="nav-item">
+                <a class="nav-link" href="/liste-consommations">Consommation</a>
+                </li>
+                <li class="nav-item">
                 <a class="nav-link" aria-disabled="true">Contact</a>
                 </li>
             </ul>
