@@ -109,7 +109,6 @@
 
 
 
-<!--Partie EmissionCarbone-->
 
 <div class="container mt-4">
     <div class="card shadow-sm">
@@ -149,33 +148,35 @@
 
             <!-- Modal pour modifier le facteur d'émission -->
             <div class="modal fade" id="editFactorModal" tabindex="-1" role="dialog" aria-labelledby="editFactorModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editFactorModalLabel">Modifier le facteur d'émission</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="editFactorForm" action="" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div class="form-group">
-                                    <label for="energy_type">Type d'énergie</label>
-                                    <input type="text" class="form-control" id="editEnergyType" name="energy_type" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="carbon_emission_factor">Facteur d'émission de carbone</label>
-                                    <input type="number" step="0.001" class="form-control" id="editCarbonEmissionFactor" name="carbon_emission_factor" required>
-                                </div>
-                                <input type="hidden" id="editFactorId" name="factor_id">
-                                <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editFactorModalLabel">Modifier le facteur d'émission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                <form id="editFactorForm" action="" method="POST" onsubmit="return validateForm()">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <label for="energy_type">Type d'énergie</label>
+                        <input type="text" class="form-control" id="editEnergyType" name="energy_type" >
+                        <small id="energyTypeError" class="form-text text-danger" style="display: none;">Veuillez entrer un type d'énergie.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="carbon_emission_factor">Facteur d'émission de carbone</label>
+                        <input type="number" step="0.001" class="form-control" id="editCarbonEmissionFactor" name="carbon_emission_factor" required min="0" placeholder="0.000">
+                        <small id="carbonFactorError" class="form-text text-danger" style="display: none;">Veuillez entrer un facteur d'émission valide (0 ou supérieur).</small>
+                    </div>
+                    <input type="hidden" id="editFactorId" name="factor_id">
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
             <!-- Pagination Controls -->
             <div id="paginationControls" style="text-align: center; margin-top: 20px;">
@@ -208,6 +209,64 @@
 
 
 
+<div class="modal fade" id="editFactorModal" tabindex="-1" role="dialog" aria-labelledby="editFactorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editFactorModalLabel">Modifier le facteur d'émission</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editFactorForm" action="" method="POST" onsubmit="return validateForm()">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <label for="energy_type">Type d'énergie</label>
+                        <input type="text" class="form-control" id="editEnergyType" name="energy_type" required>
+                        <small id="energyTypeError" class="form-text text-danger" style="display: none;">Veuillez entrer un type d'énergie.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="carbon_emission_factor">Facteur d'émission de carbone</label>
+                        <input type="number" step="0.001" class="form-control" id="editCarbonEmissionFactor" name="carbon_emission_factor" required min="0" placeholder="0.000">
+                        <small id="carbonFactorError" class="form-text text-danger" style="display: none;">Veuillez entrer un facteur d'émission valide (0 ou supérieur).</small>
+                    </div>
+                    <input type="hidden" id="editFactorId" name="factor_id">
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        let isValid = true;
+
+        // Validate energy type
+        const energyType = document.getElementById('editEnergyType').value;
+        const energyTypeError = document.getElementById('energyTypeError');
+        if (!energyType) {
+            energyTypeError.style.display = 'block';
+            isValid = false;
+        } else {
+            energyTypeError.style.display = 'none';
+        }
+
+        // Validate carbon emission factor
+        const carbonEmissionFactor = document.getElementById('editCarbonEmissionFactor').value;
+        const carbonFactorError = document.getElementById('carbonFactorError');
+        if (carbonEmissionFactor === '' || carbonEmissionFactor < 0) {
+            carbonFactorError.style.display = 'block';
+            isValid = false;
+        } else {
+            carbonFactorError.style.display = 'none';
+        }
+
+        return isValid;
+    }
+</script>
 
 
 
@@ -358,50 +417,51 @@
             });
     }
     // Function to filter table based on search input
-    document.getElementById('searchInput').addEventListener('keyup', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('searchInput').addEventListener('keyup', function () {
         const searchValue = this.value.toLowerCase();
         const rows = document.querySelectorAll('#consumptionTable tbody tr');
+
         rows.forEach(row => {
             const userName = row.querySelector('td.text-gray-900').textContent.toLowerCase();
             row.style.display = userName.includes(searchValue) ? '' : 'none';
         });
     });
+});
 
     function openModal(userId) {
-        console.log('Opening modal for user ID:', userId); // Log userId
-        fetch(`/consommation/${userId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(data); // Log the fetched data
-                const modalBody = document.getElementById('modalTableBody');
-                modalBody.innerHTML = ''; // Clear previous content
-                data.consumptions.forEach(consumption => {
-                    modalBody.innerHTML += `
-                    <tr>
-                        <td>${consumption.consumption_date}</td>
-                        <td>${consumption.energy_value}</td>
-                        <td>${consumption.energy_type}</td>
-                        <td>${consumption.carbonFootprint ? consumption.carbonFootprint.carbon_emission : 'N/A'}</td>
-                       <td>${consumption.carbonFootprint ? consumption.carbonFootprint.carbon_emission : 'N/A'}</td>
+    console.log('Opening modal for user ID:', userId); // Log userId
+    fetch(`/consommation/${userId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Log the fetched data
+            const modalBody = document.getElementById('modalTableBody');
+            modalBody.innerHTML = ''; // Clear previous content
 
-                       <td>${consumption.carbonFootprint ? consumption.carbonFootprint.carbon_emission : 'N/A'}</td>
-
-                    </tr>
-                    `;
-                });
-
-                document.getElementById('consumptionModal').style.display = 'block';
-                document.getElementById('modalOverlay').style.display = 'block';
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
+            data.consumptions.forEach(consumption => {
+                modalBody.innerHTML += `
+                <tr>
+                    <td>${consumption.consumption_date}</td>
+                    <td>${consumption.energy_value}</td>
+                    <td>${consumption.energy_type}</td>
+                    <td>${consumption.carbonFootprint ? consumption.carbonFootprint.carbon_emission : 'N/A'}</td>
+                </tr>
+                `;
             });
-    }
+
+            document.getElementById('consumptionModal').style.display = 'block';
+            document.getElementById('modalOverlay').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
+
 
     function closeModal() {
         document.getElementById('consumptionModal').style.display = 'none';
@@ -442,46 +502,8 @@
     }
 
     paginateTable(); // Initial call to paginate the table
-<<<<<<< HEAD
-
-    document.getElementById('downloadPdfBtn').addEventListener('click', function () {
-    const { jsPDF } = window.jspdf; // Ensure jsPDF is accessed
-    const { autoTable } = window.jspdf; // Ensure autoTable is correctly accessed
-
-    const doc = new jsPDF();
-    const table = document.getElementById('consumptionTable');
-    const rows = table.rows;
-
-    let pdfTableData = [];
-    for (let i = 0; i < rows.length; i++) {
-        let rowData = [];
-        for (let j = 0; j < rows[i].cells.length; j++) {
-            rowData.push(rows[i].cells[j].innerText);
-        }
-        pdfTableData.push(rowData);
-    }
-
-    // Use autoTable here
-    if (autoTable) {
-        autoTable(doc, {
-            head: [pdfTableData[0]], // Header
-            body: pdfTableData.slice(1), // Body
-        });
-
-        // Save the PDF
-        doc.save('consumption_report.pdf');
-    } else {
-        console.error("autoTable is not a function. Please check the jsPDF-AutoTable library.");
-    }
-});
-
-
-
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.11/jspdf.plugin.autotable.min.js"></script>
 
-</script>
 
 
 <script>

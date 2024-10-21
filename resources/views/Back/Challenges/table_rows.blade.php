@@ -10,16 +10,16 @@
         <td>{{ $challenge->reward_points }}</td>
         <td>
         <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#viewModal{{ $challenge->id }}" onclick="populateViewModal('{{ $challenge->id }}', '{{ $challenge->title }}', '{{ $challenge->description }}', '{{ $challenge->start_date }}', '{{ $challenge->end_date }}', {{ $challenge->reward_points }})">
-                <i class="fas fa-eye"></i> 
+                <i class="fas fa-eye"></i>
             </button>
             <a href="{{ route('challenges.edit', $challenge->id) }}" class="btn btn-warning">
-                <i class="fas fa-edit"></i> 
+                <i class="fas fa-edit"></i>
             </a>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $challenge->id }}">
-                <i class="fas fa-trash"></i> 
+                <i class="fas fa-trash"></i>
             </button>
             <a href="{{ route('challenges.show', $challenge->id) }}" class="btn btn-success">
-                <i class="fas fa-list"></i> 
+                <i class="fas fa-list"></i>
             </a>
             <div class="modal fade" id="deleteModal{{ $challenge->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ $challenge->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -55,7 +55,8 @@
                         <div class="image-framecard">
         <img src="{{ asset('storage/' . $challenge->image) }}" alt="Challenge Image" class="img-fluid challenge-image" />
     </div>                            <strong>Title:</strong> <span id="viewTitle{{ $challenge->id }}">{{ $challenge->title }}</span><br>
-                            <strong>Description:</strong> <span id="viewDescription{{ $challenge->id }}">{{ Str::limit($challenge->description, 10, '...') }}</span><br>
+                            <strong>Description:</strong> {{ Str::limit($challenge->description, 50, '...') }}<br>
+
                             <strong>Start Date:</strong> <span id="viewStartDate{{ $challenge->id }}">{{ $challenge->start_date }}</span><br>
                             <strong>End Date:</strong> <span id="viewEndDate{{ $challenge->id }}">{{ $challenge->end_date }}</span><br>
                             <strong>Reward Points:</strong> <span id="viewRewardPoints{{ $challenge->id }}">{{ $challenge->reward_points }}</span><br>

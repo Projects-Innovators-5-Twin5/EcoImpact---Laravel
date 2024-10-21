@@ -18,6 +18,7 @@
             <img src="{{ asset('storage/' . $challenge->image) }}" alt="Challenge Image" class="img-fluid challenge-image" />
         </div>
         <div class="challenge-details">
+
             <p><strong>Description:</strong> {{ $challenge->description }}</p>
             <p><strong>Start Date:</strong> {{ $challenge->start_date }}</p>
             <p><strong>End Date:</strong> {{ $challenge->end_date }}</p>
@@ -63,10 +64,10 @@
         <div class="solution-item">
     <div class="solution-header">
         <div class="user-info">
-            <img src="/assets/img/team/profile-picture-5.jpg" alt="User Image" class="user-image">
+        <img src="{{ $solution->user->image ? asset('storage/' . $solution->user->image) : asset('assets/img/team/default_img.png') }}" alt="User Image" class="user-image">
 
             <strong>{{ $solution->user->name }}</strong>
-            
+
         </div>
         <span class="solution-date">{{ $solution->created_at->format('Y-m-d') }}</span>
         @if(auth()->id() === $solution->user_id || auth()->user()->role === 'admin')
@@ -85,7 +86,7 @@
                 @method('DELETE')
             </form>
         @endif
-     
+
     </div>
     <div class="vote-section">
     <button class="vote-btn {{ $solution->voted ? 'voted' : '' }}" onclick="voteSolution({{ $solution->id }})" data-solution-id="{{ $solution->id }}">
@@ -193,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.edit-solution').forEach(button => {
         button.addEventListener('click', function () {
             const solutionId = this.getAttribute('data-solution-id');
-            
+
             // Fetch the solution data for the clicked edit button
             fetch(`/solutions/${solutionId}/edit`)
                 .then(response => response.json())
@@ -296,7 +297,7 @@ function sortSolutions() {
     const sortValue = document.getElementById('solutionSort').value;
     const url = new URL(window.location.href);
     url.searchParams.set('sort', sortValue);
-    window.location.href = url.toString(); 
+    window.location.href = url.toString();
 }
 
     // Get the end date from the PHP variable

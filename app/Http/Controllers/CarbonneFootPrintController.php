@@ -7,7 +7,7 @@ use App\Models\CarbonFootprint;
 use Carbon\Carbon;
 use App\Models\EnergyConsumption;
 use App\Models\CarbonEmissionTypeValue;
-
+use Illuminate\Support\Facades\Auth;
 class CarbonneFootPrintController extends Controller
 {
     //
@@ -93,7 +93,7 @@ class CarbonneFootPrintController extends Controller
     ]);
 
     // Récupérer la consommation d'énergie la plus récente de l'utilisateur
-    $energyConsumption = EnergyConsumption::where('user_id', $userId)
+    $energyConsumption = EnergyConsumption::where('user_id', Auth::id())
         ->where('energy_type', $validatedData['energy_type'])
         ->orderBy('consumption_date', 'desc')
         ->first();
@@ -117,7 +117,7 @@ class CarbonneFootPrintController extends Controller
 
     // Créer un nouvel enregistrement pour CarbonFootprint
     $carbonFootprint = new CarbonFootprint();
-    $carbonFootprint->user_id = $userId;
+    $carbonFootprint->user_id = Auth::id();
     $carbonFootprint->energy_consumption_id = $energyConsumption->id;
     $carbonFootprint->carbon_emission = $carbonEmission;
     $carbonFootprint->calculation_date = $energyConsumption->consumption_date;

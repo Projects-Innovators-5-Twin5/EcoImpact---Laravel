@@ -16,7 +16,7 @@
               aria-describedby="topbar-addon">
           </div>
         </form>
-        
+
       </div>
       <!-- Navbar links -->
       <ul class="navbar-nav align-items-center">
@@ -33,7 +33,7 @@
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-center mt-2 py-0">
             <div class="list-group list-group-flush">
               <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
-           
+
               @foreach(auth()->user()->unreadNotifications as $notification)
     <a href="{{ route('challenges.show', $notification->data['challenge_id']) }}" class="list-group-item list-group-item-action border-bottom">
         <div class="row align-items-center">
@@ -96,7 +96,7 @@
               </svg>
               My Profile
             </a>
-          
+
             <div role="separator" class="dropdown-divider my-1"></div>
             <a class="dropdown-item d-flex align-items-center" href="#" id="logout-link">
     <svg class="dropdown-icon text-danger me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>

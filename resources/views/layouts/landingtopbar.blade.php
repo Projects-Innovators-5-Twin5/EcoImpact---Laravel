@@ -37,16 +37,14 @@
                 <li class="nav-item">
                 <a class="nav-link" href="/produitss" aria-disabled="true">Store</a>
                 </li>
-                <li class="nav-item">
-                <a class="nav-link" href="/liste-consommations">Consommation</a>
-                </li>
+               
                 <li class="nav-item">
                 <a class="nav-link" aria-disabled="true">Contact</a>
                 </li>
             </ul>
         </div>
 <div>
-        @if (Auth::check()) 
+        @if (Auth::check())
     <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
        aria-expanded="false">
       <div class="media d-flex align-items-center">
@@ -67,7 +65,7 @@
         </svg>
         My Profile
       </a>
-      
+
       <div role="separator" class="dropdown-divider my-1"></div>
       <a class="dropdown-item d-flex align-items-center" href="#" id="logout-link">
         <svg class="dropdown-icon text-danger me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

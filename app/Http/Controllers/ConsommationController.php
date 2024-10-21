@@ -8,6 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use App\Models\CarbonEmissionTypeValue;
 use App\Models\CarbonFootprint;
+use Illuminate\Support\Facades\Auth;
 class ConsommationController extends Controller
 {
     // Form view
@@ -26,7 +27,7 @@ class ConsommationController extends Controller
         ]);
         // 1. Ajouter l'enregistrement de consommation d'énergie
         $energyConsumption = new EnergyConsumption();
-        $energyConsumption->user_id = 1;  // Remplacer par auth()->user()->id pour un utilisateur connecté
+        $energyConsumption->user_id = Auth::id();  // Remplacer par auth()->user()->id pour un utilisateur connecté
         $energyConsumption->energy_type = $validatedData['energy_type'];
         $energyConsumption->energy_value = $validatedData['energy_value'];
         $energyConsumption->consumption_date = $validatedData['consumption_date'];
@@ -79,7 +80,7 @@ switch ($validatedData['energy_type']) {
 
         // 3. Ajouter l'enregistrement d'empreinte carbone
         $carbonFootprint = new CarbonFootprint();
-        $carbonFootprint->user_id = 1;  // Remplacer par auth()->user()->id pour un utilisateur connecté
+        $carbonFootprint->user_id = Auth::id();  // Remplacer par auth()->user()->id pour un utilisateur connecté
         $carbonFootprint->energy_consumption_id = $energyConsumption->id;  // Lier la consommation d'énergie
         $carbonFootprint->carbon_emission = $carbonEmission;
         $carbonFootprint->calculation_date = $validatedData['consumption_date']; // Utiliser la même date que la consommation
@@ -94,7 +95,7 @@ switch ($validatedData['energy_type']) {
  public function listConsumptions()
  {
 
-     $userConsumptions = EnergyConsumption::where('user_id', 1)->paginate(10);
+     $userConsumptions = EnergyConsumption::where('user_id', Auth::id() )->paginate(10);
      $userConsumptionTotal = $userConsumptions->sum('energy_value');
 
 
@@ -319,7 +320,7 @@ public function getUserConsumptions($id)
         $energyType = $request->input('energy_type');
 
         $consumptions = EnergyConsumption::where('energy_type', $energyType)
-            ->where('user_id', 1)
+            ->where('user_id', Auth::id())
             ->get();
 
 
