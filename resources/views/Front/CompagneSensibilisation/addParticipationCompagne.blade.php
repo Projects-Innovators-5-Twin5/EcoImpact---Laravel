@@ -136,7 +136,7 @@
                 <div class="form-group mb-4">
                     <label for="reasons">Reasons to join our campaign</label>
                     <div class="input-group">
-                        <textarea  class="form-control {{ $errors->has('reasons') ? 'is-invalid' : '' }}" name="reasons" placeholder="Enter your reasons to join our campaign..." id="reasons" rows="2">{{ old('reasons') }}</textarea>
+                        <textarea  class="form-control  {{ $errors->has('reasons') ? 'is-invalid' : '' }}" name="reasons" placeholder="Enter your reasons to join our campaign..." id="reasons" rows="2">{{ old('reasons') }}</textarea>
                     </div>  
                     @if ($errors->has('reasons'))
                                                         @foreach ($errors->get('reasons') as $error)

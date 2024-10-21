@@ -48,7 +48,7 @@
                         @endif
                 </div>
 
-                <div style="background-image: url('{{ asset('storage/' . $campaign_participation->campaign->image) }}'); background-size: cover; background-position: center; height: 300px; margin-top:20px;"></div>
+                <div style="background-image: url('{{ asset('storage/' . $campaign_participation->campaign->image) }}'); background-size: cover; background-position: center; height: 300px; margin-top:40px;"></div>
 
 
             </div>
