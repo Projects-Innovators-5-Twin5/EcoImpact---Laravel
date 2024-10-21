@@ -30,7 +30,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN npm install
 
 # Exécuter le script de construction (ou dev)
-RUN npm run dev
+RUN npm run build
 
 # Générer la clé d'application Laravel
 RUN php artisan key:generate
