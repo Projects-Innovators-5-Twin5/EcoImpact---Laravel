@@ -22,6 +22,7 @@ use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PanierController;
 use Illuminate\Support\Facades\Mail as MailFacade;
 
+use App\Http\Controllers\CategorieController;
 
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\UserController;
@@ -141,6 +142,7 @@ Route::get('/solutions/{solution}/voters', [SolutionController::class, 'getVoter
 
 Route::get('/produitss', [ProduitController::class, 'frontaffichage'])->name('produitCards.front')->middleware('isAuth');
 Route::get('produits/{id}', [ProduitController::class, 'showDetail'])->name('produits.produit_detail');
+Route::get('/backproduit', [ProduitController::class, 'index'])->name('produits.backproduit');
 
 //back
 
@@ -225,3 +227,18 @@ Route::post('/commande/passer', [CommandeController::class, 'passer'])->name('co
 
 
 Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
+
+
+
+//commande
+Route::get('/mescommandes', [CommandeController::class, 'frontaffichage'])->name('commandes.index');
+Route::delete('/commandes/{commande}', [CommandeController::class, 'destroy'])->name('commandes.destroy');
+
+// Routes pour les catégories
+Route::resource('categories', CategorieController::class);
+Route::get('categories/{id}/assign-products', [CategorieController::class, 'assignProducts'])->name('categories.assignProducts');
+Route::post('categories/{id}/assign-products', [CategorieController::class, 'storeAssignedProducts'])->name('categories.storeAssignedProducts');
+Route::delete('categories/{categoryId}/remove-product/{productId}', [CategorieController::class, 'removeAssignedProduct'])->name('categories.removeAssignedProduct');
+Route::get('/catcat', [CategorieController::class, 'indexfront'])->name('categories.indexfront');
+Route::get('/categories/{id}/produits', [CategorieController::class, 'produitsParCategorie'])->name('categories.produits');
+Route::get('/categorie/{id}/produits', [ProduitController::class, 'produitsParCategorie'])->name('categorie.produits');

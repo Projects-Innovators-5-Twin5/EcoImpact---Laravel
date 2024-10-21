@@ -5,7 +5,7 @@
         <h1 class="h4">Modifier le Produit</h1>
         <p class="mb-0">Mettez à jour les détails ci-dessous pour modifier le produit.</p>
         <div class="button-group">
-            <a href="{{ route('produits.index') }}" class="btn btn-secondary back-btn">Retour à la Liste des Produits</a>
+            <a href="{{ route('produits.backproduit') }}" class="btn btn-secondary back-btn">Retour à la Liste des Produits</a>
         </div>
     </div>
 

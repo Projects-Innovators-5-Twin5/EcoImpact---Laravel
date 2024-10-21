@@ -22,6 +22,9 @@
                 </select>
             </div>
         </form>
+        <div class="mt-3">
+          <a href="/leaderboard" class="btn btn-primary">Go to Leaderboard</a>
+         </div>
     </div>
 </div>
 

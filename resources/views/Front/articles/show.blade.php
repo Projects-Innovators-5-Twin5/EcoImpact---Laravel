@@ -51,6 +51,11 @@
                         @csrf
                         @method('PUT')
                         <textarea name="contenu" class="form-control mb-2">{{ $commentaire->contenu }}</textarea>
+                        @if ($errors->has('contenu'))
+                            <div class="alert alert-danger mt-2">
+                                {{ $errors->first('contenu') }}
+                            </div>
+                        @endif
                         <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
                         <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit({{ $commentaire->id }})">Annuler</button>
                     </form>
@@ -103,6 +108,11 @@
                    <div class="form-group">
                        <label for="contenu" class="form-label">Votre commentaire</label>
                        <textarea name="contenu" class="form-control" rows="2" ></textarea>
+                       @if ($errors->has('contenu'))
+                        <div class="alert alert-danger mt-2">
+                            {{ $errors->first('contenu') }}
+                        </div>
+                       @endif
                    </div>
                </div>
                <div class="col-md-3 mt-4">    

@@ -92,7 +92,7 @@
         <i class="fa fa-star"></i>
     </button>
     <span id="vote-count-{{ $solution->id }}">{{ $solution->votes()->count() }}</span> <!-- Display vote count -->
-    <button class="btn btn-info btn-sm" onclick="showVoters({{ $solution->id }})">View Voters</button>
+    <button class="btn btn-primary btn-sm" onclick="showVoters({{ $solution->id }})">View Voters</button>
 
 </div>
 

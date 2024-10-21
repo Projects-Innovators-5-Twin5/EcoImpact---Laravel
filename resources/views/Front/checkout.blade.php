@@ -45,7 +45,6 @@
         </div>
     </div>
 </div>
-
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const stripe = Stripe('{{ env('STRIPE_KEY') }}');
@@ -61,7 +60,17 @@
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const clientNom = document.getElementById('client_nom').value;
             const clientEmail = document.getElementById('client_email').value;
-            const produits = JSON.parse(sessionStorage.getItem('panier')) || []; // Assurez-vous d'avoir un panier valide
+
+            // Panier statique
+            const produits = [
+                { "id": 1, "quantité": 2, "prix": 10.00 },
+                { "id": 2, "quantité": 1, "prix": 20.00 }
+            ];
+
+            // Log des produits pour le débogage
+            console.log('Produits dans le panier:', produits);
+            console.log('Nom du Client:', clientNom);
+            console.log('Email du Client:', clientEmail);
 
             const { paymentIntent, error } = await stripe.confirmCardPayment('{{ $clientSecret }}', {
                 payment_method: {
@@ -90,11 +99,20 @@
                     },
                     body: JSON.stringify({
                         total: {{ session('total', 0) }}, // Utilisez le total de la session
-                        produits: produits,
+                        produits: produits, // Passez les produits
                         client_nom: clientNom,
                         client_email: clientEmail,
-                        statut: 'en attente'
+                        statut: 'en attente' // Statut par défaut
                     })
+                });
+
+                // Log des détails de la commande envoyés
+                console.log('Détails de la commande envoyés:', {
+                    total: {{ session('total', 0) }},
+                    produits: produits,
+                    client_nom: clientNom,
+                    client_email: clientEmail,
+                    statut: 'en attente'
                 });
 
                 if (!response.ok) {
@@ -113,5 +131,6 @@
         });
     });
 </script>
+
 
 @endsection

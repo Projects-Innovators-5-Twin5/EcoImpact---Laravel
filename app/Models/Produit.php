@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,12 +15,23 @@ class Produit extends Model
         'prix',
         'quantite',
         'image',
-        'commande_id',
+        'categorie_id',
     ];
 
-   // Relation many-to-many avec Commande
-   public function commandes()
-   {
-       return $this->belongsToMany(Commande::class)->withPivot('quantite')->withTimestamps();
-   }
+    // Relation many-to-one: un produit appartient à une catégorie
+    public function categorie()
+    {
+        return $this->belongsTo(Categorie::class);
+    }
+
+     // Accessor pour obtenir le nom de la catégorie
+     public function getCategorieNomAttribute()
+     {
+         return $this->categorie ? $this->categorie->nom : 'Aucune catégorie';
+     }
+    // Relation one-to-many: un produit peut avoir plusieurs commandes
+    public function commandes()
+    {
+        return $this->belongsTo(Categorie::class);
+    }
 }

@@ -36,7 +36,10 @@ class User extends Authenticatable
         'role',
         'score',
     ];
-
+    public function commandes()
+    {
+        return $this->hasMany(Commande::class, 'client_id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
