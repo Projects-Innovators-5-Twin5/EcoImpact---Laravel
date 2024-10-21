@@ -99,7 +99,6 @@
 
 <div class="contactus">
     <img src="/assets/img/ImagesModule1/eau.jpg" alt="Consommation d'énergie">
-    
     <div class="form-container">
         @if (session('success'))
             <div id="success-message" class="alert alert-success">
@@ -112,34 +111,44 @@
         <form action="{{ url('/consommation-energie') }}" method="POST" class="energy-form">
             @csrf
 
+            <!-- Type d'énergie -->
             <div class="form-group mb-3">
                 <label class="mb-2">Type d'énergie :</label>
                 <div class="d-flex flex-wrap">
-                    @foreach(['Électricité' => 'Électricité', 'gas' => 'Gaz', 'Solaire' => 'Solaire', 
-                              'Éolienne' => 'Éolienne', 'Biomasse' => 'Biomasse', 'Géothermique' => 'Géothermique', 
-                              'Charbon' => 'Charbon', 'Pétrole' => 'Pétrole', 'Nucléaire' => 'Nucléaire', 
+                    @foreach(['Électricité' => 'Électricité', 'gas' => 'Gaz', 'Solaire' => 'Solaire',
+                              'Éolienne' => 'Éolienne', 'Biomasse' => 'Biomasse', 'Géothermique' => 'Géothermique',
+                              'Charbon' => 'Charbon', 'Pétrole' => 'Pétrole', 'Nucléaire' => 'Nucléaire',
                               'Diesel' => 'Diesel'] as $value => $label)
                         <div class="form-check me-3">
-                            <input type="radio" id="energy_type_{{ $value }}" name="energy_type" value="{{ $value }}" class="form-check-input" required>
+                            <input type="radio" id="energy_type_{{ $value }}" name="energy_type" value="{{ $value }}" class="form-check-input" >
                             <label for="energy_type_{{ $value }}" class="form-check-label">{{ $label }}</label>
                         </div>
                     @endforeach
                 </div>
+                @if ($errors->has('energy_type'))
+                    <div class="text-danger" style="color: red;">{{ $errors->first('energy_type') }}</div>
+                @endif
             </div>
 
+            <!-- Valeur de consommation -->
             <div class="form-group mb-3">
                 <label for="energy_value">Valeur de consommation (kWh) :</label>
-                <input type="number" name="energy_value" id="energy_value" class="form-control" required>
+                <input type="number" name="energy_value" id="energy_value" class="form-control" >
+                @if ($errors->has('energy_value'))
+                <div class="text-danger" style="color: red;">{{ $errors->first('energy_value') }}</div>
+                @endif
             </div>
 
+            <!-- Date de consommation -->
             <div class="form-group mb-3">
                 <label for="consumption_date">Date de consommation :</label>
-                <input type="date" name="consumption_date" id="consumption_date" class="form-control" required>
+                <input type="date" name="consumption_date" id="consumption_date" class="form-control" >
+                @if ($errors->has('consumption_date'))
+                <div class="text-danger" style="color: red;">{{ $errors->first('consumption_date') }}</div>
+                @endif
             </div>
 
-            <button type="submit" class="btn btn-primary mt-1" style=" width: auto;">Enregistrer</button>
-
-
+            <button type="submit" class="btn btn-primary mt-1" style="width: auto;">Enregistrer</button>
         </form>
     </div>
 </div>

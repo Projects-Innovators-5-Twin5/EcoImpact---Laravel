@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\EnergyConsumption;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Models\CarbonEmissionTypeValue;
 use App\Models\CarbonFootprint;
 class ConsommationController extends Controller
 {
@@ -23,19 +24,18 @@ class ConsommationController extends Controller
             'energy_value' => 'required|numeric',
             'consumption_date' => 'required|date',
         ]);
-    
         // 1. Ajouter l'enregistrement de consommation d'énergie
         $energyConsumption = new EnergyConsumption();
         $energyConsumption->user_id = 1;  // Remplacer par auth()->user()->id pour un utilisateur connecté
         $energyConsumption->energy_type = $validatedData['energy_type'];
         $energyConsumption->energy_value = $validatedData['energy_value'];
         $energyConsumption->consumption_date = $validatedData['consumption_date'];
-    
+
         $energyConsumption->save();
-    
+
         // 2. Calculer l'empreinte carbone
         $carbonEmissionFactor = 0; // Par défaut
-    
+
        // Définir les facteurs d'émission pour chaque type d'énergie
 switch ($validatedData['energy_type']) {
     case 'Électricité':
@@ -73,48 +73,48 @@ switch ($validatedData['energy_type']) {
         break;
 }
 
-    
+
         // Calculer l'empreinte carbone (en kg CO2)
         $carbonEmission = $validatedData['energy_value'] * $carbonEmissionFactor;
-    
+
         // 3. Ajouter l'enregistrement d'empreinte carbone
         $carbonFootprint = new CarbonFootprint();
         $carbonFootprint->user_id = 1;  // Remplacer par auth()->user()->id pour un utilisateur connecté
         $carbonFootprint->energy_consumption_id = $energyConsumption->id;  // Lier la consommation d'énergie
         $carbonFootprint->carbon_emission = $carbonEmission;
         $carbonFootprint->calculation_date = $validatedData['consumption_date']; // Utiliser la même date que la consommation
-    
+
         $carbonFootprint->save();
-    
+
         // Retourner une réponse ou rediriger avec un message de succès
         return redirect()->back()->with('success', 'Données enregistrées avec succès, et empreinte carbone calculée !');
     }
-    
-  
+
+
  public function listConsumptions()
  {
-    
+
      $userConsumptions = EnergyConsumption::where('user_id', 1)->paginate(10);
      $userConsumptionTotal = $userConsumptions->sum('energy_value');
- 
-   
+
+
      $globalConsumptions = EnergyConsumption::all();
      $globalConsumptionTotal = $globalConsumptions->sum('energy_value');
- 
-  
+
+
      $consumptionDates = $userConsumptions->pluck('consumption_date')->toArray();
      $consumptionValues = $userConsumptions->pluck('energy_value')->toArray();
- 
- 
+
+
      $globalConsumptionDates = $globalConsumptions->pluck('consumption_date')->map(function ($date) {
-         return Carbon::parse($date)->format('Y-m-d'); 
+         return Carbon::parse($date)->format('Y-m-d');
      })->toArray();
      $globalConsumptionValues = $globalConsumptions->pluck('energy_value')->toArray();
- 
-   
+
+
      return view('Front.ModuleSuiviDeConsommation.EnergyConsumption.ListeDeDeConsommation', compact(
-         'userConsumptions', 'userConsumptionTotal', 'globalConsumptionTotal', 
-         'consumptionDates', 'consumptionValues', 
+         'userConsumptions', 'userConsumptionTotal', 'globalConsumptionTotal',
+         'consumptionDates', 'consumptionValues',
          'globalConsumptionValues', 'globalConsumptionDates'
      ));
  }
@@ -123,35 +123,66 @@ switch ($validatedData['energy_type']) {
  {
      // Récupérer tous les utilisateurs avec leurs consommations et empreintes carbone
      $users = User::with('consumptions.carbonFootprint')->get();
- 
+
      // Récupérer toutes les consommations d'énergie avec leurs empreintes carbone
      $energyConsumptions = EnergyConsumption::with('carbonFootprint')->get();
- 
+
      // Calculer la consommation totale d'énergie
      $globalConsumptionTotal = $energyConsumptions->sum('energy_value');
- 
+     $carbonEmissionFactors = CarbonEmissionTypeValue::all();
+
      // Calculer la valeur totale de carbone, en s'assurant de gérer les cas où carbonFootprint peut être null
      $globalCarbonTotal = $energyConsumptions->sum(function ($consumption) {
          return optional($consumption->carbonFootprint)->carbon_emission ?? 0; // Utiliser ?? 0 pour éviter les null
      });
- 
      // Retourner la vue avec les données nécessaires
      return view('Back.ModuleSuiviDeConsommationBackModule1.ListeDeConsommationEnergitiqueETCarbonique', compact(
          'users',
          'energyConsumptions',
          'globalConsumptionTotal',
-         'globalCarbonTotal'
+         'globalCarbonTotal',
+         'carbonEmissionFactors'
      ));
  }
- 
- 
+
+ public function updateFactor(Request $request, $id)
+ {
+     // Validation des données d'entrée
+     $validatedData = $request->validate([
+         'energy_type' => 'required|string|max:255',
+         'carbon_emission_factor' => 'required|numeric',
+     ]);
+
+     // Récupérer le facteur d'émission par ID
+     $factor = CarbonEmissionTypeValue::findOrFail($id);
+
+     // Mettre à jour les valeurs
+     $factor->energy_type = $validatedData['energy_type'];
+     $factor->carbon_emission_factor = $validatedData['carbon_emission_factor'];
+
+     $factor->save();
+
+     return redirect()->route('consommationBack.list')->with('success', 'Consommation mise à jour avec succès.');
+ }
+
+ public function deleteFactor($id)
+ {
+     // Récupérer le facteur d'émission par ID
+     $factor = CarbonEmissionTypeValue::findOrFail($id);
+
+     // Supprimer le facteur d'émission
+     $factor->delete();
+
+     // Rediriger avec un message de succès
+     return redirect()->route('consommationBack.list')->with('success', 'Facteur d\'émission supprimé avec succès !');
+ }
+
 
  public function edit($id)
  {
      $consumption = EnergyConsumption::findOrFail($id);
      return view('Front.ModuleSuiviDeConsommation.EnergyConsumption.editConsumption', compact('consumption'));
  }
- 
  public function update(Request $request, $id)
  {
      $request->validate([
@@ -159,17 +190,16 @@ switch ($validatedData['energy_type']) {
          'energy_value' => 'required|numeric',
          'consumption_date' => 'required|date',
      ]);
- 
      $consumption = EnergyConsumption::findOrFail($id);
      $consumption->update([
          'energy_type' => $request->energy_type,
          'energy_value' => $request->energy_value,
          'consumption_date' => $request->consumption_date,
      ]);
- 
+
      return redirect()->route('consommation.list')->with('success', 'Consommation mise à jour avec succès.');
  }
- 
+
 
 public function destroy($id)
 {
@@ -257,54 +287,53 @@ public function updateback(Request $request, $id)
 }
 
 
- 
- 
+
+
  public function getConsumptionDetails($userId)
  {
      $consumptions = EnergyConsumption::with('carbonFootprint')
          ->where('user_id', $userId)
          ->get();
- 
+
      return response()->json(['consumptions' => $consumptions]);
  }
- 
 
- 
+
+
 public function getUserConsumptions($id)
 {
     $user = User::with('consumptions')->findOrFail($id);
     return response()->json(['consumptions' => $user->consumptions]);
 }
 
- 
 
 
     public function getConsumptionDataByType(Request $request)
     {
-        
+
         $request->validate([
             'energy_type' => 'required|string|max:255',
         ]);
-    
-      
+
+
         $energyType = $request->input('energy_type');
-    
+
         $consumptions = EnergyConsumption::where('energy_type', $energyType)
-            ->where('user_id', 1) 
+            ->where('user_id', 1)
             ->get();
-    
-      
+
+
         $data = [
             'labels' => $consumptions->pluck('consumption_date')->map(function ($date) {
-                return Carbon::parse($date)->format('Y-m-d'); 
+                return Carbon::parse($date)->format('Y-m-d');
             })->toArray(),
             'values' => $consumptions->pluck('energy_value')->toArray(),
         ];
-    
-      
+
+
         return response()->json($data);
     }
-    
+
     public function show($id)
 {
     $consumptions = EnergyConsumption::where('user_id', $id)->get();
@@ -320,7 +349,7 @@ public function getGlobalConsumptionData()
     foreach ($consumptionData as $energyType => $consumptions) {
         $result[$energyType] = [
             'labels' => $consumptions->pluck('consumption_date')->map(function ($date) {
-                return Carbon::parse($date)->format('Y-m-d'); 
+                return Carbon::parse($date)->format('Y-m-d');
             })->toArray(),
             'values' => $consumptions->pluck('energy_value')->toArray(),
         ];
@@ -329,5 +358,4 @@ public function getGlobalConsumptionData()
     return response()->json($result);
 }
 
-  
 }

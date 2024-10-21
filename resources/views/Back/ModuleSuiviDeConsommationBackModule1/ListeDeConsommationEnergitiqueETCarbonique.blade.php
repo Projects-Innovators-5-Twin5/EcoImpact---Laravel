@@ -3,75 +3,77 @@
 @section('content')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Load AutoTable Plugin -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.11/jspdf.plugin.autotable.min.js"></script>
-<script src="jspdf.min.js"></script>
-<script src="jspdf.plugin.autotable.min.js"></script>
 
 
 
 <div class="container mt-4">
-   
+
     <div class="card shadow-sm">
-        
+
         <div class="card-body">
             <h3 class="mb-4 text-center" style="font-size: 1.5rem; font-weight: bold; color: #343a40; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px;">
                 Détails de la consommation énergétique
             </h3>
 
             <div class="mb-4 d-flex align-items-center">
-    <h5 class="me-3" style="margin: 0; color: #343a40; font-weight: bold;">Recherche</h5>
-    <input type="text" id="searchInput" placeholder="Rechercher par nom..." class="form-control me-2" style="width: 300px;">
-    <button id="downloadPdfBtn" class="btn" style="background-color: #ff948b; border: none; padding: 10px 15px; display: flex; align-items: center; cursor: pointer;">
-    <i class="fas fa-file-pdf" style="margin-right: 5px;"></i> 
-    Télécharger en PDF
-</button>
+                <h5 class="me-3" style="margin: 0; color: #343a40; font-weight: bold;">Recherche</h5>
+                <input type="text" id="searchInput" placeholder="Rechercher par nom..." class="form-control me-2" style="width: 300px;">
+                <button id="downloadPdfBtn" class="btn" style="background-color: #ff948b; border: none; padding: 10px 15px; display: flex; align-items: center; cursor: pointer;">
+                    <i class="fas fa-file-pdf" style="margin-right: 5px;"></i>
+                    Télécharger en PDF
+                </button>
 
-</div>
+            </div>
 
 
 
-<div class="table-responsive">
-    <table class="custom-table align-items-center table-flush" id="consumptionTable">
-        <thead class="thead-light">
-            <tr>
-                <th class="border-bottom" scope="col">Nom de l'utilisateur</th>
-                <th class="border-bottom" scope="col">Valeur totale de consommation (kWh)</th>
-                
-                <th class="border-bottom" scope="col">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($users as $user)
-            <tr>
-                <td class="text-gray-900">{{ $user->name }}</td>
-                <td class="fw-bolder text-gray-500">{{ number_format($user->consumptions->sum('energy_value'), 2) }}</td>
-            
-                <td>
-                    <button onclick="openModal({{ $user->id }})" class="btn btn-link" style="padding: 0; color:#e8cb68;">
-                        <i class="fas fa-eye" title="Voir les consommations" style="font-size: 1rem;"></i>
-                    </button>
-                    <button class="btn btn-link" style="color: #4689b4; padding: 0;" title="Modifier" onclick="window.location.href='{{ route('editConsumptionback', $user->id) }}'">
-                        <i class="fas fa-pencil-alt" style="font-size: 1rem;"></i>
-                    </button>
-                    <form action="{{ route('consumptionsback.delete', $user->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-link" style="color: red; padding: 0;" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette consommation ?');">
-                            <i class="fas fa-trash" style="font-size: 1rem;"></i>
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+            <div class="table-responsive">
+                <table class="custom-table align-items-center table-flush" id="consumptionTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-bottom" scope="col">Nom de l'utilisateur</th>
+                            <th class="border-bottom" scope="col">Valeur totale de consommation (kWh)</th>
 
-<!-- Pagination Controls -->
-<div id="paginationControls" style="text-align: center; margin-top: 20px;">
-    <!-- Pagination buttons will be added here -->
-</div>
+                            <th class="border-bottom" scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($users as $user)
+                        <tr>
+                            <td class="text-gray-900">{{ $user->name }}</td>
+                            <td class="fw-bolder text-gray-500">{{ number_format($user->consumptions->sum('energy_value'), 2) }}</td>
+
+                            <td>
+                                <button onclick="openModal({{ $user->id }})" class="btn btn-link" style="padding: 0; color:#e8cb68;">
+                                    <i class="fas fa-eye" title="Voir les consommations" style="font-size: 1rem;"></i>
+                                </button>
+                                <button class="btn btn-link" style="color: #4689b4; padding: 0;" title="Modifier" onclick="window.location.href='{{ route('editConsumptionback', $user->id) }}'">
+                                    <i class="fas fa-pencil-alt" style="font-size: 1rem;"></i>
+                                </button>
+                                <form action="{{ route('consumptionsback.delete', $user->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-link" style="color: red; padding: 0;" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette consommation ?');">
+                                        <i class="fas fa-trash" style="font-size: 1rem;"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div id="paginationControls" style="text-align: center; margin-top: 20px;">
+                <!-- Pagination buttons will be added here -->
+            </div>
 
 
             <!-- Overlay for the modal -->
@@ -107,6 +109,194 @@
 
 
 
+<!--Partie EmissionCarbone-->
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-4 text-center" style="font-size: 1.5rem; font-weight: bold; color: #343a40; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px;">
+                Détails des Carbone Consommées
+            </h3>
+
+            <div class="table-responsive">
+                <table class="custom-table align-items-center table-flush" id="consumptionTable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-bottom" scope="col">Type d'énergie</th>
+                            <th class="border-bottom" scope="col">Facteur d'émission de carbone</th>
+                            <th class="border-bottom" scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($carbonEmissionFactors as $factor)
+                        <tr>
+                            <td>{{ $factor->energy_type }}</td>
+                            <td>{{ $factor->carbon_emission_factor }}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" onclick="openEditModal({{ $factor->id }}, '{{ $factor->energy_type }}', {{ $factor->carbon_emission_factor }})">Modifier</button>
+                                <form action="{{ route('delete.factor', $factor->id) }}" method="POST" style="display:inline;">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+</form>
+
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal pour modifier le facteur d'émission -->
+            <div class="modal fade" id="editFactorModal" tabindex="-1" role="dialog" aria-labelledby="editFactorModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editFactorModalLabel">Modifier le facteur d'émission</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editFactorForm" action="" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="form-group">
+                                    <label for="energy_type">Type d'énergie</label>
+                                    <input type="text" class="form-control" id="editEnergyType" name="energy_type" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="carbon_emission_factor">Facteur d'émission de carbone</label>
+                                    <input type="number" step="0.001" class="form-control" id="editCarbonEmissionFactor" name="carbon_emission_factor" required>
+                                </div>
+                                <input type="hidden" id="editFactorId" name="factor_id">
+                                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div id="paginationControls" style="text-align: center; margin-top: 20px;">
+                <!-- Pagination buttons will be added here -->
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Script pour gérer l'ouverture du modal -->
+<script>
+    function openEditModal(id, energyType, carbonEmissionFactor) {
+        // Remplir les champs du formulaire avec les valeurs de l'enregistrement
+        document.getElementById('editFactorId').value = id;
+        document.getElementById('editEnergyType').value = energyType;
+        document.getElementById('editCarbonEmissionFactor').value = carbonEmissionFactor;
+
+        // Définir l'action du formulaire pour la mise à jour
+        document.getElementById('editFactorForm').action = '/carbon-factors/' + id;
+
+        // Ouvrir le modal
+        $('#editFactorModal').modal('show');
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -124,50 +314,49 @@
 
 
 <script>
-
-function updateChart(energyType) {
-    // Fetch total energy consumption data for all users by energy type
-    fetch(`/api/consumption/${energyType}`)
-        .then(response => response.json())
-        .then(data => {
-            const ctx = document.getElementById('consumptionChart').getContext('2d');
-            const chart = new Chart(ctx, {
-                type: 'line', // Change this to 'bar' if you prefer a bar chart
-                data: {
-                    labels: data.dates, // Assuming you have dates for the x-axis
-                    datasets: [{
-                        label: `Consommation totale pour ${energyType}`,
-                        data: data.consumptionValues, // Consumption values for the selected energy type
-                        backgroundColor: 'rgba(100, 212, 187, 0.5)',
-                        borderColor: '#64d4bb',
-                        borderWidth: 2,
-                        fill: true,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Consommation (kWh)'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Date'
+    function updateChart(energyType) {
+        // Fetch total energy consumption data for all users by energy type
+        fetch(`/api/consumption/${energyType}`)
+            .then(response => response.json())
+            .then(data => {
+                const ctx = document.getElementById('consumptionChart').getContext('2d');
+                const chart = new Chart(ctx, {
+                    type: 'line', // Change this to 'bar' if you prefer a bar chart
+                    data: {
+                        labels: data.dates, // Assuming you have dates for the x-axis
+                        datasets: [{
+                            label: `Consommation totale pour ${energyType}`,
+                            data: data.consumptionValues, // Consumption values for the selected energy type
+                            backgroundColor: 'rgba(100, 212, 187, 0.5)',
+                            borderColor: '#64d4bb',
+                            borderWidth: 2,
+                            fill: true,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Consommation (kWh)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
                             }
                         }
                     }
-                }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching consumption data:', error);
             });
-        })
-        .catch(error => {
-            console.error('Error fetching consumption data:', error);
-        });
-}
+    }
     // Function to filter table based on search input
     document.getElementById('searchInput').addEventListener('keyup', function() {
         const searchValue = this.value.toLowerCase();
@@ -197,12 +386,11 @@ function updateChart(energyType) {
                         <td>${consumption.consumption_date}</td>
                         <td>${consumption.energy_value}</td>
                         <td>${consumption.energy_type}</td>
-<<<<<<< HEAD
                         <td>${consumption.carbonFootprint ? consumption.carbonFootprint.carbon_emission : 'N/A'}</td>
-=======
                        <td>${consumption.carbonFootprint ? consumption.carbonFootprint.carbon_emission : 'N/A'}</td>
 
->>>>>>> 9f89951ad0401b6012e666cdeb895d1ff2cc431a
+                       <td>${consumption.carbonFootprint ? consumption.carbonFootprint.carbon_emission : 'N/A'}</td>
+
                     </tr>
                     `;
                 });
@@ -254,6 +442,7 @@ function updateChart(energyType) {
     }
 
     paginateTable(); // Initial call to paginate the table
+<<<<<<< HEAD
 
     document.getElementById('downloadPdfBtn').addEventListener('click', function () {
     const { jsPDF } = window.jspdf; // Ensure jsPDF is accessed
@@ -292,6 +481,41 @@ function updateChart(energyType) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.11/jspdf.plugin.autotable.min.js"></script>
 
+</script>
+
+
+<script>
+    // PDF Download functionality
+    document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+        const {
+            jsPDF
+        } = window.jspdf; // Make sure jsPDF is being referenced correctly
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text('Détails de la consommation énergétique', 20, 20);
+
+        const tableRows = [];
+        document.querySelectorAll('#consumptionTable tbody tr').forEach(row => {
+            const cols = Array.from(row.querySelectorAll('td')).map(td => td.textContent);
+            tableRows.push(cols);
+        });
+
+        // Check if autoTable is available
+        if (typeof doc.autoTable === 'function') {
+            doc.autoTable({
+                head: [
+                    ['Nom de l’utilisateur', 'Valeur totale de consommation (kWh)', 'Actions']
+                ],
+                body: tableRows,
+            });
+        } else {
+            console.error("autoTable is not a function.");
+        }
+
+        doc.save('consommation.pdf');
+    });
+</script>
 
 <style>
     /* Table Styles */
@@ -306,7 +530,7 @@ function updateChart(energyType) {
         padding: 12px;
         text-align: left;
         border-bottom: 1px solid #e0e0e0;
-        
+
     }
 
     .custom-table th {

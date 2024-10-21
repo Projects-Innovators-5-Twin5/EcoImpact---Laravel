@@ -89,7 +89,9 @@ Route::delete('/solutions/{solution}', [SolutionController::class, 'destroy'])->
 
 Route::resource('produits', ProduitController::class);
 
-Route::get('/register', [AuthController::class, 'register'])->name('register');
+
+
+
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginSubmit'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -176,6 +178,9 @@ Route::get('/export-participant-pdf/{campaign_id}', [CompagneParticipationsContr
 Route::get('/listParticipation', [CompagneParticipationsController::class, 'listParticipation'])->name('participation.front.list');
 
 Route::put('/participants/{id}/cancel', [CompagneParticipationsController::class, 'cancelParticipation'])->name('participation.cancel');
+
+
+
 Route::get('/Consommation', [ConsommationController::class, 'Consommation'])->name('Consommation');
 Route::post('/consommation-energie', [ConsommationController::class, 'store']);
 Route::get('/liste-consommations', [ConsommationController::class, 'listConsumptions'])->name('consommation.list');
@@ -205,6 +210,12 @@ Route::delete('/consumptions/{id}/delete', [ConsommationController::class, 'dest
 Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
 Route::get('/consumptions/editback/{id}', [ConsommationController::class, 'editback'])->name('editConsumptionback');
 Route::put('/consumptions/updateback/{id}', [ConsommationController::class, 'updateback'])->name('consumptionsback.update');
+
+Route::get('/carbon-factors/edit/{id}', [ConsommationController::class, 'editFactor'])->name('edit.factor');
+Route::put('/carbon-factors/{id}', [ConsommationController::class, 'updateFactor'])->name('carbon.factors.update');
+Route::delete('/carbon-factors/delete/{id}', [ConsommationController::class, 'deleteFactor'])->name('delete.factor');
+
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/register', function () {
     return view('auth.register'); // Assurez-vous que cette vue existe
