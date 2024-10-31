@@ -1,60 +1,73 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Commentaire;
-use App\Models\Article;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http; // Use Laravel's built-in HTTP client
 use Auth;
 
 class CommentaireController extends Controller
 {
+    protected $apiUrl = 'http://localhost:1064/api/comments/'; // Update with your actual API endpoint
+
     public function index()
     {
-        $commentaires = Commentaire::with('user')->latest()->paginate(5);
+        // Fetch comments from the external API
+        $response = Http::get($this->apiUrl ."all");
+
+        $commentaires = json_decode($response->body(), true);
+       // dd($commentaires);
+        // Pass the comments to the view
         return view('back.commentaires.index', compact('commentaires'));
     }
+
     public function store(Request $request, $articleId)
     {
         $request->validate([
-            'contenu' => 'required|string',
+            'contentArticle' => 'required|string',
+        ]);
+       // dd($request);
+        // Send a POST request to the external API to create a comment
+        $response = Http::post($this->apiUrl ."create" ."/" .$articleId, [
+            'content' => $request->contentArticle,
+            'likes' => '0',
         ]);
 
-        $commentaire = new Commentaire();
-        $commentaire->contenu = $request->contenu;
-        $commentaire->user_id = 1;
-        $commentaire->article_id = $articleId;
-        $commentaire->likes = 0;
-
-        $commentaire->save();
-
-        return back()->with('success', 'Commentaire ajouté avec succès.');
-    }
-    public function update(Request $request, $id)
-    {
-        $commentaire = Commentaire::find($id);
-        
-        if (!$commentaire) {
-            return back()->with('error', 'Commentaire non trouvé.');
+        if ($response->successful()) {
+            return back()->with('success', 'Commentaire ajouté avec succès.');
         }
 
+        return back()->with('error', 'Erreur lors de l\'ajout du commentaire.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate the request
         $request->validate([
-            'contenu' => 'required|string',
+            'content' => 'required|string',
+        ]);
+        //dd($id);
+        // Send a PUT request to the external API to update the comment
+        $response = Http::put("{$this->apiUrl}update/{$id}", [
+            'content' => $request->input('content'),
         ]);
 
-        $commentaire->contenu = $request->input('contenu');
-        
-        $commentaire->save();
-        
-        return back()->with('success', 'Commentaire mis à jour avec succès.');
+        if ($response->successful()) {
+            return back()->with('success', 'Commentaire mis à jour avec succès.');
+        }
+
+        return back()->with('error', 'Erreur lors de la mise à jour du commentaire.');
     }
+
     public function destroy($id)
     {
-        $commentaire = Commentaire::findOrFail($id);
-   
+        // Send a DELETE request to the external API to delete the comment
+        $response = Http::delete("{$this->apiUrl}delete/{$id}");
 
-        $commentaire->delete();
+        if ($response->successful()) {
+            return back()->with('success', 'Commentaire supprimé avec succès.');
+        }
 
-        return back()->with('success', 'Commentaire mis à jour avec succès.');
+        return back()->with('error', 'Erreur lors de la suppression du commentaire.');
     }
-    
 }

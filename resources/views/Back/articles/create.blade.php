@@ -15,17 +15,17 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="titre">Titre</label>
-                        <input type="text" name="titre" id="titre" class="form-control" value="{{ old('titre') }}">
-                        @if ($errors->has('titre'))
-                            <div class="text-danger">{{ $errors->first('titre') }}</div>
+                        <input type="text" name="title" id="titre" class="form-control" value="{{ old('title') }}">
+                        @if ($errors->has('title'))
+                            <div class="text-danger">{{ $errors->first('title') }}</div>
                         @endif
                     </div>
         
                     <div class="form-group col-md-6">
-                        <label for="contenu">Contenu</label>
-                        <textarea name="contenu" id="contenu" class="form-control">{{ old('contenu') }}</textarea>
-                        @if ($errors->has('contenu'))
-                            <div class="text-danger">{{ $errors->first('contenu') }}</div>
+                        <label for="content">content</label>
+                        <textarea name="content" id="content" class="form-control">{{ old('content') }}</textarea>
+                        @if ($errors->has('content'))
+                            <div class="text-danger">{{ $errors->first('content') }}</div>
                         @endif
                     </div>
                 </div>
@@ -39,8 +39,8 @@
                         @endif
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="categorie">Categorie</label>
-                        <select name="categorie" id="categorie" class="form-control">
+                        <label for="categories">categories</label>
+                        <select name="categories" id="categories" class="form-control">
                             <option value="solutions-ecologiques">Solutions Écologiques</option>
                             <option value="energie-solaire">Énergie Solaire</option>
                             <option value="energie-eolienne">Énergie Éolienne</option>
@@ -56,8 +56,8 @@
                             <option value="impact-environnemental">Impact Environnemental</option>
                             <option value="financement-subventions">Financement et Subventions</option>
                         </select>
-                        @if ($errors->has('categorie'))
-                            <div class="text-danger">{{ $errors->first('categorie') }}</div>
+                        @if ($errors->has('categories'))
+                            <div class="text-danger">{{ $errors->first('categories') }}</div>
                         @endif
                     </div>
                 </div>

@@ -13,28 +13,21 @@
                         <tr>
                             <th class="border-0">Auteur</th>
                             <th class="border-0">Commentaire</th>
-                            <th class="border-0">Article</th>
-                            <th class="border-0">Date</th>
+                            
                             <th class="border-0">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($commentaires as $commentaire)
                         <tr>
-                            <td>{{ $commentaire->user->name }}</td>
-                            <td>{{ Str::limit($commentaire->contenu, 20) }}</td>
-                            <td>
-                                <a href="{{ route('back.articles.show', $commentaire->article->id) }}">
-                                    {{ Str::limit($commentaire->article->titre, 20) }}
-                                </a>
-                            </td>
-                            <td>{{ $commentaire->created_at->format('d M Y, H:i') }}</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal" data-content="{{ $commentaire->contenu }}" data-author="{{ $commentaire->user->name }}" title="Voir le commentaire">
+                            <td>Rick Iplekci</td>
+                            <td>{{ Str::limit($commentaire['content'], 20) }}</td>
+                                                      <td>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal" data-content="{{ $commentaire['content'] }}" data-author="Rick Iplekci" title="Voir le commentaire">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             
-                                <button class="btn btn-danger btn-sm" data-id="{{ $commentaire->id }}" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Supprimer le commentaire">
+                                <button class="btn btn-danger btn-sm" data-id="{{ $commentaire['id'] }}" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Supprimer le commentaire">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
@@ -44,9 +37,7 @@
                 </table>
             </div>
         </div>
-        <div class="d-flex justify-content-center mt-4">
-            {{ $commentaires->links('pagination::bootstrap-4') }}
-        </div>
+      
     </div>
 </div>
 
