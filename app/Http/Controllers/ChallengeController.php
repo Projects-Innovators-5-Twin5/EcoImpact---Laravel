@@ -144,7 +144,7 @@ class ChallengeController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
             'reward_points' => 'required|integer|min:1|max:1000',
-            'image' => 'image|required|max:2048',
+            'image' => 'image|nullable|max:2048',
         ]);
 
         $challenge = Challenge::findOrFail($id);

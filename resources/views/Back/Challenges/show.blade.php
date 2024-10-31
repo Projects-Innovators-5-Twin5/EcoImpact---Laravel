@@ -85,6 +85,9 @@
                 @csrf
                 @method('DELETE')
             </form>
+
+
+            
         @endif
 
     </div>
@@ -342,7 +345,8 @@ function sortSolutions() {
             data.voters.forEach(voter => {
                 const listItem = document.createElement('li');
                 listItem.className = 'list-group-item';
-                listItem.textContent = voter.name; // Assuming 'name' is the property of the voter
+                listItem.textContent = voter.name;
+                 // Assuming 'name' is the property of the voter
                 votersList.appendChild(listItem);
             });
 
@@ -364,8 +368,39 @@ function showVoters(solutionId) {
             if (data.voters.length) {
                 data.voters.forEach(voter => {
                     const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item';
-                    listItem.textContent = voter.name; // Assuming voter object has a name property
+                    listItem.className = 'list-group-item d-flex align-items-center';
+
+                    // Create an image element for the voter's image
+                    const voterImage = document.createElement('img');
+                    voterImage.src = voter.image ?
+                        `/storage/${voter.image}` : // Adjust to your storage path
+                        '/assets/img/team/default_img.png';                    voterImage.alt = voter.name; // Use name as alt text
+                    voterImage.className = 'rounded-circle me-2'; // Add some styling
+                    voterImage.style.width = '40px'; // Set width for the image
+                    voterImage.style.height = '40px'; // Set height for the image
+
+                    // Create a div for the voter's details
+                    const voterDetails = document.createElement('div');
+                    voterDetails.className = 'flex-grow-1'; // Allow the details div to take up space
+
+                    // Create a span for the voter's name
+                    const voterName = document.createElement('span');
+                    voterName.textContent = voter.name; // Set the voter's name
+                    voterName.className = 'fw-bold'; // Make the name bold
+
+                    // Create a span for the voter's email
+                    const voterEmail = document.createElement('span');
+                    voterEmail.textContent = ` (${voter.email})`; // Set the voter's email
+
+                    // Append name and email to the details div
+                    voterDetails.appendChild(voterName);
+                    voterDetails.appendChild(voterEmail);
+
+                    // Append image and details to the list item
+                    listItem.appendChild(voterImage);
+                    listItem.appendChild(voterDetails);
+
+                    // Append the list item to the voters list
                     votersList.appendChild(listItem);
                 });
             } else {

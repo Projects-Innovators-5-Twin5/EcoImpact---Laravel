@@ -16,39 +16,53 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label for="nom" class="form-label">Nom</label>
-                    <input type="text" class="form-control" id="nom" name="nom" value="{{ old('nom', $produit->nom) }}" required minlength="3" maxlength="100">
-                    <div class="invalid-feedback">
-                        Veuillez fournir un nom valide (3-100 caractères).
-                    </div>
+                    <input type="text" class="form-control @error('nom') is-invalid @enderror" id="nom" name="nom" value="{{ old('nom', $produit->nom) }}" required minlength="3" maxlength="100">
+                    @error('nom')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="4" required minlength="10" maxlength="500">{{ old('description', $produit->description) }}</textarea>
-                    <div class="invalid-feedback">
-                        Veuillez fournir une description (10-500 caractères).
-                    </div>
+                    <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" required minlength="10" maxlength="500">{{ old('description', $produit->description) }}</textarea>
+                    @error('description')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="prix" class="form-label">Prix</label>
-                    <input type="number" class="form-control" id="prix" name="prix" value="{{ old('prix', $produit->prix) }}" required min="0.01" step="0.01">
-                    <div class="invalid-feedback">
-                        Veuillez entrer un prix valide.
-                    </div>
+                    <input type="number" class="form-control @error('prix') is-invalid @enderror" id="prix" name="prix" value="{{ old('prix', $produit->prix) }}" required min="0.01" step="0.01">
+                    @error('prix')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="quantite" class="form-label">Quantité</label>
-                    <input type="number" class="form-control" id="quantite" name="quantite" value="{{ old('quantite', $produit->quantite) }}" required min="1">
-                    <div class="invalid-feedback">
-                        Veuillez entrer une quantité valide.
-                    </div>
+                    <input type="number" class="form-control @error('quantite') is-invalid @enderror" id="quantite" name="quantite" value="{{ old('quantite', $produit->quantite) }}" required min="1">
+                    @error('quantite')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="image" class="form-label">Image</label>
-                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
+                    @error('image')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
                     @if ($produit->image)
                         <img src="{{ asset('storage/' . $produit->image) }}" alt="{{ $produit->nom }}" class="img-thumbnail mt-2" style="width: 100px; height: auto;">
                     @endif

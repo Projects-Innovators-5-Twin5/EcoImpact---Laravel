@@ -12,7 +12,7 @@ class Solution extends Model
         'title',
         'description',
         'challenge_id',
-        'user_id', // Assuming you want to mass assign user_id as well
+        'user_id', 
     ];
     public function challenge()
 {
