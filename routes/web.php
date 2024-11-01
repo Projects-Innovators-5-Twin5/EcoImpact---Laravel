@@ -30,8 +30,8 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashb
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/forgotPassword', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
-Route::get('/Consommation', [ConsommationController::class, 'Consommation'])->name('Consommation');
-Route::post('/consommation-energie', [ConsommationController::class, 'store']);
+/*Route::get('/Consommation', [ConsommationController::class, 'Consommation'])->name('Consommation');
+
 Route::get('/liste-consommations', [ConsommationController::class, 'listConsumptions'])->name('consommation.list');
 
 Route::get('/consumption-data', [ConsommationController::class, 'getConsumptionDataByType']);
@@ -58,3 +58,13 @@ Route::delete('/consumptions/{id}/delete', [ConsommationController::class, 'dest
 Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
 Route::get('/consumptions/editback/{id}', [ConsommationController::class, 'editback'])->name('editConsumptionback');
 Route::put('/consumptions/updateback/{id}', [ConsommationController::class, 'updateback'])->name('consumptionsback.update');
+*/
+Route::get('/liste-consommations', [ConsommationController::class, 'listConsumptions'])->name('listConsumptions');
+Route::delete('/consumptions/delete/{id}', [ConsommationController::class, 'delete'])->name('consumptions.delete');
+Route::post('/energy', [ConsommationController::class, 'storeEnergie'])->name('energy.store');
+
+
+Route::put('/consumptions/{id}', [ConsommationController::class, 'updateEnergie'])->name('consumptions.update');
+
+
+
