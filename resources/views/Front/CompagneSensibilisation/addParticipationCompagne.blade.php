@@ -30,14 +30,10 @@
 
                 
                <div class="col-12">
-                    <div class="card card-body border-0 shadow">
+               <div class="card card-body border-0 shadow">
                         <h5>Campaign target Audience</h5>
                         <p class="mt-4">This campaign is designed specifically for:
-                            <ul>
-                              @foreach($campaign->target_audience as $audience)
-                               <li>{{$audience}}</li>
-                               @endforeach
-                            </ul>
+                            {{ $campaign->target_audience }}
                         </p>
                     </div>
                 </div>
@@ -69,15 +65,16 @@
     <div class="col-10 col-xl-8 mt-4 p-4">
             <div class="card card-body border-0 shadow mb-4 d-flex justify-content-center align-items-center ">
                 <h2 class="h3 mb-4 text-center">Participation Form</h2>
-                <form action="{{ route('participation.store') }}" class="col-xl-10"  method="POST" enctype="multipart/form-data">
+                <form action="{{ route('participation.store' ) }}" class="col-xl-10"  method="POST" enctype="multipart/form-data">
 
                 @csrf
-                <input type="hidden" name="campaign_id" value="{{ $campaign->id }}">
+                <input type="hidden" name="campaign_id" value="{{ $campaign->idCampaign }}">
+
                 <!-- Form -->
                 <div class="form-group mb-4">
                     <label for="name">Full name</label>
                     <div class="input-group">
-                        <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="name" placeholder="Enter your full name"  value="{{ old('name', Auth::user()->name) }}"  id="name" autofocus readonly>
+                        <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="name" placeholder="Enter your full name"  id="name" autofocus >
                     </div>  
                     @if ($errors->has('name'))
                             @foreach ($errors->get('name') as $error)
@@ -94,7 +91,7 @@
                 <div class="form-group mb-4">
                     <label for="email">Email</label>
                     <div class="input-group">
-                        <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" placeholder="Enter your email" value="{{ old('email', Auth::user()->email) }}" id="email" autofocus readonly>
+                        <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" placeholder="Enter your email"  id="email" autofocus >
                     </div>  
 
                     @if ($errors->has('email'))
@@ -111,47 +108,10 @@
                    
                 </div>
 
-                <div class="form-group mb-4">
-                    <label for="phone">Phone</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" name="phone" placeholder="Enter your phone" value="{{ old('phone', Auth::user()->phone) }}" id="phone" autofocus readonly>
-                    </div>  
-
-                    @if ($errors->has('phone'))
-                        @foreach ($errors->get('phone') as $error)
-                            @if ($error == 'The phone field is required.')
-                                <div class="text-danger h6 mt-1" id="error-phone">Phone number is required</div>
-                            @elseif (str_contains($error, 'digits'))
-                                <div class="text-danger h6 mt-1" id="error-phone">Phone number must be exactly 8 digits, you entered {{ old('phone') }}</div>
-                            @else
-                                <div class="text-danger h6 mt-1" id="error-phone">{{ $error }}</div>
-                            @endif
-                        @endforeach
-                    @endif
-
-                   
-                </div>
+                
 
 
-                <div class="form-group mb-4">
-                    <label for="reasons">Reasons to join our campaign</label>
-                    <div class="input-group">
-                        <textarea  class="form-control  {{ $errors->has('reasons') ? 'is-invalid' : '' }}" name="reasons" placeholder="Enter your reasons to join our campaign..." id="reasons" rows="2">{{ old('reasons') }}</textarea>
-                    </div>  
-                    @if ($errors->has('reasons'))
-                                                        @foreach ($errors->get('reasons') as $error)
-                                                            @if ($error == 'The reasons field is required.')
-                                                                <div class="text-danger h6 mt-1" id="error-description">Reasons to join our campaign is required</div>
-                                                            @elseif ($error == 'The reasons must be at least 100 characters.')
-                                                                <div class="text-danger h6 mt-1" id="error-description">The Reasons to join our campaign must be at least 100 characters long</div>
-                                                            @elseif ($error == 'The reasons may not be greater than 1000 characters.')
-                                                                <div class="text-danger h6 mt-1" id="error-description">The Reasons to join our campaign cannot be more than 1000 characters long</div>
-                                                            @else
-                                                                <div class="text-danger h6 mt-1" id="error-description">{{ $error }}</div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endif                    
-                </div>
+             
                 
                 <input type="hidden" id="error-exist" value="{{ $errors->any() ? 'true' : 'false' }}">
 

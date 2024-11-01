@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 use PDF;
 
@@ -22,53 +25,102 @@ class SensibilisatioCompagneController extends Controller
      */
     public function index()
     {
-        $campaigns = SensibilisationCampaign::all();
 
-        foreach ($campaigns as $campaign) {
-            if (Carbon::parse($campaign->end_date)->lt(Carbon::today()) && ($campaign->status != 'archived')) {
+
+    $endpointUrl = 'http://localhost:1064/api/campaign/all';
+
+    $response = Http::get($endpointUrl);
+
+    if ($response->successful()) {
+        $campaignsData = $response->json();
+
+        $campaigns = [];
+        foreach ($campaignsData as $data) {
+            $campaign = new SensibilisationCampaign();
+            $campaign->idCampaign = $data['id'] ?? null;
+            $campaign->title = $data['title'] ?? null;
+            $campaign->target_audience = $data['targetAudience'] ?? null;
+            $campaign->start_date = Carbon::parse($data['startDate'] ?? null);
+            $campaign->end_date = Carbon::parse($data['endDate'] ?? null);
+
+            if ($campaign->end_date && $campaign->end_date->lt(Carbon::today())) {
                 $campaign->status = 'completed';
-                $campaign->save();
-            }
-            if (Carbon::parse($campaign->start_date)->lte(Carbon::today()) && ($campaign->status == 'upcoming')) {
+            } elseif ($campaign->start_date && $campaign->start_date->lte(Carbon::today())) {
                 $campaign->status = 'active';
-                $campaign->save();
+            } else {
+                $campaign->status = 'upcoming';
             }
+
+            $campaigns[] = $campaign;
         }
-        $activeCampaignsCount = SensibilisationCampaign::where('status', 'active')->count();
-    
-        $upcomingCampaignsCount = SensibilisationCampaign::where('status', 'upcoming')->count();
 
-        $completedCampaignsCount = SensibilisationCampaign::where('status', 'completed')->count();
+        // Count campaigns by status
+        $activeCampaignsCount = count(array_filter($campaigns, fn($c) => $c->status == 'active'));
+        $upcomingCampaignsCount = count(array_filter($campaigns, fn($c) => $c->status == 'upcoming'));
+        $completedCampaignsCount = count(array_filter($campaigns, fn($c) => $c->status == 'completed'));
 
-        $campaigns = SensibilisationCampaign::paginate(5);
-    
-        return View('Back.CompagneSensibilisation.compagneList', compact('campaigns' , 'activeCampaignsCount' , 'upcomingCampaignsCount','completedCampaignsCount'));
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+        $perPage = 5;
+
+        $currentCampaigns = array_slice($campaigns, ($currentPage - 1) * $perPage, $perPage);
+
+        // Create the paginator
+        $campaigns = new LengthAwarePaginator($currentCampaigns, count($campaigns), $perPage, $currentPage, [
+            'path' => LengthAwarePaginator::resolveCurrentPath()
+        ]);
+
+        return View('Back.CompagneSensibilisation.compagneList', compact('campaigns', 'activeCampaignsCount', 'upcomingCampaignsCount', 'completedCampaignsCount'));
+    } else {
+        // Handle the error response
+        return View('Back.CompagneSensibilisation.compagneList')->withErrors(['msg' => 'Failed to fetch campaigns.']);
+    }
     }
 
 
 
     public function indexFront()
     {
-        $activeCampaigns = SensibilisationCampaign::where('status', 'active')
-        ->get();
-    
-        $upcomingCampaigns = SensibilisationCampaign::where('status', 'upcoming')
-        ->get();
+        $endpointUrl = 'http://localhost:1064/api/campaign/all';
 
-        $completedCampaigns = SensibilisationCampaign::where('status', 'completed')->whereBetween('end_date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+        $response = Http::get($endpointUrl);
 
-        $campaigns = SensibilisationCampaign::all();
-        foreach ($campaigns as $campaign) {
-            if (Carbon::parse($campaign->end_date)->lt(Carbon::today()) && ($campaign->status != 'archived')) {
-                $campaign->status = 'completed';
-                $campaign->save();
+        if ($response->successful()) {
+            $campaignsData = $response->json();
+
+            $activeCampaigns = [];
+            $upcomingCampaigns = [];
+            $completedCampaigns = [];
+
+            foreach ($campaignsData as $data) {
+                $campaign = new SensibilisationCampaign();
+                $campaign->idCampaign = $data['id'] ?? null;
+                $campaign->title = $data['title'] ?? null;
+                $campaign->description = $data['description'] ?? null;
+                $campaign->target_audience = $data['targetAudience'] ?? null;
+                $campaign->start_date = Carbon::parse($data['startDate'] ?? null);
+                $campaign->end_date = Carbon::parse($data['endDate'] ?? null);
+                $campaign->image = $data['image'] ?? null;
+
+                // Determine campaign status and categorize
+                if ($campaign->end_date && $campaign->end_date->lt(Carbon::today())) {
+                    $campaign->status = 'completed';
+                    $completedCampaigns[] = $campaign;
+                } elseif ($campaign->start_date && $campaign->start_date->lte(Carbon::today())) {
+                    $campaign->status = 'active';
+                    $activeCampaigns[] = $campaign;
+                } else {
+                    $campaign->status = 'upcoming';
+                    $upcomingCampaigns[] = $campaign;
+                }
             }
-            if (Carbon::parse($campaign->start_date)->lte(Carbon::today()) && ($campaign->status == 'upcoming')) {
-                $campaign->status = 'active';
-                $campaign->save();
-            }
+
+            // Pass the categorized lists to the view
+            return View('Front.CompagneSensibilisation.compagneList', compact('activeCampaigns', 'upcomingCampaigns', 'completedCampaigns'));
+        } else {
+            // Handle the error response
+            return View('Front.CompagneSensibilisation.compagneList')->withErrors(['msg' => 'Failed to fetch campaigns.']);
         }
-        return view('Front.CompagneSensibilisation.compagneList', compact('activeCampaigns', 'upcomingCampaigns','completedCampaigns'));
     }
 
     /**
@@ -78,13 +130,13 @@ class SensibilisatioCompagneController extends Controller
      */
     public function create()
     {
-        
+
     }
 
 
     public function calendar()
     {
-    
+
         return view('Back.CompagneSensibilisation.compagneCalendar');
     }
 
@@ -92,7 +144,7 @@ class SensibilisatioCompagneController extends Controller
     public function calendarData()
     {
         $campaigns = SensibilisationCampaign::all();
-    
+
         return response()->json($campaigns);
     }
 
@@ -105,43 +157,55 @@ class SensibilisatioCompagneController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|min:4|max:255',
-            'description' => 'required|string|min:50|max:1000',
-            'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => 'required|date|after:start_date',
-            'target_audience' => 'required|array',
-            'target_audience.*' => 'string|max:255', 
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
 
+            // Validate incoming data
+            $validatedData = $request->validate([
+                'title' => 'required|string|min:4|max:255',
+                'description' => 'required|string|min:2|max:200',
+                'start_date' => 'required|date|after_or_equal:today',
+                'end_date' => 'required|date|after:start_date',
+                'target_audience' => 'required',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif'
+            ]);
 
-        $startDate = $request->input('start_date');
+            // Handle the status based on the start date
+            $status = Carbon::parse($request->input('start_date'))->gt(Carbon::today()) ? 'upcoming' : 'active';
 
-        if (Carbon::parse($startDate)->gt(Carbon::today())) {
-            $status = 'upcoming';
-        } else {
-            $status = 'active'; 
-        }
+            // Store the image if provided
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imagePath = $image->store('images', 'public'); // Save in the 'public/images' directory
+            }
 
-        $imagePath = null;
+            // Prepare the payload for the API
+            $payload = [
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'startDate' => $request->input('start_date'),
+                'endDate' => $request->input('end_date'),
+                'targetAudience' => implode(',', $request->input('target_audience')), // Convert array to comma-separated string
+                'status' => $status,
+                'image' => $imagePath,
+            ];
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imagePath = $image->store('images', 'public');
-        }
+            // Define the endpoint URL
+            $endpointUrl = 'http://localhost:1064/api/campaign/create';
 
-        $campaign = SensibilisationCampaign::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'image' => $imagePath,
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
-            'target_audience' => $request->input('target_audience'), 
-            'status'=>$status
-        ]);
+            // Send POST request to API
+            $response = Http::post($endpointUrl, $payload);
 
-        return redirect()->route('campaigns.index')->with('success', 'Campaign created successfully.');
+            if (!$response->successful()) {
+                \Log::error('API Error:', ['response' => $response->json()]);
+                return back()->withErrors(['msg' => 'Failed to add campaign. Check logs for details.'])->withInput();
+            }
+
+            if ($response->successful()) {
+                return redirect()->route('campaigns.index')->with('success', 'Campaign added successfully.');
+            } else {
+                return back()->withErrors(['msg' => 'Failed to add campaign.'])->withInput();
+            }
+
     }
 
     /**
@@ -152,26 +216,73 @@ class SensibilisatioCompagneController extends Controller
      */
     public function show($id)
     {
-        $campaign = SensibilisationCampaign::findOrFail($id);
-        $startDate = Carbon::parse($campaign->start_date);
-        $endDate = Carbon::parse($campaign->end_date);
+        $endpointUrl = "http://localhost:1064/api/campaign/{$id}";
 
-        $participation = CampaignParticipation::where('campaign_id', $campaign->id)->where('user_id', Auth::id())->first();     
-        return view('Front.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate','endDate','participation'));
+        $response = Http::get($endpointUrl);
+
+        if ($response->successful()) {
+            $campaignData = $response->json();
+
+            $campaign = new SensibilisationCampaign();
+            $campaign->idCampaign = $campaignData['idCampaign'] ?? null;
+            $campaign->title = $campaignData['titleCampaign'] ?? null;
+            $campaign->description = $campaignData['descriptionCampaign'] ?? null;
+            $campaign->start_date = Carbon::parse($campaignData['startDateCampaign'] ?? null);
+            $campaign->end_date = Carbon::parse($campaignData['endDateCampaign'] ?? null);
+            $campaign->target_audience = $campaignData['targetCampaign'] ?? null;
+            $campaign->status = $campaignData['statusCampaign'] ?? null;
+            $campaign->image = $campaignData['imageCampaign'] ?? null;
+
+            $startDate = $campaign->start_date;
+            $endDate = $campaign->end_date;
+
+            return view('Front.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate', 'endDate'));
+        } else {
+            // Handle API error response
+            return redirect()->route('campaigns.index')->withErrors(['msg' => 'Failed to fetch campaign details.']);
+        }
     }
 
 
     public function showBack($id)
     {
-        $campaign = SensibilisationCampaign::findOrFail($id);
-        $startDate = Carbon::parse($campaign->start_date);
-        $endDate = Carbon::parse($campaign->end_date);
+        $endpointUrl = "http://localhost:1064/api/campaign/{$id}";
 
-        $users = User::where('role' , 'user')->get();
+        $response = Http::get($endpointUrl);
 
-        $campaigns_participations = CampaignParticipation::with('user')->where('campaign_id', $campaign->id)->paginate(5);
+        if ($response->successful()) {
+            $campaignData = $response->json();
 
-        return view('Back.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate','endDate','campaigns_participations','users'));
+            $campaign = new SensibilisationCampaign();
+            $campaign->idCampaign = $campaignData['id'] ?? null;
+            $campaign->title = $campaignData['titleCampaign'] ?? null;
+            $campaign->description = $campaignData['descriptionCampaign'] ?? null;
+            $campaign->start_date = Carbon::parse($campaignData['startDateCampaign'] ?? null);
+            $campaign->end_date = Carbon::parse($campaignData['endDateCampaign'] ?? null);
+            $campaign->target_audience = $campaignData['targetCampaign'] ?? null;
+            $campaign->status = $campaignData['statusCampaign'] ?? null;
+            $campaign->image = $campaignData['imageCampaign'] ?? null;
+
+            // Fetch participants for the campaign
+            $participantsEndpointUrl = "http://localhost:1064/api/campaign/{$id}/participants";
+
+            $participantsResponse = Http::get($participantsEndpointUrl);
+
+            $participants = [];
+            if ($participantsResponse->successful()) {
+                $participants = $participantsResponse->json();
+            } else {
+                \Log::error('Failed to fetch participants:', ['campaign_id' => $id, 'response' => $participantsResponse->json()]);
+            }
+
+            $startDate = $campaign->start_date;
+            $endDate = $campaign->end_date;
+
+            return view('Back.CompagneSensibilisation.compagneDetails', compact('campaign', 'startDate', 'endDate','participants'));
+        } else {
+            // Handle API error response
+            return redirect()->route('campaigns.index')->withErrors(['msg' => 'Failed to fetch campaign details.']);
+        }
     }
 
     /**
@@ -182,10 +293,30 @@ class SensibilisatioCompagneController extends Controller
      */
     public function edit($id)
     {
-        $campaign = SensibilisationCampaign::findOrFail($id);
-   
+        // Define the endpoint URL for retrieving the campaign details
+    $endpointUrl = "http://localhost:1064/api/campaign/{$id}";
+
+    // Send GET request to the API
+    $response = Http::get($endpointUrl);
+
+    if ($response->successful()) {
+        $campaignData = $response->json();
+
+        $campaign = new SensibilisationCampaign();
+        $campaign->idCampaign = $campaignData['idCampaign'] ?? null;
+        $campaign->title = $campaignData['titleCampaign'] ?? null;
+        $campaign->description = $campaignData['descriptionCampaign'] ?? null;
+        $campaign->start_date = Carbon::parse($campaignData['startDateCampaign'] ?? null);
+        $campaign->end_date = Carbon::parse($campaignData['endDateCampaign'] ?? null);
+        $campaign->target_audience = $campaignData['targetCampaign'] ?? null;
+        $campaign->status = $campaignData['statusCampaign'] ?? null;
+        $campaign->image = $campaignData['imageCampaign'] ?? null;
 
         return view('Back.CompagneSensibilisation.editCompagne', compact('campaign'));
+    } else {
+        // Handle API error response
+        return redirect()->route('campaigns.index')->withErrors(['msg' => 'Failed to fetch campaign details.']);
+    }
     }
 
     /**
@@ -197,48 +328,54 @@ class SensibilisatioCompagneController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|min:4|max:255',
-            'description' => 'required|string|min:150|max:1000',
-            'reasons_join_campaign' => 'required|string|min:300|max:5000',
-            'link_fb' => 'required|url|max:5000',
-            'link_insta' => 'required|url|max:5000',
-            'link_web' => 'required|url|max:5000',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'target_audience' => 'required|array',
-            'target_audience.*' => 'string|max:255', 
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
+            // Validate incoming data
+            $validatedData = $request->validate([
+                'title' => 'required|string|min:4|max:255',
+                'description' => 'required|string|min:2|max:200',
+                'start_date' => 'required|date|after_or_equal:today',
+                'end_date' => 'required|date|after:start_date',
+                'target_audience' => 'required',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif',
+                'reasons_join_campaign' => 'required'
+            ]);
 
-        $campaign = SensibilisationCampaign::findOrFail($id);
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imagePath = $image->store('images', 'public');
+            }
 
-        $startDate = $request->input('start_date');
-        $status = Carbon::parse($startDate)->gt(Carbon::today()) ? 'upcoming' : 'active';
+            $payload = [
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'startDate' => $request->input('start_date'),
+                'endDate' => $request->input('end_date'),
+                'targetAudience' => $request->input('target_audience'),
+                'status' =>  $request->input('status'),
+                'reasonsJoinCampaign'=>$request->input('reasons_join_campaign') ,
+                'image' =>  $imagePath,
+            ];
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imagePath = $image->store('images', 'public');
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imagePath = $image->store('images', 'public');
+                $payload['image'] = $imagePath;
+            }
+
+        $endpointUrl = "http://localhost:1064/api/campaign/update/{$id}";
+
+        $response = Http::put($endpointUrl, $payload);
+
+        if ($response->successful()) {
+            return redirect()->route('campaigns.index')->with('success', 'Campaign edited successfully.');
         } else {
-            $imagePath = $campaign->image; 
+            \Log::error('API Update Error', [
+                'response_status' => $response->status(),
+                'response_body' => $response->body(),
+                'payload' => $payload,
+            ]);
+
         }
-
-        $campaign->update([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'reasons_join_campaign' => $request->input('reasons_join_campaign'),
-            'link_fb' => $request->input('link_fb'),
-            'link_insta' => $request->input('link_insta'),
-            'link_web' => $request->input('link_web'),
-            'image' => $imagePath,
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
-            'target_audience' => $request->input('target_audience'),
-            'status' => $status,
-        ]);
-
-        return redirect()->route('campaigns.index')->with('success', 'Campaign edited successfully.');
-
     }
 
     /**
@@ -249,14 +386,20 @@ class SensibilisatioCompagneController extends Controller
      */
     public function destroy($id)
     {
-        $campaign = SensibilisationCampaign::findOrFail($id);
+        $endpointUrl = "http://localhost:1064/api/campaign/delete/{$id}";
 
-        $campaign->delete();
+        $response = Http::delete($endpointUrl);
 
-        return redirect()->route('campaigns.index')->with('success', 'Campaign deleted successfully.');
+        if ($response->successful()) {
+            return redirect()->route('campaigns.index')->with('success', 'Campaign deleted successfully.');
+        } else {
+            // Handle errors
+            $errorMessage = $response->json()['message'] ?? 'Failed to delete campaign.';
+            return redirect()->route('campaigns.index')->withErrors(['msg' => $errorMessage]);
+        }
     }
 
-    
+
     public function archive($id)
     {
         $campaign = SensibilisationCampaign::findOrFail($id);
@@ -279,14 +422,14 @@ class SensibilisatioCompagneController extends Controller
 
     public function searchByStatus(Request $request)
     {
-        $query = $request->input('query', ''); 
+        $query = $request->input('query', '');
 
         if ($query === 'all' || empty($query)) {
             $results = SensibilisationCampaign::all();
         } else {
             $results = SensibilisationCampaign::where('status', 'LIKE', "%{$query}%")->get();
         }
-        
+
         return response()->json($results);
     }
 
@@ -301,24 +444,24 @@ class SensibilisatioCompagneController extends Controller
 
     public function updateDateCampaignCalendar(Request $request)
     {
-       
+
         $campaignId = $request->input('id');
         $campaignStartDate = $request->input('start');
         $campaignEndDate = $request->input('end');
 
         $campaign = SensibilisationCampaign::find($campaignId);
-    
+
         $campaign->start_date = $campaignStartDate;
         $campaign->end_date = $campaignEndDate;
-    
+
         $campaign->save();
-    
+
         return response()->json([
             'success' => true,
             'message' => 'Les dates de la campagne ont été mises à jour avec succès.',
             'campaign' => $campaign
         ]);
-       
+
     }
 
 

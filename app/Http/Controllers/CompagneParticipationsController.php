@@ -11,6 +11,7 @@ use App\Mail\MailParticipation;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use PDF;
 
 
@@ -24,12 +25,12 @@ class CompagneParticipationsController extends Controller
     public function index($campaign_id)
     {
 
-        
+
     }
 
 
     public function listParticipation()
-    { 
+    {
         $userId = Auth::id();
         $user = User::findOrFail($userId);
         $participations = CampaignParticipation::with('campaign')->where('user_id' , Auth::id())->whereIn('status', ['accepted', 'pending'])->get();
@@ -45,9 +46,23 @@ class CompagneParticipationsController extends Controller
      */
     public function create($campaign_id)
     {
-        $campaign = SensibilisationCampaign::findOrFail($campaign_id);
-        $startDate = Carbon::parse($campaign->start_date);
-        $endDate = Carbon::parse($campaign->end_date);
+        $endpointUrl = "http://localhost:1064/api/campaign/{$campaign_id}";
+
+        $response = Http::get($endpointUrl);
+
+        if ($response->successful()) {
+            $campaignData = $response->json();
+
+            $campaign = new SensibilisationCampaign();
+            $campaign->idCampaign = $campaignData['idCampaign'] ?? null;
+            $campaign->image = $campaignData['imageCampaign'] ?? null;
+
+            $campaign->start_date = Carbon::parse($campaignData['startDateCampaign'] ?? null);
+            $campaign->end_date = Carbon::parse($campaignData['endDateCampaign'] ?? null);
+        }
+
+            $startDate = $campaign->start_date;
+            $endDate = $campaign->end_date;
 
         return view('Front.CompagneSensibilisation.addParticipationCompagne', compact('campaign' , 'startDate','endDate'));
     }
@@ -61,35 +76,37 @@ class CompagneParticipationsController extends Controller
      */
     public function store(Request $request)
     {
+
+        $campaign_id = $request->input('campaign_id');
+
         $request->validate([
-            'reasons' => 'required|string|min:100|max:1000',
+            'name' => 'required|string',
+            'email' => 'required|email',
+
         ]);
 
-        $id=$request->input('campaign_id');
 
-        $userId = Auth::id();
-        $user = User::findOrFail($userId);
-
-        $campaign_participation = CampaignParticipation::create([
-            'campaign_id' => $id,
-            'user_id'=> $userId,
-            'reasons' => $request->input('reasons')
-        ]);
-
-        $campaign = SensibilisationCampaign::findOrFail($id);
-        $startDate = Carbon::parse($campaign->start_date);
-        $endDate = Carbon::parse($campaign->end_date);
-
-        $data = [
-            'name' => $user->name,
-            'participation_date'=>$campaign_participation->created_at,
-            'campaign_name'=>$campaign->title,
-            'campaign_startDate'=>$campaign->start_date,
+        $payload = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
         ];
 
-        Mail::to($user->email)->send(new MailParticipation($data));
+        $endpointUrl = "http://localhost:1064/api/campaign/participate/{$campaign_id}";
 
-        return redirect()->route('campaigns.show' , $id)->with('success', 'participation created successfully.');
+        $response = Http::post($endpointUrl,$payload);
+
+        if (!$response->successful()) {
+            \Log::error('API Error:', ['response' => $response->json()]);
+            return back()->withErrors(['msg' => 'Failed to participate campaign. Check logs for details.'])->withInput();
+        }
+
+        if ($response->successful()) {
+            return redirect()->route('campaigns.show' , $campaign_id)->with('success', 'participation created successfully.');
+
+        } else {
+            return back()->withErrors(['msg' => 'Failed to add participation.'])->withInput();
+        }
+
     }
 
     /**
@@ -167,7 +184,7 @@ class CompagneParticipationsController extends Controller
         ];
 
         Mail::to($user->email)->send(new MailParticipationAccepted($data));
-         
+
         return redirect()->route('campaigns.showBack',$campaign->id)->with('success', 'participation accepted successfully.');
     }
 
@@ -179,7 +196,7 @@ class CompagneParticipationsController extends Controller
         $campaign_participation->status = 'rejected';
 
         $campaign_participation->save();
-         
+
         return redirect()->route('campaigns.showBack',$campaign->id)->with('success', 'participation rejected successfully.');
     }
 
@@ -189,7 +206,7 @@ class CompagneParticipationsController extends Controller
         $campaign_participation = CampaignParticipation::findOrFail($id);
 
         $campaign_participation->delete();
-         
+
         return redirect()->route('participation.front.list');
     }
 
@@ -200,23 +217,28 @@ class CompagneParticipationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($idCampaign,$idUser)
     {
-        $participant = CampaignParticipation::findOrFail($id);
-        $campaign = SensibilisationCampaign::findOrFail($participant->campaign_id);
+        $endpointUrl = "http://localhost:1064/api/campaign/participate/delete/${idCampaign}/{$idUser}";
 
-        $participant->delete();
+        $response = Http::delete($endpointUrl);
 
-        return redirect()->route('campaigns.showBack',$campaign->id)->with('success', 'Participant deleted successfully.');
+        if ($response->successful()) {
+            return redirect()->route('campaigns.index')->with('success', 'participants deleted successfully.');
+        } else {
+            // Handle errors
+            $errorMessage = $response->json()['message'] ?? 'Failed to delete campaign.';
+            return redirect()->route('campaigns.index')->withErrors(['msg' => $errorMessage]);
+        }
     }
 
     public function search(Request $request , $id)
     {
         $query = $request->input('query');
 
-        $results = CampaignParticipation::with('user') 
-        ->where('campaign_id', $id) 
-        ->whereHas('user', function ($q) use ($query) { 
+        $results = CampaignParticipation::with('user')
+        ->where('campaign_id', $id)
+        ->whereHas('user', function ($q) use ($query) {
             $q->where('name', 'LIKE', "%{$query}%");
         })
         ->get();
@@ -225,7 +247,7 @@ class CompagneParticipationsController extends Controller
 
     public function searchByStatus(Request $request,$id)
     {
-        $query = $request->input('query', ''); 
+        $query = $request->input('query', '');
 
         if ($query === 'all' || empty($query)) {
             $results = CampaignParticipation::with('user')->where('campaign_id', $id)->get();
@@ -234,7 +256,7 @@ class CompagneParticipationsController extends Controller
                                             ->where('status', 'LIKE', "%{$query}%")
                                             ->get();
         }
-        
+
         return response()->json($results);
     }
 

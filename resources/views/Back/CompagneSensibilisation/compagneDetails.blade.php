@@ -54,11 +54,7 @@
                     <div class="card card-body border-0 shadow">
                         <h5>Campaign target Audience</h5>
                         <p class="mt-4">This campaign is designed specifically for:
-                            <ul>
-                              @foreach($campaign->target_audience as $audience)
-                               <li>{{$audience}}</li>
-                               @endforeach
-                            </ul>
+                            {{ $campaign->target_audience }}
                         </p>
                     </div>
                 </div>
@@ -90,10 +86,9 @@
         <div class="col-10 col-xl-8 mt-4 p-4">
             <div class="card card-body border-0 shadow mb-4">
                 <h2 class="h5 mb-4">Campaign Overview</h2>
-                <p class="d-flex align-items-center"><span class="text-des">{{$campaign -> description}}</span></p>    
+                <p class="d-flex align-items-center"><span class="text-des">{{$campaign->description}}</span></p>    
                 
-                <h2 class="h5 mb-4 mt-4">Join Our Campaign! 🌟</h2>
-                <p class="d-flex align-items-center"><span class="text-des">{{$campaign -> reasons_join_campaign}}</span></p>
+         
             </div>
 
         </div>
@@ -107,7 +102,7 @@
     <div class="btn-toolbar mb-2 mb-md-0 py-4 d-flex justify-content-end">
  
     <div class="btn-group ms-2 ms-lg-3">
-        <a type="button"  href="{{ route('participation.export.pdf' , $campaign->id) }}" class="btn btn-sm btn-outline-gray-600 export-pdf">Export PDF</a>
+        <a type="button"  href="#" class="btn btn-sm btn-outline-gray-600 export-pdf">Export PDF</a>
     </div>      
 </div>
 
@@ -145,48 +140,30 @@
         </div>
     </div>
 </div>
+
 <div class="card card-body border-0 shadow table-wrapper table-responsive">
     <table class="table table-hover" id="participationList">
         <thead>
             <tr>
                 <th class="border-gray-200">Name</th>						
                 <th class="border-gray-200">Email</th>
-                <th class="border-gray-200">Phone</th>
-                <th class="border-gray-200">Date created</th>
-                <th class="border-gray-200">Status</th>
                 <th class="border-gray-200">Action</th>
+
+          
             </tr>
         </thead>
         <tbody>
             <!-- Item -->
 
-            @foreach($campaigns_participations as $campaign_participation)
+            @foreach($participants as $participant)
             <tr>
                 
                 <td>
-                    <span class="fw-normal">{{ $campaign_participation->user->name }}</span>
+                    <span class="fw-normal">{{  $participant['name']}}</span>
                 </td>
                 <td>
-                    <span class="fw-normal">{{ $campaign_participation->user->email }}</span>
+                    <span class="fw-normal">{{ $participant['email']}}</span>
                 </td>
-                <td>
-                    <span class="fw-normal">{{ $campaign_participation->user->phone }}</span>
-                </td>
-                <td>
-                    <span class="fw-normal">{{ $campaign_participation->created_at->format('l, F j, Y') }}</span>
-                </td>
-                <td>
-                    @if ($campaign_participation->status === 'pending')
-                      <span class="fw-bold status-pending">pending</span>
-                    @elseif($campaign_participation->status  === 'accepted')
-                      <span class="fw-bold status-active">accepted</span>
-                    @elseif($campaign_participation->status === 'rejected')
-                      <span class="fw-bold status-archived">rejected</span>
-                    @else
-                       <span class="fw-bold status-archived">archived</span>
-                    @endif
-                </td>
-                
                 <td> 
                     <div class="btn-group">
                         <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -196,12 +173,12 @@
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu py-0">
-                            <a class="dropdown-item rounded-top" data-bs-toggle="modal" data-bs-target="#modal-default" data-imagep="{{$campaign_participation->user->image }}"  data-namep="{{$campaign_participation->user->name }}" data-phonep="{{$campaign_participation->user->phone }}" data-emailp="{{$campaign_participation->user->email }}" data-reasonsp="{{$campaign_participation->reasons }}" data-participant-id="{{$campaign_participation->id}}" data-statusp="{{$campaign_participation->status}}"><span class="fas fa-eye me-2" ></span>View Details</a>
 
                             <button type="button" class="dropdown-item text-danger rounded-bottom" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#modal-confirmationsuppression-participant"
-                                        data-participant-id="{{ $campaign_participation->id }}">
+                                        data-campaign-id="{{ $campaign['idCampaign'] }}"
+                                        data-user-id="{{ $participant['id'] }}">
                                     <span class="fas fa-trash-alt me-2"></span>Remove
                                 </button>                        
                         </div>
@@ -214,50 +191,8 @@
         </tbody>
     </table>
 
-
-
-
-    <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination mb-0">
-        @if ($campaigns_participations->onFirstPage())
-            <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-            </li>
-        @else
-            <li class="page-item">
-                <a class="page-link" href="{{  $campaigns_participations ->previousPageUrl() }}" rel="prev">Previous</a>
-            </li>
-        @endif
-
-        <!-- Pagination Elements -->
-        @foreach ($campaigns_participations->links() as $page => $url)
-            @if ($campaigns_participations->currentPage() == $page)
-                <li class="page-item active">
-                    <span class="page-link">{{ $page }}</span>
-                </li>
-            @else
-                <li class="page-item">
-                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                </li>
-            @endif
-        @endforeach
-
-        <!-- Next Page Link -->
-        @if ($campaigns_participations ->hasMorePages())
-            <li class="page-item">
-                <a class="page-link" href="{{  $campaigns_participations ->nextPageUrl() }}" rel="next">Next</a>
-            </li>
-        @else
-            <li class="page-item disabled">
-                <span class="page-link">Next</span>
-            </li>
-        @endif
-            </ul>
-        </nav>
-
-       </div>
 </div>
+
 @endsection
 
 

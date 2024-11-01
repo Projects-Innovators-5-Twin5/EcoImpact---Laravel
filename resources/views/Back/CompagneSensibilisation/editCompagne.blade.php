@@ -25,7 +25,7 @@
                                                 <h1 class="mb-0 h4">Edit Campaign</h1>
                                             </div>
                                            
-                                            <form action="{{ route('campaigns.update' ,$campaign->id) }}"  method="POST" enctype="multipart/form-data">
+                                            <form action="{{ route('campaigns.update' , ['id' => $campaign->idCampaign] ) }}"  method="POST" enctype="multipart/form-data">
 
                                                 @csrf
                                                 @method('PUT')
@@ -54,7 +54,7 @@
                                                     <label for="start_date">Start Date</label>
                                                     <div class="input-group">
                                                       
-                                                       <input data-datepicker="" class="form-control {{ $errors->has('start_date') ? 'is-invalid' : '' }}" id="start_date" value="{{ old('start_date', $campaign->start_date) }}" name="start_date" type="date" placeholder="dd/mm/yyyy" >   
+                                                       <input data-datepicker="" class="form-control {{ $errors->has('start_date') ? 'is-invalid' : '' }}" id="start_date" value="{{ old('start_date', $campaign->start_date ? $campaign->start_date->format('Y-m-d') : '') }}" name="start_date" type="date" placeholder="dd/mm/yyyy" >   
                                                 
                                                     </div>  
                                                     @if ($errors->has('start_date'))
@@ -75,7 +75,7 @@
                                                 <div class="form-group mb-4">
                                                     <label for="end_date">End Date</label>
                                                     <div class="input-group">
-                                                       <input data-datepicker=""  class="form-control {{ $errors->has('end_date') ? 'is-invalid' : '' }}" id="end_date" type="date" value="{{ old('end_date', $campaign->end_date) }}" name="end_date" placeholder="dd/mm/yyyy" >   
+                                                       <input data-datepicker=""  class="form-control {{ $errors->has('end_date') ? 'is-invalid' : '' }}" id="end_date" type="date" value="{{  old('end_date', $campaign->end_date ? $campaign->end_date->format('Y-m-d') : '') }}" name="end_date" placeholder="dd/mm/yyyy" >   
                                                       
                                                     </div>  
                                                     @if ($errors->has('end_date'))
@@ -120,13 +120,9 @@
                                                     <label for="target_audience">Target audience</label>
 
                                                     <div class="input-group">
-                                                    <select class="form-select {{ $errors->has('target_audience') ? 'is-invalid' : '' }}" id="target_audience" name="target_audience[]" aria-label="Default select example" multiple>
-                                                    @foreach (['General Public', 'Youth and Students', 'Professionals and Workers', 'Institutions and Organizations', 'Local Communities'] as $option)
-                                                    <option value="{{ $option }}" {{ in_array($option, $campaign->target_audience ) ? 'selected' : '' }}>
-                                                            {{ $option }}
-                                                    </option>
-                                                        @endforeach
-                                                    </select>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control {{ $errors->has('target_audience') ? 'is-invalid' : '' }}" name="target_audience" value="{{ old('target_audience', $campaign->target_audience) }}" placeholder="Enter target audience" id="target_audience" autofocus >
+                                                    </div>  
                                                     </div>  
                                                     @if ($errors->has('target_audience'))
                                                         <div class="text-danger h6 mt-1">Target audience is required</div>
@@ -165,67 +161,6 @@
                                                 </div>
 
 
-                                                <div class="form-group mb-4">
-                                                    <label for="link_fb">Campaign facebook</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" name="link_fb" value="{{ old('link_fb', $campaign->link_fb) }}" placeholder="Enter facebook link" id="link_fb" autofocus >
-                                                    </div>  
-                                                    @if ($errors->has('link_fb'))
-                                                        @foreach ($errors->get('link_fb') as $error)
-                                                            @if ($error == 'The link fb field is required.')
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">Facebook link is required</div>
-                                                            @elseif ($error == 'The link fb must be a valid URL.')
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">The Facebook link must be a valid URL</div>
-                                                            @elseif ($error == 'The link fb may not be greater than 5000 characters.')
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">The Facebook link cannot be more than 5000 characters long</div>
-                                                            @else
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">{{ $error }}</div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-
-
-                                                <div class="form-group mb-4">
-                                                    <label for="link_insta">Campaign instagram</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" name="link_insta" value="{{ old('link_insta', $campaign->link_insta) }}" placeholder="Enter instagram link" id="link_insta" autofocus >
-                                                    </div>  
-                                                    @if ($errors->has('link_insta'))
-                                                        @foreach ($errors->get('link_insta') as $error)
-                                                            @if ($error == 'The link_insta field is required.')
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">Instagram link is required</div>
-                                                            @elseif ($error == 'The link_insta must be a valid URL.')
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">The instagram link must be a valid URL</div>
-                                                            @elseif ($error == 'The link_insta may not be greater than 5000 characters.')
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">The instagram link cannot be more than 5000 characters long</div>
-                                                            @else
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">{{ $error }}</div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-
-
-                                                <div class="form-group mb-4">
-                                                    <label for="link_web">Campaign website</label>
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" name="link_web" value="{{ old('link_web', $campaign->link_web) }}" placeholder="Enter website link" id="link_web" autofocus >
-                                                    </div>  
-                                                    @if ($errors->has('link_web'))
-                                                        @foreach ($errors->get('link_web') as $error)
-                                                            @if ($error == 'The link_web field is required.')
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">Website link is required</div>
-                                                            @elseif ($error == 'The link_web must be a valid URL.')
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">The website link must be a valid URL</div>
-                                                            @elseif ($error == 'The link_web may not be greater than 5000 characters.')
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">The website link cannot be more than 5000 characters long</div>
-                                                            @else
-                                                                <div class="text-danger h6 mt-1" id="error-link-fb">{{ $error }}</div>
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </div>
 
 
                                                 <div class="form-group mb-4">

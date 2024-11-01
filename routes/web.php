@@ -71,10 +71,6 @@ Route::get('/landing', [LandingController::class, 'landing'])->name('landing');
     Route::resource('challenges', ChallengeController::class);
     Route::get('challenges/export/pdf', [ChallengeController::class, 'exportPdf'])->name('challenges.export.pdf');
     Route::get('/challenges/{challenge}/solutions/create', [SolutionController::class, 'create'])->name('solutions.create');
-   Route::get('/liste-consommationsBack', [ConsommationController::class, 'listConsumptionsBack'])->name('consommationBack.list');
-   Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
-   Route::get('/consumptions/editback/{id}', [ConsommationController::class, 'editback'])->name('editConsumptionback');
-   Route::put('/consumptions/updateback/{id}', [ConsommationController::class, 'updateback'])->name('consumptionsback.update');
 
 
 
@@ -93,7 +89,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/forgotPassword', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
 
-Route::get('/profile', [AuthController::class, 'profileUser'])->name('ProfileUser')->middleware('isAuth');
+Route::get('/profile', [AuthController::class, 'profileUser'])->name('ProfileUser');
 Route::post('/updateImage', [AuthController::class, 'updateImage'])->name('updateImageProfile');
 Route::post('/updateProfile', [AuthController::class, 'updateProfile'])->name('updateProfile');
 Route::get('/getUsers', [AuthController::class, 'getUsers'])->name('getUsers');
@@ -111,9 +107,9 @@ Route::get('/campaigns/front', [SensibilisatioCompagneController::class, 'indexF
 Route::get('/campaigns/show/{id}', [SensibilisatioCompagneController::class, 'show'])->name('campaigns.show');
 Route::get('/search', [SensibilisatioCompagneController::class, 'search'])->name('search');
 Route::get('/searchByStatus', [SensibilisatioCompagneController::class, 'searchByStatus'])->name('searchByStatus');
-Route::get('/campaigns/show/{campaign_id}/participate', [CompagneParticipationsController::class, 'create'])->name('participation.create')->middleware('isAuth');;
-Route::post('/campaigns/participateAdd', [CompagneParticipationsController::class, 'store'])->name('participation.store')->middleware('isAuth');;
-Route::delete('/participants/{id}/delete', [CompagneParticipationsController::class, 'destroy'])->name('participation.delete')->middleware('isAuth');;
+Route::get('/campaigns/show/{campaign_id}/participate', [CompagneParticipationsController::class, 'create'])->name('participation.create');;
+Route::post('/campaigns/participateAdd', [CompagneParticipationsController::class, 'store'])->name('participation.store');;
+Route::delete('/participants/{id}/delete', [CompagneParticipationsController::class, 'destroy'])->name('participation.delete');;
 
 
 Route::get('/participants/search', [CompagneParticipationsController::class, 'search'])->name('participation.search');
@@ -125,19 +121,19 @@ Route::get('/front/articles/{id}', [ArticleController::class, 'show_front'])->na
 
 
 // Routes pour les commentaires
-Route::post('/articles/{article_id}/commentaires', [CommentaireController::class, 'store'])->name('commentaires.store')->middleware('isAuth');
-Route::put('/front/commentaires/{id}', [CommentaireController::class, 'update'])->name('front.commentaires.update')->middleware('isAuth');
+Route::post('/articles/{article_id}/commentaires', [CommentaireController::class, 'store'])->name('commentaires.store');
+Route::put('/front/commentaires/{id}', [CommentaireController::class, 'update'])->name('front.commentaires.update');
 
-Route::delete('/commentaires/{id}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy')->middleware('isAuth');
+Route::delete('/commentaires/{id}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy');
 //challenges front
 Route::get('/challengesfront', [ChallengeController::class, 'indexfront'])->name('challenges.indexfront');
 Route::get('/challengesfront/{id}', [ChallengeController::class, 'showfront'])->name('challenges.showfront');
 
-Route::post('/solutions/{solution}/vote', [SolutionController::class, 'voteSolution'])->name('solutions.vote')->middleware('isAuth');
+Route::post('/solutions/{solution}/vote', [SolutionController::class, 'voteSolution'])->name('solutions.vote');
 Route::get('/leaderboard', [ChallengeController::class, 'leaderboard'])->name('leaderboard');
 Route::get('/solutions/{solution}/voters', [SolutionController::class, 'getVoters']);
 
-Route::get('/produitss', [ProduitController::class, 'frontaffichage'])->name('produitCards.front')->middleware('isAuth');
+Route::get('/produitss', [ProduitController::class, 'frontaffichage'])->name('produitCards.front');
 Route::get('produits/{id}', [ProduitController::class, 'showDetail'])->name('produits.produit_detail');
 Route::get('/backproduit', [ProduitController::class, 'index'])->name('produits.backproduit');
 
@@ -175,39 +171,7 @@ Route::put('/participants/{id}/cancel', [CompagneParticipationsController::class
 
 
 
-Route::get('/Consommation', [ConsommationController::class, 'Consommation'])->name('Consommation');
-Route::post('/consommation-energie', [ConsommationController::class, 'store']);
-Route::get('/liste-consommations', [ConsommationController::class, 'listConsumptions'])->name('consommation.list');
 
-
-Route::get('/consumption-data', [ConsommationController::class, 'getConsumptionDataByType']);
-Route::get('/carbonneDetails', [CarbonneFootPrintController::class, 'carbonneDetails']);
-Route::get('/carbon-footprint', [CarbonneFootPrintController::class, 'showEnergyConsumption'])->name('carbon.footprint');
-Route::post('/carbon-footprint/add/{userId}', [CarbonneFootPrintController::class, 'addCarbonFootprintWithConsumption'])->name('carbon.footprint.add');
-Route::get('/carbon-footprints', [CarbonneFootPrintController::class, 'listCarbonFootprintsWithConsumption'])->name('carbon.footprints.list');
-
-Route::get('/global-consumption-data', [ConsommationController::class, 'getGlobalConsumptionData'])->name('global.consumption.data');
-
-Route::get('/liste-consommationsBack', [ConsommationController::class, 'listConsumptionsBack'])->name('consommationBack.list');
-Route::get('/consumptions/edit/{id}', [ConsommationController::class, 'edit'])->name('editConsumption');
-Route::put('/consumptions/update/{id}', [ConsommationController::class, 'update'])->name('consumptions.update');
-Route::get('/consommation/{id}',[ConsommationController::class, 'show']);
-
-
-// Route pour mettre à jour la consommation
-Route::put('/consumptions/{id}', [ConsommationController::class, 'updateConsumption'])->name('updateConsumption');
-
-// Route pour supprimer la consommation
-// web.php
-Route::delete('/consumptions/{id}/delete', [ConsommationController::class, 'destroy'])->name('consumptions.delete');
-//back
-Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
-Route::get('/consumptions/editback/{id}', [ConsommationController::class, 'editback'])->name('editConsumptionback');
-Route::put('/consumptions/updateback/{id}', [ConsommationController::class, 'updateback'])->name('consumptionsback.update');
-
-Route::get('/carbon-factors/edit/{id}', [ConsommationController::class, 'editFactor'])->name('edit.factor');
-Route::put('/carbon-factors/{id}', [ConsommationController::class, 'updateFactor'])->name('carbon.factors.update');
-Route::delete('/carbon-factors/delete/{id}', [ConsommationController::class, 'deleteFactor'])->name('delete.factor');
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -247,3 +211,10 @@ Route::delete('categories/{categoryId}/remove-product/{productId}', [CategorieCo
 Route::get('/catcat', [CategorieController::class, 'indexfront'])->name('categories.indexfront');
 Route::get('/categories/{id}/produits', [CategorieController::class, 'produitsParCategorie'])->name('categories.produits');
 Route::get('/categorie/{id}/produits', [ProduitController::class, 'produitsParCategorie'])->name('categorie.produits');
+
+
+
+Route::get('/liste-consommations', [ConsommationController::class, 'listConsumptions'])->name('listConsumptions');
+Route::delete('/consumptions/delete/{id}', [ConsommationController::class, 'delete'])->name('consumptions.delete');
+Route::post('/energy', [ConsommationController::class, 'storeEnergie'])->name('energy.store');
+Route::put('/consumptions/{id}', [ConsommationController::class, 'updateEnergie'])->name('consumptions.update');

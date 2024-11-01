@@ -173,11 +173,10 @@
                 </td>
                 <td><span class="fw-normal">{{ $startDate->format('l, F j, Y')}}</span></td>                        
                 <td><span class="fw-normal">{{ $endDate->format('l, F j, Y')}}</span></td>
-                    <td>
-                        @foreach($campaign->target_audience as $audience)
-                            <div class="fw-bold"> {{ $audience }}</div>
-                        @endforeach    
-                    </td>
+                <td>
+                    <span class="fw-normal">{{ $campaign->target_audience }}</span>
+                </td>
+
                 <td>
                     @if ($campaign->status === 'active')
                       <span class="fw-bold status-active">active</span>
@@ -198,14 +197,14 @@
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu py-0">
-                            <a class="dropdown-item rounded-top" href="{{ route('campaigns.showBack',  $campaign->id) }}"><span class="fas fa-eye me-2" ></span>View Details</a>
+                            <a class="dropdown-item rounded-top" href="{{ route('campaigns.showBack',  ['id' => $campaign->idCampaign] ) }}"><span class="fas fa-eye me-2" ></span>View Details</a>
 
-                            <a class="dropdown-item" href="{{ route('campaigns.edit',  $campaign->id) }}" ><span class="fas fa-edit me-2" ></span>Edit</a>   
+                            <a class="dropdown-item" href="{{ route('campaigns.edit', ['id' => $campaign->idCampaign]) }}" ><span class="fas fa-edit me-2" ></span>Edit</a>   
 
                             <button type="button" class="dropdown-item text-danger rounded-bottom" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#modal-confirmationsuppression"
-                                        data-campaign-id="{{ $campaign->id }}">
+                                        data-campaign-id="{{ $campaign->idCampaign }}">
                                     <span class="fas fa-trash-alt me-2"></span>Remove
                                 </button>                        
                         </div>

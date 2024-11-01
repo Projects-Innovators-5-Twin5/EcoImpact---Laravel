@@ -29,16 +29,14 @@
 
                 
                <div class="col-12">
-                    <div class="card card-body border-0 shadow">
+                
+               <div class="card card-body border-0 shadow">
                         <h5>Campaign target Audience</h5>
                         <p class="mt-4">This campaign is designed specifically for:
-                            <ul>
-                              @foreach($campaign->target_audience as $audience)
-                               <li>{{$audience}}</li>
-                               @endforeach
-                            </ul>
+                            {{ $campaign->target_audience }}
                         </p>
                     </div>
+                
                 </div>
 
                 <div class="col-12 mt-4">
@@ -69,15 +67,9 @@
             <div class="card card-body border-0 shadow mb-4">
                 <h2 class="h5 mb-4">Campaign Overview</h2>
                 <p class="d-flex align-items-center"><span class="text-des">{{$campaign -> description}}</span></p>    
-                
-                <h2 class="h5 mb-4 mt-4">Join Our Campaign! 🌟</h2>
-                <p class="d-flex align-items-center"><span class="text-des">{{$campaign -> reasons_join_campaign}}</span></p>
+
                 <div class="d-flex justify-content-end">
-                    @if($participation)
-                     <button class="btn btn-secondary btn-join " type="button" disabled><a href="{{route('participation.create' , $campaign->id) }}" class="text-btn" style="color:white;">Join the Campaign!</a></button>
-                    @else
-                    <button class="btn btn-secondary btn-join " type="button"><a href="{{route('participation.create' , $campaign->id) }}" class="text-btn" style="color:white;" >Join the Campaign!</a></button>
-                    @endif
+                    <button class="btn btn-secondary btn-join " type="button"><a href="{{route('participation.create' , ['campaign_id' => $campaign->idCampaign] ) }}" class="text-btn" style="color:white;" >Join the Campaign!</a></button>
                 </div>   
 
             </div>
