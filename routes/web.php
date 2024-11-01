@@ -46,7 +46,6 @@ Route::get('/', function () {
 });
 
 Route::get('/landing', [LandingController::class, 'landing'])->name('landing');
-Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     //module compagne de sensibilisation back
     Route::get('/campaigns', [SensibilisatioCompagneController::class, 'index'])->name('campaigns.index');
@@ -60,32 +59,28 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::post('/participants/{id}/accept', [CompagneParticipationsController::class, 'acceptParticipation'])->name('participation.accept');
     Route::post('/participants/{id}/reject', [CompagneParticipationsController::class, 'rejectParticipation'])->name('participation.reject');
     //articles back
-    Route::get('/articles', [ArticleController::class, 'index'])->name('back.articles.index'); 
+    Route::get('/articles', [ArticleController::class, 'index'])->name('back.articles.index');
 
-    Route::get('/back/commentaires', [CommentaireController::class, 'index'])->name('back.commentaires.index'); 
-    Route::get('/articles/create', [ArticleController::class, 'create'])->name('back.articles.create'); 
-    Route::post('/articles', [ArticleController::class, 'store'])->name('back.articles.store'); 
-    Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('back.articles.show'); 
+    Route::get('/back/commentaires', [CommentaireController::class, 'index'])->name('back.commentaires.index');
+    Route::get('/articles/create', [ArticleController::class, 'create'])->name('back.articles.create');
+    Route::post('/articles', [ArticleController::class, 'store'])->name('back.articles.store');
+    Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('back.articles.show');
     Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('back.articles.edit');
     Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('back.articles.update');
-    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('back.articles.destroy'); 
-    //module challenges back
+    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('back.articles.destroy');
     Route::resource('challenges', ChallengeController::class);
     Route::get('challenges/export/pdf', [ChallengeController::class, 'exportPdf'])->name('challenges.export.pdf');
     Route::get('/challenges/{challenge}/solutions/create', [SolutionController::class, 'create'])->name('solutions.create');
-     //produits back
-   //consumption back 
    Route::get('/liste-consommationsBack', [ConsommationController::class, 'listConsumptionsBack'])->name('consommationBack.list');
    Route::delete('/consumptions/{id}/deleteback', [ConsommationController::class, 'destroyback'])->name('consumptionsback.delete');
    Route::get('/consumptions/editback/{id}', [ConsommationController::class, 'editback'])->name('editConsumptionback');
    Route::put('/consumptions/updateback/{id}', [ConsommationController::class, 'updateback'])->name('consumptionsback.update');
 
 
-});
 
-Route::post('/solutions', [SolutionController::class, 'store'])->name('solutions.store');
+Route::post('/solutions/{challenge_id}', [SolutionController::class, 'store'])->name('solutions.store');
 Route::put('/solutions/{id}', [SolutionController::class, 'update'])->name('solutions.update');
-Route::delete('/solutions/{solution}', [SolutionController::class, 'destroy'])->name('solutions.destroy');
+Route::delete('/solutions/{id}', [SolutionController::class, 'destroy'])->name('solutions.destroy');
 
 Route::resource('produits', ProduitController::class);
 
@@ -123,17 +118,17 @@ Route::delete('/participants/{id}/delete', [CompagneParticipationsController::cl
 
 Route::get('/participants/search', [CompagneParticipationsController::class, 'search'])->name('participation.search');
 Route::get('/participants/searchByStatusP', [CompagneParticipationsController::class, 'searchByStatus'])->name('participation.searchByStatus');
-//article routes 
-Route::get('/front/articles', [ArticleController::class, 'index_front'])->name('front.articles.index_front'); 
-Route::get('/front/articles/{id}', [ArticleController::class, 'show_front'])->name('front.articles.show'); 
+//article routes
+Route::get('/front/articles', [ArticleController::class, 'index_front'])->name('front.articles.index_front');
+Route::get('/front/articles/{id}', [ArticleController::class, 'show_front'])->name('front.articles.show');
 
 
 
 // Routes pour les commentaires
-Route::post('/articles/{article_id}/commentaires', [CommentaireController::class, 'store'])->name('commentaires.store')->middleware('isAuth'); 
+Route::post('/articles/{article_id}/commentaires', [CommentaireController::class, 'store'])->name('commentaires.store')->middleware('isAuth');
 Route::put('/front/commentaires/{id}', [CommentaireController::class, 'update'])->name('front.commentaires.update')->middleware('isAuth');
 
-Route::delete('/commentaires/{id}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy')->middleware('isAuth'); 
+Route::delete('/commentaires/{id}', [CommentaireController::class, 'destroy'])->name('commentaires.destroy')->middleware('isAuth');
 //challenges front
 Route::get('/challengesfront', [ChallengeController::class, 'indexfront'])->name('challenges.indexfront');
 Route::get('/challengesfront/{id}', [ChallengeController::class, 'showfront'])->name('challenges.showfront');
@@ -149,14 +144,13 @@ Route::get('/backproduit', [ProduitController::class, 'index'])->name('produits.
 //back
 
 //gestion utilisateurs
-Route::middleware(['auth', 'isAdmin'])->prefix('back')->name('users.')->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('index');
     Route::get('users/create', [UserController::class, 'create'])->name('create');
     Route::post('users', [UserController::class, 'store'])->name('store');
     Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('edit');
     Route::put('users/{user}', [UserController::class, 'update'])->name('update');
     Route::delete('users/{user}', [UserController::class, 'destroy'])->name('destroy');
-});
+
 
 Route::get('/campaigns/show/{campaign_id}/participate', [CompagneParticipationsController::class, 'create'])->name('participation.create');
 Route::post('/campaigns/participateAdd', [CompagneParticipationsController::class, 'store'])->name('participation.store');

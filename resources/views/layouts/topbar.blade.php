@@ -34,27 +34,6 @@
             <div class="list-group list-group-flush">
               <a href="#" class="text-center text-primary fw-bold border-bottom border-light py-3">Notifications</a>
 
-              @foreach(auth()->user()->unreadNotifications as $notification)
-    <a href="{{ route('challenges.show', $notification->data['challenge_id']) }}" class="list-group-item list-group-item-action border-bottom">
-        <div class="row align-items-center">
-            <div class="col-auto">
-                <!-- Avatar -->
-                <div class="user-info">
-            <img src="/assets/img/team/profile-picture-5.jpg" alt="User Image" class="user-image">
-        </div>                </div>
-            <div class="col ps-0 ms-2">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h4 class="h6 mb-0 text-small">{{ $notification->data['message'] }}</h4>
-                    </div>
-                    <div class="text-end">
-                        <small class="text-danger">{{ $notification->created_at->diffForHumans() }}</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </a>
-@endforeach
 
 
 
@@ -80,7 +59,6 @@
             <div class="media d-flex align-items-center">
               <img class="avatar rounded-circle" alt="Image placeholder" src="/assets/img/team/profile-picture-1.jpg">
               <span style="color:black;font-size:15px;margin-left:10px;">
-        {{ Auth::check() ? Auth::user()->name : '' }} <!-- Display the user's name or 'Guest' -->
           </span>
 
             </div>

@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="container">
-    
+
     <div class="text">
         <h2>🌱 Empower Your Energy Choices 🌞</h2>
         <p>
@@ -11,15 +11,8 @@
         </p>
         <form class="navbar-search form-inline" id="navbar-search-main">
             <div class="input-group input-group-merge search-bar">
-                <input type="text" id="search" class="form-control" placeholder="Search challenges..." value="{{ $search }}">
-                
-                <!-- Add the status filter dropdown next to the search input -->
-                <select id="statusFilter" class="form-select">
-                    <option value="">All Challenges</option>
-                    <option value="open" {{ $statusFilter == 'open' ? 'selected' : '' }}>Open Challenges</option>
-                    <option value="closed" {{ $statusFilter == 'closed' ? 'selected' : '' }}>Closed Challenges</option>
-                    <option value="upcoming" {{ $statusFilter == 'upcoming' ? 'selected' : '' }}>Upcoming Challenges</option>
-                </select>
+
+
             </div>
         </form>
         <div class="mt-3">
@@ -34,11 +27,9 @@
             @include('Front.Challenges.challenges_list', ['challenges' => $challenges])
         </div>
     </div>
-    
+
     <!-- Add pagination links -->
-    <div class="d-flex justify-content-center mt-4">
-        {{ $challenges->links('pagination::bootstrap-4') }} <!-- Using Bootstrap pagination -->
-    </div>
+   
 </div>
 
 <link rel="stylesheet" href="{{ asset('css/challenge.css') }}">
@@ -126,6 +117,6 @@
         </div>
     </div>
 
- 
+
 </div>
  --}}

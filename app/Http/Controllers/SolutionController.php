@@ -7,70 +7,71 @@ use App\Models\Challenge;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Notifications\SolutionSubmitted;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http; // Use Laravel's built-in HTTP client
 
 class SolutionController extends Controller
 {
-    public function create($challengeId)
-    {
-        $challenge = Challenge::findOrFail($challengeId);
-        return view('solutions.create', compact('challenge'));
-    }
 
-    public function store(Request $request)
+
+    protected $client;
+    protected $apiUrl = 'http://localhost:1064/api/solutions'; // Replace with your API URL
+
+
+    public function store(Request $request , $challenge_id)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'title' => 'required|string|min:3|max:100',
             'description' => 'required|string|min:10|max:500',
-                'challenge_id' => 'required|exists:challenges,id',
         ]);
 
-        // Assuming you have a Solution model set up
-        Solution::create([
-            'title' => $validatedData['title'],
-            'description' => $validatedData['description'],
-            'challenge_id' => $validatedData['challenge_id'],
-            'user_id' => auth()->id(), // Store the logged-in user's ID
+
+        $response = Http::post("{$this->apiUrl}/create/{$challenge_id}", [
+            'title' => $request->input('title'), // Ensure these match the field names in the API
+            'description' => $request->input('description'),
         ]);
 
-        $admin = User::where('role', 'admin')->first(); // You can adjust this to notify all admins
-        $challenge = Challenge::findOrFail($validatedData['challenge_id']);
-        $user = auth()->user();
-
-        $admin->notify(new SolutionSubmitted($user, $challenge));
 
 
         return redirect()->back()->with('success', 'Solution added successfully!');
     }
 
 
-
 public function update(Request $request, $id)
 {
-    // Validate the incoming request data
-    $validatedData = $request->validate([
+    $request->validate([
         'title' => 'required|string|min:3|max:100',
         'description' => 'required|string|min:10|max:500',
     ]);
-    // Find the solution by its ID
-    $solution = Solution::findOrFail($id);
 
-    $solution->update([
-        'title' => $validatedData['title'],
-        'description' => $validatedData['description'],
+
+    $response = Http::put("{$this->apiUrl}/update/{$id}", [
+        'title' => $request->input('title'),
+        'description' => $request->input('description'),
+
     ]);
 
-    // Return a success response
-    return redirect()->route('challenges.showfront', $solution->challenge_id)->with('success', 'Solution updated successfully');
+    if ($response->successful()) {
+        return back()->with('success', 'Solution mis à jour avec succès.');
+    }
 
+    return back()->with('error', 'Erreur lors de la mise à jour du Solution.');
 }
+
 
 
 
     public function destroy($id)
     {
-        $solution = Solution::findOrFail($id);
-        $solution->delete();
-        return redirect()->back()->with('success', 'Solution deleted successfully!');
+
+        $response = Http::delete("{$this->apiUrl}/delete/{$id}");
+
+        if ($response->successful()) {
+            return back()->with('success', 'Solution supprimé avec succès.');
+        }
+
+        return back()->with('error', 'Erreur lors de la suppression du solution.');
+
     }
 
     public function voteSolution(Request $request, $solutionId)

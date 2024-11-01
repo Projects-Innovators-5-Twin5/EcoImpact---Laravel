@@ -25,10 +25,10 @@
 
                 <!-- Reward Points Field -->
                 <div class="col-lg-6 mb-3">
-                    <label for="reward_points" class="form-label">Reward Points</label>
-                    <input type="number" name="reward_points" id="reward_points" class="form-control @error('reward_points') is-invalid @enderror"
-                           placeholder="Enter reward points" value="{{ old('reward_points') }}">
-                    @error('reward_points')
+                    <label for="rewardPoints" class="form-label">Reward Points</label>
+                    <input type="number" name="rewardPoints" id="rewardPoints" class="form-control @error('rewardPoints') is-invalid @enderror"
+                           placeholder="Enter reward points" value="{{ old('rewardPoints') }}">
+                    @error('rewardPoints')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>

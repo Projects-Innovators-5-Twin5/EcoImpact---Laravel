@@ -37,21 +37,17 @@
                 <li class="nav-item">
                 <a class="nav-link" href="/produitss" aria-disabled="true">Store</a>
                 </li>
-               
+
                 <li class="nav-item">
                 <a class="nav-link" aria-disabled="true">Contact</a>
                 </li>
             </ul>
         </div>
 <div>
-        @if (Auth::check())
     <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown"
        aria-expanded="false">
       <div class="media d-flex align-items-center">
-        <img class="avatar rounded-circle" style="margin-right:20px" alt="Image placeholder" src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('assets/img/team/default_img.png') }}">
-        <span style="color:black;font-size:18px;margin-right:20px">
-          {{ Auth::user()->name }} <!-- Display the user's name -->
-        </span>
+
       </div>
     </a>
 
@@ -85,10 +81,9 @@
         });
       </script>
     </div>
-@else
   <!-- Show Login/Register button if not signed in -->
       <button class="btn btn-outline-secondary" type="button"><a href="/register" class="text-btn">  Login/Regsiter</a></button>
-@endif
+
 
 
 </div>

@@ -18,191 +18,123 @@
 <div id="alert-container" class="mt-3"></div>
 <div class="challenge-container">
     <div class="challenge-header">
-        <h1>{{ $challenge->title }}</h1>
-        <div class="button-group">
+    <div class="button-group">
+    <h5 class="card-title">{{ $challenge['titleChallenge'] }}</h5>
+
             <a href="{{ route('challenges.indexfront') }}" class="btn btn-secondary back-btn">Back to Challenges</a>
-            @if ($challenge->isOpen() && !$challenge->isUpcoming())
             <button class="btn btn-primary add-solution-btn" onclick="toggleAddSolutionSection()">Add Solution</button>
 
 
 
-                @endif        </div>
+                     </div>
     </div>
 
     <div class="challenge-content">
         <div class="image-frame">
-            <img src="{{ asset('storage/' . $challenge->image) }}" alt="Challenge Image" class="img-fluid challenge-image" />
+
+        <img src="{{ asset('storage/' . $challenge['imageChallenge']) }}" alt="Challenge Image" class="img-fluid challenge-image" />
         </div>
         <div class="challenge-details">
-            <p><strong>Description:</strong> {{ $challenge->description }}</p>
-            <p><strong>Start Date:</strong> {{ $challenge->start_date }}</p>
-            <p><strong>End Date:</strong> {{ $challenge->end_date }}</p>
+        <p><strong>Description:</strong> {{ $challenge['descriptionChallenge'] }}</p>
+            <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($challenge['start_dateChallenge'])->format('d-m-Y H:i') }}</p>
+            <p><strong>End Date:</strong> {{ \Carbon\Carbon::parse($challenge['end_dateChallenge'])->format('d-m-Y H:i') }}</p>
             <p><strong>Time Left:</strong> <span id="time-left"></span></p> <!-- Updated for real-time -->
-            <p><strong>Reward Points:</strong> {{ $challenge->reward_points }}</p>
+            <p><strong>Reward Points:</strong> {{ $challenge['rewardPoints'] }}</p>
         </div>
     </div>
     <div id="addSolutionSection" style="display: {{ old('form_type') === 'add_solution' && $errors->any() ? 'block' : 'none' }};">
 
     <h3>Add a Solution</h3>
-    <form id="solutionForm" action="{{ route('solutions.store') }}" method="POST">
-        @csrf
-        <input type="hidden" name="form_type" value="add_solution">
-        <div class="form-group">
-        <input type="hidden" name="challenge_id" value="{{ $challenge->id }}">
-            <label for="title">Title</label>
-            <div class="input-group">
-                <input type="text" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" name="title" placeholder="Enter Title" value="{{ old('title') }}" id="title" autofocus>
-            </div>
-            @if ($errors->has('title'))
-                @foreach ($errors->get('title') as $error)
-                    <div class="text-danger h6 mt-1" id="error-title">{{ $error }}</div>
-                @endforeach
-            @endif
-        </div>
+    <form id="solutionForm" action="{{ route('solutions.store', $challenge['idChallenge']) }}" method="POST">
 
-        <div class="form-group">
-            <label for="description">Description</label>
-            <div class="input-group">
-                <textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description" placeholder="Enter description..." id="description" rows="4">{{ old('description') }}</textarea>
-            </div>
-            @if ($errors->has('description'))
-                @foreach ($errors->get('description') as $error)
-                    <div class="text-danger h6 mt-1" id="error-description">{{ $error }}</div>
-                @endforeach
-            @endif
-        </div>
+    @csrf
+    <input type="hidden" name="form_type" value="add_solution">
+    <input type="hidden" name="challenge_id" value="{{ $challenge['idChallenge'] }}">
 
-        <button type="submit" class="btn btn-primary">Add Solution</button>
-    </form>
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" name="title" placeholder="Enter Title" value="{{ old('title') }}" id="title" autofocus>
+        @if ($errors->has('title'))
+            <div class="text-danger h6 mt-1" id="error-title">{{ $errors->first('title') }}</div>
+        @endif
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description" placeholder="Enter description..." id="description" rows="4">{{ old('description') }}</textarea>
+        @if ($errors->has('description'))
+            <div class="text-danger h6 mt-1" id="error-description">{{ $errors->first('description') }}</div>
+        @endif
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Solution</button>
+</form>
 </div>
 
 
 
 
-    <div class="solution-list">
-        <h3>Solutions</h3>
-        @if ($isClosed && $winningSolutions->count())
-<div class="winner-container">
-    <div class="podium">
+<div class="solution-list">
+    <h3 class="mb-4">Solutions</h3>
 
-        @foreach ($winningSolutions as $solution)
-            <div class="podium-position">
-                <i class="fas fa-trophy trophy-icon"></i>
-                <div class="winner-info">
-                    <strong class="winner-name">🎉{{ $solution->user->name }}🎉</strong>
-                    <p class="winner-title">{{ $solution->title }}</p>
+    @foreach($challenge['solutions'] as $solution)
+        <div class="solution-item card mb-3">
+            <div class="solution-header d-flex justify-content-between align-items-center p-3">
+                <h5 class="mb-0">{{ $solution['title'] }}</h5>
+                <div class="dropdown">
+                    <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        &#x2026;
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" onclick="editSolution({{ $solution['id'] }})">Edit</a></li>
+                        <li>
+                        <a class="dropdown-item" href="#"
+                        onclick="event.preventDefault(); document.getElementById('delete-solution-{{ $solution['id'] }}').submit();">Delete</a>
+
+        </li>
+
+                    </ul>
                 </div>
+                <form id="delete-solution-{{ $solution['id'] }}" action="{{ route('solutions.destroy', $solution['id']) }}" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
+
             </div>
-        @endforeach
-    </div>
-    <div class="alert alert-success">
-        Congratulations to the winner(s) :
-        @foreach ($winningSolutions as $solution)
-            <strong>{{ $solution->title }}</strong> by <strong>{{ $solution->user->name }}</strong>@if (!$loop->last), @endif
-        @endforeach
-    </div>
-</div>
-@endif
 
+            <div class="solution-content p-3">
+                <p><strong>Description:</strong> {{ $solution['description'] }}</p>
+                <form action="{{ route('solutions.update', $solution['id']) }}" method="POST" style="display:none;" id="edit-form-{{ $solution['id'] }}">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="form_type" value="edit_solution">
+                    <input type="hidden" name="solution_id" value="{{ $solution['id'] }}">
 
+                    <div class="form-group">
+                        <label for="edit-title">Title</label>
+                        <input type="text" name="title" value="{{ old('title', $solution['title']) }}" class="form-control @error('title') is-invalid @enderror">
+                        @error('title')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
+                    <div class="form-group">
+                        <label for="edit-description">Description</label>
+                        <textarea name="description" class="form-control @error('description') is-invalid @enderror">{{ old('description', $solution['description']) }}</textarea>
+                        @error('description')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-
-        <div class="solution-filter-container">
-        <div class="solution-filter">
-            <label for="solutionSort">Sort Solutions By:</label>
-            <select id="solutionSort" onchange="sortSolutions()">
-                <option value="latest" {{ request('sort') === 'latest' ? 'selected' : '' }}>Latest</option>
-                <option value="votes" {{ request('sort') === 'votes' ? 'selected' : '' }}>Votes</option>
-            </select>
-        </div>
-    </div>
-
-        @foreach($solutions as $solution)
-        <div class="solution-item">
-    <div class="solution-header">
-    <div class="user-info">
-            <img src="{{ $solution->user->image ? asset('storage/' . $solution->user->image) : asset('assets/img/team/default_img.png') }}" alt="User Image" class="user-image">
-            <strong>{{ $solution->user->name }}</strong>
-        </div>
-        <span class="solution-date">{{ $solution->created_at->format('d-m-Y H:i') }}</span>
-        @if(auth()->id() === $solution->user_id || auth()->user()->role === 'admin')
-        <div class="dropdown">
-                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                    &#x2026;
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
-                <li><a class="dropdown-item" href="#" onclick="editSolution({{ $solution->id }})">Edit</a></li>
-
-
-                    <li><a class="dropdown-item" href="{{ route('solutions.destroy', $solution->id) }}" onclick="event.preventDefault(); document.getElementById('delete-solution-{{ $solution->id }}').submit();">Delete</a></li>
-                </ul>
+                    <button type="submit" class="btn btn-primary">Update Solution</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit({{ $solution['id'] }})">Cancel</button>
+                </form>
             </div>
-            <form id="delete-solution-{{ $solution->id }}" action="{{ route('solutions.destroy', $solution->id) }}" method="POST" style="display: none;">
-                @csrf
-                @method('DELETE')
-            </form>
-        @endif
-    </div>
+        </div>
 
-    <div class="vote-section">
-        @if (!$challenge->isClosed())
-            <button class="vote-btn {{ $solution->voted ? 'voted' : '' }}" onclick="voteSolution({{ $solution->id }})" data-solution-id="{{ $solution->id }}">
-                <i class="fa fa-star"></i>
-            </button>
-        @else
-            <button class="vote-btn" disabled>
-                <i class="fa fa-star"></i>
-            </button>
-        @endif
-        <span id="vote-count-{{ $solution->id }}">{{ $solution->votes()->count() }}</span>
-    </div>
+    @endforeach
 
-    <div class="solution-content">
-        <h5 id="solution-title-{{ $solution->id }}">{{ $solution->title }}</h5>
-        <p id="solution-description-{{ $solution->id }}">{{ $solution->description }}</p>
-        <form action="{{ route('solutions.update', $solution->id) }}" method="POST" style="width:90%; display:none;" id="edit-form-{{ $solution->id }}">
-
-        @csrf
-            @method('PUT')
-
-            <input type="hidden" name="form_type" value="edit_solution">
-            <input type="hidden" name="solution_id" value="{{ $solution->id }}">
-
-            <div class="form-group">
-                    <label for="edit-title">Title</label>
-                    <input type="text" name="title" value="{{ old('title', $solution->title) }}" class="form-control @error('title') is-invalid @enderror">
-                    @error('title')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="edit-description">Description</label>
-                    <textarea name="description" class="form-control @error('description') is-invalid @enderror">{{ old('description', $solution->description) }}</textarea>
-                    @error('description')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-            <button type="submit" class="btn btn-primary">Update Solution</button>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit({{ $solution->id }})">Cancel</button>
-        </form>
-    </div>
 </div>
-@endforeach
-
-
-
-
-
-        @if($solutions->isEmpty())
-            <p>No solutions have been submitted yet.</p>
-        @endif
-    </div>
-
-
 
 
 
@@ -318,7 +250,7 @@ function sortSolutions() {
 
 
     // Get the end date from the PHP variable
-    const endDate = new Date("{{ $challenge->end_date }}").getTime();
+    const endDate = new Date("{{ $challenge['end_dateChallenge'] }}").getTime();
 
     // Function to calculate the time left and update the DOM
     function updateCountdown() {

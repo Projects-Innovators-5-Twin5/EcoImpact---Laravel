@@ -7,9 +7,9 @@
         <td>{{ Str::limit($challenge->description, 20) }}</td>
         <td>{{ \Carbon\Carbon::parse($challenge->start_date)->format('d/m/Y, H:i:s') }}</td>
         <td>{{ \Carbon\Carbon::parse($challenge->end_date)->format('d/m/Y, H:i:s') }}</td>
-        <td>{{ $challenge->reward_points }}</td>
+        <td>{{ $challenge->rewardPoints }}</td>
         <td>
-        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#viewModal{{ $challenge->id }}" onclick="populateViewModal('{{ $challenge->id }}', '{{ $challenge->title }}', '{{ $challenge->description }}', '{{ $challenge->start_date }}', '{{ $challenge->end_date }}', {{ $challenge->reward_points }})">
+        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#viewModal{{ $challenge->id }}" onclick="populateViewModal('{{ $challenge->id }}', '{{ $challenge->title }}', '{{ $challenge->description }}', '{{ $challenge->start_date }}', '{{ $challenge->end_date }}', {{ $challenge->rewardPoints }})">
                 <i class="fas fa-eye"></i>
             </button>
             <a href="{{ route('challenges.edit', $challenge->id) }}" class="btn btn-warning">
@@ -59,7 +59,7 @@
 
                             <strong>Start Date:</strong> <span id="viewStartDate{{ $challenge->id }}">{{ $challenge->start_date }}</span><br>
                             <strong>End Date:</strong> <span id="viewEndDate{{ $challenge->id }}">{{ $challenge->end_date }}</span><br>
-                            <strong>Reward Points:</strong> <span id="viewRewardPoints{{ $challenge->id }}">{{ $challenge->reward_points }}</span><br>
+                            <strong>Reward Points:</strong> <span id="viewRewardPoints{{ $challenge->id }}">{{ $challenge->rewardPoints }}</span><br>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
