@@ -9,7 +9,7 @@
             Modifier Article
         </div>
         <div class="container card-body py-2">
-            <form action="{{ route('back.articles.update', $article['id']) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('back.articles.update', $article['id']) }}" method="POST" enctype="multipart/form-data" novalidate>
                 @csrf
                 @method('PUT')
                 

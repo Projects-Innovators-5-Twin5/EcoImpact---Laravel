@@ -9,7 +9,7 @@
             Créer un Article
         </div>
         <div class="container card-body py-2">
-            <form action="{{ route('back.articles.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('back.articles.store') }}" method="POST" enctype="multipart/form-data" novalidate>
                 @csrf
 
                 <div class="row">

@@ -61,7 +61,7 @@
                 <p>Êtes-vous sûr de vouloir supprimer l'article "<span id="articleTitle"></span>" ?</p>
             </div>
             <div class="modal-footer">
-                <form method="POST" action="{{ route('back.articles.destroy', ['id' => '-1']) }}">
+                <form method="POST" action="{{ route('back.articles.destroy', ['id' => '-1']) }}" novalidate>
                     @csrf
                     @method('DELETE')
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>

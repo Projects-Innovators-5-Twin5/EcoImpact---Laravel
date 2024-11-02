@@ -41,7 +41,7 @@
                                 <div class="d-flex justify-content-between">
                                     <p id="comment-content-{{ $commentaire['id'] }}">{{ $commentaire['content'] }}</p>
 
-                                    <form action="{{ route('front.commentaires.update', $commentaire['id']) }}" method="POST" style="width:90%;" id="edit-form-{{ $commentaire['id'] }}" class="d-none">
+                                    <form action="{{ route('front.commentaires.update', $commentaire['id']) }}" method="POST" style="width:90%;" id="edit-form-{{ $commentaire['id'] }}" class="d-none" novalidate>
                                         @csrf
                                         @method('PUT')
                                         <textarea name="content" class="form-control mb-2">{{ $commentaire['content'] }}</textarea>
@@ -78,7 +78,7 @@
                 @endif
 
                 <h4 class="mt-5"><i class="fas fa-plus-circle"></i> Ajouter un commentaire</h4>
-                <form action="{{ route('commentaires.store', $article['idArticle']) }}" method="POST" class="mb-4">
+                <form action="{{ route('commentaires.store', $article['idArticle']) }}" method="POST" class="mb-4" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-md-9">
